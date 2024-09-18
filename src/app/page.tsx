@@ -1,101 +1,106 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import Card from "../components/ui/card";
+import { ModeToggle } from "@/components/ui/themeToggle";
+import { Input } from "@/components/ui/input";
+import SocialSelect from "@/components/ui/SocialSelect";
+import SocialInputs from "@/components/ui/SocialInputs";
+import { Switch } from "@/components/ui/switch";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [name, setName] = useState("Name");
+  const [email, setEmail] = useState("Email");
+  const [location, setLocation] = useState("Toronto");
+  const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
+  const [showUsername, setShowUsername] = useState<boolean>(true);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedInputs((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
+  };
+  const [urls, setUrls] = useState<Record<string, string>>({
+    linkedin: "",
+    github: "",
+    twitter: "",
+    instagram: "",
+    facebook: "",
+    tiktok: "",
+    youtube: "",
+    twitch: "",
+    discord: "",
+    snapchat: "",
+    whatsapp: "",
+    telegram: "",
+    reddit: "",
+    pinterest: "",
+  });
+  return (
+    <main className="flex flex-col bg-white dark:bg-black gap-3 text-black dark:text-white">
+      <ModeToggle />
+
+      <div className="flex flex-col sm:flex-row gap-2 w-screen px-10 py-10">
+        <div className="flex flex-col gap-2 w-full">
+          <Card
+            name={name}
+            email={email}
+            location={location}
+            urls={urls}
+            showUsername={showUsername}
+            selectedInputs={selectedInputs}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        <div className="flex flex-col gap-2 w-full">
+          
+
+          <h1 className="text-xl font-bold">Personal Info:</h1>
+          <Input
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          <Input
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
+          <Input
+            placeholder="Location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
           />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <div className="flex flex-row items-center gap-2">
+            <h1 className="text-xl font-bold whitespace-nowrap">Social Links:</h1>
+            <SocialSelect
+              selectedInputs={selectedInputs}
+              handleSelectChange={handleSelectChange}
+            />
+            
+          </div>
+          {selectedInputs.length > 0 ? (
+            <div className="flex flex-row justify-center items-center gap-2">
+              <p>Show Username:</p>
+              <Switch
+                checked={showUsername}
+                onCheckedChange={setShowUsername}
+              />
+            </div>
+          ) : null}
+          <div className="flex flex-col gap-2 px-2">
+            <SocialInputs
+            selectedInputs={selectedInputs}
+            urls={urls}
+            setUrls={setUrls}
+            setSelectedInputs={setSelectedInputs}
+            />
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
