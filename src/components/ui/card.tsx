@@ -1,40 +1,76 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import SocialLinks from "@/components/ui/SocialLinks";
+import * as React from "react"
 
-interface CardProps {
-  name: string;
-  email: string;
-  location: string;
-  urls: Record<string, string>;
-  showUsername: boolean;
-  selectedInputs: string[];
-}
+import { cn } from "@/lib/utils"
 
-export default function Card({
-  name = "",
-  email = "",
-  location = "",
-  urls = {},
-  showUsername = true,
-  selectedInputs = [],
-}: CardProps) {
-  return (
-    <div className="bg-white w-full sm:w-72 md:w-80 lg:w-96 h-auto p-4 rounded-lg shadow-md text-black">
-      <h1 className="text-2xl font-bold ">{name}</h1>
-      <div className="flex items-center gap-2">
-        <FontAwesomeIcon icon={faEnvelope} className="" />
-        <p className="">{email}</p>
-      </div>
-      <div className="flex items-center gap-2">
-        <FontAwesomeIcon icon={faLocationDot} className="" />
-        <p className="">{location}</p>
-      </div>
-      <SocialLinks
-        urls={urls}
-        showUsername={showUsername}
-        selectedInputs={selectedInputs}
-      />
-    </div>
-  );
-}
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-xl border border-neutral-200 bg-white text-neutral-950 shadow dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50",
+      className
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn("font-semibold leading-none tracking-tight", className)}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-neutral-500 dark:text-neutral-400", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

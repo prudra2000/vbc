@@ -98,11 +98,11 @@ const SocialInputs: React.FC<{
         <div className="flex flex-col gap-2">
           {selectedInputs.map((social) => (
             <SortableItem key={social} id={social}>
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-row gap-2 group">
                 <div className="flex items-center gap-2">
                   <FontAwesomeIcon
                     icon={faGripVertical}
-                    className=" w-4 h-4 opacity-50"
+                    className=" w-4 h-4 opacity-0 group-hover:opacity-50 transition-opacity duration-500"
                   />
                   <FontAwesomeIcon
                     icon={socialIcons[social as keyof typeof socialIcons]}
