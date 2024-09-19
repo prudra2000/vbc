@@ -6,6 +6,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  DragEndEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -68,18 +69,19 @@ const SocialInputs: React.FC<{
   const removeInput = (social: string) => {
     setSelectedInputs((prev) => prev.filter((input) => input !== social));
     setUrls((prev) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [social]: _, ...rest } = prev;
       return rest;
     });
   };
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (active.id !== over.id) {
+    if (active.id !== over?.id) {
       setSelectedInputs((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
+        const oldIndex = items.indexOf(active.id as string);
+        const newIndex = items.indexOf(over?.id as string);
         return arrayMove(items, oldIndex, newIndex);
       });
     }
