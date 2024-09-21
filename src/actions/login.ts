@@ -87,7 +87,6 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         twoFactor: true,
       };
     }
-    
   }
 
   try {
@@ -111,4 +110,4 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     }
     throw error;
   }
-};
+}

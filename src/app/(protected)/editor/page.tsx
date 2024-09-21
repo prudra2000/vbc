@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { startTransition, useState, useTransition } from "react";
 import Card from "../../../components/card";
 import { ModeToggle } from "@/components/ui/themeToggle";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,8 @@ import SocialSelect from "@/components/ui/SocialSelect";
 import SocialInputs from "@/components/ui/SocialInputs";
 import { Switch } from "@/components/ui/switch";
 import { useSession } from "next-auth/react";
+import * as z from "zod";
+import { CardSchema } from "@/schemas";
 
 const EditorPage = () =>   {
   const { data: session } = useSession();
@@ -15,6 +17,7 @@ const EditorPage = () =>   {
   const [location, setLocation] = useState("Toronto");
   const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
   const [showUsername, setShowUsername] = useState<boolean>(true);
+  const [isPending, startTransition] = useTransition();
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -41,35 +44,37 @@ const EditorPage = () =>   {
     pinterest: "",
   });
 
-  const handleSaveData = async () => {
-    const cardData = {
-      userId: session?.user?.id,
-      name,
-      email,
-      location,
-      urls,
-      showUsername,
-      selectedInputs,
+
+  
+  const handleSaveData = async (values: z.infer<typeof CardSchema>) => {
+    const values = {
+      userId: session?.user?.id || "",
+      title: name,
+      description: email,
+      image: location,
+      linkedin: urls.linkedin,
+      github: urls.github,
+      twitter: urls.twitter,
+      instagram: urls.instagram,
+      facebook: urls.facebook,
+      tiktok: urls.tiktok,
+      youtube: urls.youtube,
+      twitch: urls.twitch,
+      discord: urls.discord,
+      snapchat: urls.snapchat,
+      whatsapp: urls.whatsapp,
+      telegram: urls.telegram,
+      reddit: urls.reddit,
+      pinterest: urls.pinterest,
     };
-  console.log(JSON.stringify(cardData))
-    try {
-      const response = await fetch('/api/cards', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(cardData),
-      });
   
-      if (!response.ok) {
-        throw new Error('Failed to save data');
-      }
-  
-      const result = await response.json();
-      console.log('Card saved:', result); // Handle success (e.g., show a message)
-    } catch (error) {
-      console.error('Error saving card:', error); // Handle error
-    }
+    startTransition(async () => {
+      card(values)
+        .then((data) => {
+          // handle success
+        })
+        .catch(() => "Something went wrong.");
+    });
   };
 
   return (

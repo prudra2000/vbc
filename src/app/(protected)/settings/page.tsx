@@ -16,7 +16,9 @@ const SettingsPage = async () => {
     <nav>
       <Link href="/editor">Editor</Link>
     </nav>
-    </div>;
+    <h1 className="text-2xl font-bold">Welcom Back, {session?.user?.name}.</h1>
+
+    </div>
 };
 
 export default SettingsPage;
