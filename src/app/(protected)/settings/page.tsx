@@ -1,4 +1,5 @@
 import { auth, signOut } from "@/auth";
+import Link from "next/link";
 
 
 const SettingsPage = async () => {
@@ -12,6 +13,9 @@ const SettingsPage = async () => {
     }}>
       <button type="submit">Logout</button>
     </form>
+    <nav>
+      <Link href="/editor">Editor</Link>
+    </nav>
     </div>;
 };
 

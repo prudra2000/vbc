@@ -1,14 +1,15 @@
 "use client";
-
 import { useState } from "react";
-import Card from "../../components/card";
+import Card from "../../../components/card";
 import { ModeToggle } from "@/components/ui/themeToggle";
 import { Input } from "@/components/ui/input";
 import SocialSelect from "@/components/ui/SocialSelect";
 import SocialInputs from "@/components/ui/SocialInputs";
 import { Switch } from "@/components/ui/switch";
+import { useSession } from "next-auth/react";
 
-export default function Home() {
+const EditorPage = () =>   {
+  const { data: session } = useSession();
   const [name, setName] = useState("Name");
   const [email, setEmail] = useState("Email");
   const [location, setLocation] = useState("Toronto");
@@ -39,6 +40,38 @@ export default function Home() {
     reddit: "",
     pinterest: "",
   });
+
+  const handleSaveData = async () => {
+    const cardData = {
+      userId: session?.user?.id,
+      name,
+      email,
+      location,
+      urls,
+      showUsername,
+      selectedInputs,
+    };
+  console.log(JSON.stringify(cardData))
+    try {
+      const response = await fetch('/api/cards', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(cardData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to save data');
+      }
+  
+      const result = await response.json();
+      console.log('Card saved:', result); // Handle success (e.g., show a message)
+    } catch (error) {
+      console.error('Error saving card:', error); // Handle error
+    }
+  };
+
   return (
     <main className="flex flex-col bg-white dark:bg-black gap-3 text-black dark:text-white">
       <ModeToggle />
@@ -99,8 +132,13 @@ export default function Home() {
             setSelectedInputs={setSelectedInputs}
             />
           </div>
+          <button onClick={handleSaveData} className="mt-4 p-2 bg-blue-500 text-white rounded">
+            Save Data
+          </button>
         </div>
       </div>
     </main>
   );
 }
+
+export default EditorPage;

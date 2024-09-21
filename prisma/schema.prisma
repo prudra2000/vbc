@@ -25,6 +25,7 @@ model User {
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  cards                 Card[]
 }
 
 model Account {
@@ -44,6 +45,16 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+}
+
+model Card {
+  id        String   @id @default(cuid())
+  userId    String
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId])
 }
 
 model VerificationToken {
@@ -80,4 +91,13 @@ model TwoFactorConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+model BusinessCard {
+  id        String   @id @default(cuid()) // Generate unique ID
+  name      String
+  title     String
+  company   String
+  email     String
+  phone     String
+  createdAt DateTime @default(now())
 }

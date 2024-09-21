@@ -11,7 +11,7 @@
   },
   "eslintConfig": {
     "rules": {
-        "no-var": "off"
+      "no-var": "off"
     }
   },
   "dependencies": {
@@ -33,6 +33,7 @@
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "firebase": "^10.13.2",
     "lucide-react": "^0.441.0",
     "next": "14.2.11",
     "next-auth": "^5.0.0-beta.21",
