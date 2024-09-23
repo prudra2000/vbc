@@ -17,6 +17,7 @@ import {
   faReddit,
   faPinterest,
 } from "@fortawesome/free-brands-svg-icons";
+
 const socialIcons = {
   linkedin: faLinkedin,
   github: faGithub,

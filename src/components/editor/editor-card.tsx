@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../../components/ui/input";
@@ -10,20 +9,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "../../components/ui/form";
 import { useForm } from "react-hook-form";
 import { EditorSchema } from "@/schemas";
 import SocialInputs from "../ui/SocialInputs";
 import SocialSelect from "../ui/SocialSelect";
-import { useState } from "react";
-import { X } from "lucide-react";
 
 interface EditorForm {
   isOpen?: boolean;
   onClose?: () => void;
   formValues: any;
   onFormChange: (newValues: any) => void;
+  selected: string[];
+  onSelectChange: (selectedInputs: string[]) => void;
 }
 
 const EditorForm: React.FC<EditorForm> = ({
@@ -31,6 +29,8 @@ const EditorForm: React.FC<EditorForm> = ({
   onClose,
   formValues,
   onFormChange,
+  selected,
+  onSelectChange = () => {},
 }) => {
   if (!isOpen) return null;
 
@@ -43,35 +43,31 @@ const EditorForm: React.FC<EditorForm> = ({
     form.reset(formValues);
   }, [formValues]);
 
+  const [urls, setUrls] = useState<Record<string, string>>(formValues.urls);
+
   const handleFormChange = (values: any) => {
-    onFormChange(values);
+    onFormChange({ ...values, urls });
+    console.log("t", values);
   };
 
-  const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
+  const [selectedInputs, setSelectedInputs] = useState<string[]>(selected);
+
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    setSelectedInputs((prev) =>
-      prev.includes(value)
+    setSelectedInputs((prev) => {
+      const newSelectedInputs = prev.includes(value)
         ? prev.filter((item) => item !== value)
-        : [...prev, value]
-    );
+        : [...prev, value];
+      onSelectChange(newSelectedInputs); // Call onSelectChange here
+      return newSelectedInputs; // Return the new state
+    });
   };
-  const [urls, setUrls] = useState<Record<string, string>>({
-    linkedin: "",
-    github: "",
-    twitter: "",
-    instagram: "",
-    facebook: "",
-    tiktok: "",
-    youtube: "",
-    twitch: "",
-    discord: "",
-    snapchat: "",
-    whatsapp: "",
-    telegram: "",
-    reddit: "",
-    pinterest: "",
-  });
+
+  useEffect(() => {
+    setSelectedInputs(selected);
+    setUrls(formValues.urls);
+  }, [selected, formValues.urls]);
+
   return (
     <div className="">
       <div className="rounded-xl border border-neutral-200 bg-white text-neutral-950 shadow dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
@@ -81,7 +77,10 @@ const EditorForm: React.FC<EditorForm> = ({
           </section>
           <section title="form">
             <Form {...form}>
-              <form className="space-y-4" onChange={() => handleFormChange(form.getValues())}>
+              <form
+                className="space-y-4"
+                onChange={() => handleFormChange(form.getValues())}
+              >
                 <FormField
                   control={form.control}
                   name="title"
@@ -116,7 +115,6 @@ const EditorForm: React.FC<EditorForm> = ({
                         <Input
                           {...field}
                           placeholder="Software Developer"
-                          type="file"
                         />
                       </FormControl>
                     </FormItem>

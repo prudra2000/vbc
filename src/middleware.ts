@@ -6,7 +6,8 @@ import {
   apiAuthPrefix,
   DEFAUL_LOGIN_REDIRECT,
 } from "./routes";
-const { auth } = NextAuth(authConfig);
+import { auth } from "@/auth";
+import {isCardOwner} from "./data/card"
 
 
 function isRoutePublic(pathname: string, publicRoutes: string[]): boolean {
@@ -16,7 +17,7 @@ function isRoutePublic(pathname: string, publicRoutes: string[]): boolean {
   });
 }
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { nextUrl } = req;
   const isLogin = !!req.auth;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
@@ -35,10 +36,38 @@ export default auth((req) => {
   if (!isLogin && !isPublicRoute) {
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
+
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  const editorMatch = nextUrl.pathname.match(/^\/editor\/(\w+)$/);
+
+  if (editorMatch) {
+    const cardId = editorMatch[1];
+
+    // Redirect to login if user is not authenticated
+    if (!userId) {
+      return Response.redirect(new URL("/auth/login", nextUrl));
+    }
+
+    // Check if the current user owns the card
+    const isOwner = await isCardOwner(userId, cardId);
+    
+    // Redirect to the card view if the user is not the owner
+    if (!isOwner) {
+      return Response.redirect(new URL(`/card/${cardId}`, nextUrl));
+    }
+
+    // Ensure no redirect loop by checking if already on the correct page
+    if (nextUrl.pathname !== `/editor/${cardId}`) {
+      return Response.redirect(new URL(`/editor/${cardId}`, nextUrl));
+    }
+  }
   return undefined;
 });
 
-// Optionally, don't invoke Middleware on some paths
+
+
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

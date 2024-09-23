@@ -37,6 +37,7 @@ const SettingsPage = async () => {
             <h2>{card.title}</h2>
             <p>{card.description}</p>
             <Link href={`http://localhost:3000/card/${card.id}`}>Link</Link>
+            <Link href={`http://localhost:3000/editor/${card.id}`}>Edit</Link>
           </div>
         ))}
       </div>

@@ -17,7 +17,7 @@ const SettingsPage = async () => {
       <Link href="/editor">Editor</Link>
       <Link href="/dashboard">Dashboard</Link>
     </nav>
-    <h1 className="text-2xl font-bold">Welcom Back, {session?.user?.name}.</h1>
+    <h1 className="text-2xl font-bold">Welcom Back, {session?.user?.id}.</h1>
 
     </div>
 };

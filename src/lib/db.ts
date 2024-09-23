@@ -1,10 +1,18 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "@prisma/client/edge";  // Use the edge version of PrismaClient
+import { Pool } from "@neondatabase/serverless";  // Import Neon adapter
 
-declare global {
-    // eslint-disable-next-line no-var
-    var prisma: PrismaClient | undefined
-}
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,  // Neon DB connection string
+});
 
-export const db = globalThis.prisma || new PrismaClient()
+// Initialize Prisma client without custom pool
+export const db = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  }
+});
 
-if (process.env.NODE_ENV !== "production") globalThis.prisma = db
+// Use the pool for custom queries if needed
+export { pool };

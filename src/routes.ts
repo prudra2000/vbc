@@ -7,6 +7,7 @@ export const publicRoutes = [
     "/api/card/*"
 ]
 
+
 export const authRoutes = [
     "/auth/login",
     "/auth/register",

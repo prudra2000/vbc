@@ -9,6 +9,7 @@ const CardPage = () => {
   const [card, setCard] = useState<PCard | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [nonEmptySocial, setNonEmptySocial] = useState<string[]>();
   const [urls, setUrls] = useState<Record<string, string>>({
     linkedin: "",
     github: "",
@@ -52,6 +53,10 @@ const CardPage = () => {
               reddit: cardData.reddit || "",
               pinterest: cardData.pinterest || "",
             });
+            if (cardData) {
+              setNonEmptySocial(Object.values(cardData).filter((url): url is string => typeof url === "string" && url !== ""));
+              console.log(nonEmptySocial);
+            }
           } else {
             setError(`Failed to fetch card data: ${response.statusText}`);
           }

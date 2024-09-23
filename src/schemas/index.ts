@@ -44,6 +44,27 @@ export const CardSchema = z.object({
   pinterest: z.string().optional(),
 });
 
+export const UpdateCardSchema = z.object({
+  userId: z.string().min(1),
+  title: z.string(),
+  description: z.string().optional(),
+  image: z.string().optional(),
+  github: z.string().optional(),
+  linkedin: z.string().optional(),
+  twitter: z.string().optional(),
+  instagram: z.string().optional(),
+  facebook: z.string().optional(),
+  tiktok: z.string().optional(),
+  youtube: z.string().optional(),
+  twitch: z.string().optional(),
+  discord: z.string().optional(),
+  snapchat: z.string().optional(),
+  whatsapp: z.string().optional(),
+  telegram: z.string().optional(),
+  reddit: z.string().optional(),
+  pinterest: z.string().optional(),
+});
+
 
 export const EditorSchema = z.object({
   userId: z.string().min(1),
