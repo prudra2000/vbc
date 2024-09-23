@@ -10,14 +10,14 @@ import {
   Search,
   Home,
   X,
-  SearchIcon,
-  ChevronRight,
-  Ban,
+  LayoutDashboard,
+  Settings,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { auth, signOut } from "@/auth";
 import { useSession } from "next-auth/react";
 import Avatar from "./avatar";
+import LogoutButton from "./auth/logout-button";
 
 const NavBarLogo = ({ children }: { children: React.ReactNode }) => (
   <div className="flex flex-row gap-2 items-center justify-center font-bold">
@@ -47,19 +47,8 @@ const Navbar = ({
   logo?: React.ReactElement<typeof NavBarLogo>;
   links?: React.ReactNode;
 }) => {
-  const { data: session } = useSession();
 
   const [docsData, setDocsData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/searchIndex.json");
-      const data = await response.json();
-      setDocsData(data);
-    };
-
-    fetchData();
-  }, []);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -137,7 +126,7 @@ const Navbar = ({
             className=""
           >
             <Search className="w-4 h-4 stroke-[#F8CC38]" />
-            <span className=" hidden md:block ml-2 border border-1 border-accent-primary text-accent-primary rounded-md px-1 text-xs">
+            <span className=" hidden md:block ml-2 text-accent-primary rounded-md px-1 text-xs">
               {typeof navigator !== "undefined" &&
               navigator.userAgent.includes("Mac")
                 ? "⌘ K"
@@ -145,37 +134,23 @@ const Navbar = ({
             </span>
           </Button>
 
-          <a href={`/`}>
+          <Link href="/dashboard">
             <Button variant="outline" size="sm">
-              <Home className="w-4 h-4 stroke-[#F8CC38]" />
+              <LayoutDashboard className="w-4 h-4 stroke-[#F8CC38]" />
+              <span className="ml-2 text-accent-primary rounded-md px-1">
+                Darshboard
+              </span>
             </Button>
-          </a>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              window.open("https://github.com/prudra2000/Velocify", "_blank")
-            }
-          >
-            <Github className="w-4 h-4 stroke-[#F8CC38]" />
-          </Button>
-          {isOpen ? (
-            <Button
-              variant="outline"
-              className="rounded-full"
-              onClick={closeNavbar}
-            >
-              <X className="h-4 w-4 stroke-[#F8CC38]" />
+          </Link>
+          <Link href="/settings">
+            <Button variant="outline" size="sm">
+              <Settings className="w-4 h-4 stroke-[#F8CC38]" />
+              <span className="ml-2 text-accent-primary rounded-md px-1">
+                Settings
+              </span>
             </Button>
-          ) : (
-            <Button
-              variant="outline"
-              className="rounded-full"
-              onClick={toggleNavbar}
-            >
-              <AlignJustify className="h-4 w-4 stroke-[#F8CC38]" />
-            </Button>
-          )}
+          </Link>
+          <LogoutButton />
         </div>
         <div className="-mr-2 flex md:hidden gap-x-2 items-center">
           <Button
@@ -185,54 +160,25 @@ const Navbar = ({
             className=""
           >
             <Search className="w-4 h-4 stroke-[#F8CC38]" />
+            <span className=" hidden md:block ml-2 border border-1 border-accent-primary text-accent-primary rounded-md px-1 text-xs">
+              {typeof navigator !== "undefined" &&
+              navigator.userAgent.includes("Mac")
+                ? "⌘ K"
+                : "Ctrl+K"}
+            </span>
           </Button>
-          <div className="hidden md:block">
-            <Input placeholder="Search" className="w-full h-8" />
-          </div>
-          <a href={`/`}>
+
+          <Link href="/dashboard">
             <Button variant="outline" size="sm">
-              <Home className="w-4 h-4 stroke-[#F8CC38]" />
+              <LayoutDashboard className="w-4 h-4 stroke-[#F8CC38]" />
             </Button>
-          </a>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              window.open("https://github.com/prudra2000/Velocify", "_blank")
-            }
-          >
-            <Github className="w-4 h-4 stroke-[#F8CC38]" />
-          </Button>
-          {isOpen ? (
-            <Button
-              variant="outline"
-              className="rounded-full"
-              onClick={closeNavbar}
-            >
-              <X className="h-4 w-4 stroke-[#F8CC38]" />
+          </Link>
+          <Link href="/dashboard">
+            <Button variant="outline" size="sm">
+              <Settings className="w-4 h-4 stroke-[#F8CC38]" />
             </Button>
-          ) : (
-            <Button
-              variant="outline"
-              className="rounded-full"
-              onClick={toggleNavbar}
-            >
-              <AlignJustify className="h-4 w-4 stroke-[#F8CC38]" />
-            </Button>
-          )}
-          {session &&
-            session.user && ( // Check if session and user exist
-              <Avatar
-                src={session.user.image ?? ""}
-                alt={session.user.name ?? ""}
-                size="small"
-                onLoad={() => {
-                  // Cache the image in localStorage
-                  const imgSrc = session.user?.image ?? "";
-                  localStorage.setItem("cachedAvatar", imgSrc);
-                }}
-              />
-            )}
+          </Link>
+          <LogoutButton />
         </div>
       </div>
       <div

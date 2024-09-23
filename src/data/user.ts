@@ -20,8 +20,12 @@ export const getUserById = async (id: string) => {
         id,
       },
     });
+    console.log("User found:", user); // Add this line
+
     return user;
   } catch {
+    console.error("Error fetching user by ID"); // Add error logging
+
     return null;
   }
 };

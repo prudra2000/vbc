@@ -13,8 +13,9 @@ const SettingsPage = async () => {
     }}>
       <button type="submit">Logout</button>
     </form>
-    <nav>
+    <nav className="flex gap-2">
       <Link href="/editor">Editor</Link>
+      <Link href="/dashboard">Dashboard</Link>
     </nav>
     <h1 className="text-2xl font-bold">Welcom Back, {session?.user?.name}.</h1>
 

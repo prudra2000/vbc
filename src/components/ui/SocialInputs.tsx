@@ -7,6 +7,7 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  useDraggable
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -65,9 +66,11 @@ const SocialInputs: React.FC<{
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
-
   const removeInput = (social: string) => {
+    // Remove the social input from the selectedInputs array
     setSelectedInputs((prev) => prev.filter((input) => input !== social));
+    
+    // Remove the corresponding URL from the urls object
     setUrls((prev) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [social]: _, ...rest } = prev;
@@ -88,6 +91,7 @@ const SocialInputs: React.FC<{
   };
 
   return (
+    <div>
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
@@ -118,26 +122,13 @@ const SocialInputs: React.FC<{
                     setUrls((prev) => ({ ...prev, [social]: e.target.value }))
                   }
                 />
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeInput(social);
-                  }}
-                  variant="icon"
-                  size="icon"
-                  className="rounded-full p-0"
-                >
-                  <FontAwesomeIcon
-                    icon={faX}
-                    className="text-red-500 w-3 h-3"
-                  />
-                </Button>
               </div>
             </SortableItem>
           ))}
         </div>
       </SortableContext>
     </DndContext>
+    </div>
   );
 };
 

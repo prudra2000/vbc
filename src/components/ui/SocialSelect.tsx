@@ -1,10 +1,4 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faX } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -40,36 +34,40 @@ const socialIcons = {
   pinterest: faPinterest,
 };
 
-const SocialSelect: React.FC<{ selectedInputs: string[]; handleSelectChange: (event: React.ChangeEvent<HTMLSelectElement>) => void }> = ({ selectedInputs, handleSelectChange }) => {
+const SocialSelect: React.FC<{
+  selectedInputs: string[];
+  handleSelectChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+}> = ({ selectedInputs, handleSelectChange }) => {
   return (
-    <Select
-      onValueChange={(value: string) =>
-        handleSelectChange({ target: { value } } as React.ChangeEvent<HTMLSelectElement>)
-      }
-    >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select Socials" />
-      </SelectTrigger>
-      <SelectContent>
-        {Object.keys(socialIcons).map((value) => (
-          <SelectItem key={value} value={value}>
-            <div className="flex justify-between items-center gap-2">
-              {selectedInputs.includes(value) ? (
-                <FontAwesomeIcon icon={faX} className="text-red-500" />
-              ) : (
-                <FontAwesomeIcon icon={faPlus} className="text-green-500" />
-              )}
-              <span className="flex items-center gap-2">
-                <FontAwesomeIcon
-                  icon={socialIcons[value as keyof typeof socialIcons]}
-                />{" "}
-                {value.charAt(0).toUpperCase() + value.slice(1)}
-              </span>
-            </div>
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="flex flex-wrap gap-2">
+      {Object.keys(socialIcons).map((value) => (
+        <Button
+          variant="outline"
+          key={value}
+          onClick={(e) => {
+            e.preventDefault(); // Prevent page reload
+            handleSelectChange({
+              target: { value },
+            } as React.ChangeEvent<HTMLSelectElement>);
+          }}
+          className={`flex items-center gap-2 p-2 border rounded ${
+            selectedInputs.includes(value) ? "border-red-500" : "border-white"
+          }`}
+        >
+          {selectedInputs.includes(value) ? (
+            <FontAwesomeIcon icon={faX} className="text-red-500" />
+          ) : (
+            <FontAwesomeIcon icon={faPlus} className="text-green-500" />
+          )}
+          <span className="flex items-center gap-2">
+            <FontAwesomeIcon
+              icon={socialIcons[value as keyof typeof socialIcons]}
+            />{" "}
+            {value.charAt(0).toUpperCase() + value.slice(1)}
+          </span>
+        </Button>
+      ))}
+    </div>
   );
 };
 

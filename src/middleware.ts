@@ -8,11 +8,19 @@ import {
 } from "./routes";
 const { auth } = NextAuth(authConfig);
 
+
+function isRoutePublic(pathname: string, publicRoutes: string[]): boolean {
+  return publicRoutes.some(route => {
+    const regex = new RegExp(`^${route.replace('*', '.*')}$`);
+    return regex.test(pathname);
+  });
+}
+
 export default auth((req) => {
   const { nextUrl } = req;
   const isLogin = !!req.auth;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isPublicRoute = isRoutePublic(nextUrl.pathname, publicRoutes);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
   if (isApiAuthRoute) {
