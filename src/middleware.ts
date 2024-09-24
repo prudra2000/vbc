@@ -7,12 +7,11 @@ import {
   DEFAUL_LOGIN_REDIRECT,
 } from "./routes";
 import { auth } from "@/auth";
-import {isCardOwner} from "./data/card"
-
+import { getCardByUserID, isCardOwner } from "./data/card";
 
 function isRoutePublic(pathname: string, publicRoutes: string[]): boolean {
-  return publicRoutes.some(route => {
-    const regex = new RegExp(`^${route.replace('*', '.*')}$`);
+  return publicRoutes.some((route) => {
+    const regex = new RegExp(`^${route.replace("*", ".*")}$`);
     return regex.test(pathname);
   });
 }
@@ -36,7 +35,6 @@ export default auth(async (req) => {
   if (!isLogin && !isPublicRoute) {
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
-
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -45,28 +43,30 @@ export default auth(async (req) => {
   if (editorMatch) {
     const cardId = editorMatch[1];
 
-    // Redirect to login if user is not authenticated
     if (!userId) {
       return Response.redirect(new URL("/auth/login", nextUrl));
     }
+    try {
+      const userId = session?.user?.id;
+      if (!userId) {
+        throw new Error("User ID is undefined");
+      }
+      const owner = isCardOwner(userId, cardId);
 
-    // Check if the current user owns the card
-    const isOwner = await isCardOwner(userId, cardId);
-    
-    // Redirect to the card view if the user is not the owner
-    if (!isOwner) {
+      if (!owner) {
+        return Response.redirect(new URL(`/card/${cardId}`, nextUrl));
+      }
+
+      if (nextUrl.pathname !== `/editor/${cardId}`) {
+        return Response.redirect(new URL(`/editor/${cardId}`, nextUrl));
+      }
+    } catch (error) {
+      console.error("Error checking card ownership:", error);
       return Response.redirect(new URL(`/card/${cardId}`, nextUrl));
-    }
-
-    // Ensure no redirect loop by checking if already on the correct page
-    if (nextUrl.pathname !== `/editor/${cardId}`) {
-      return Response.redirect(new URL(`/editor/${cardId}`, nextUrl));
     }
   }
   return undefined;
 });
-
-
 
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],

@@ -1,14 +1,6 @@
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-export const sendVerificationEmail = async (email: string, token: string) => {
-  const confirmLink = `http://localhost:3000/auth/new-verification?token=${token}`;
-  await resend.emails.send({
-    from: "onboarding@resend.dev",
-    to: email,
-    subject: "Verify your email",
-    html: `<head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Verification</title>
@@ -43,7 +35,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
                             <p style="font-size: 16px; color: #333333; margin: 0 0 20px;">Hello,</p>
                             <p style="font-size: 16px; color: #333333; margin: 0 0 20px;">Thank you for signing up. Please click the button below to verify your email address.</p>
                             <p style="text-align: center;">
-                                <a href="${confirmLink}" class="button" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #4CAF50; text-decoration: none; border-radius: 5px;">Verify Email</a>
+                                <a href="{{ verification_link }}" class="button" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #4CAF50; text-decoration: none; border-radius: 5px;">Verify Email</a>
                             </p>
                             <p style="font-size: 16px; color: #333333; margin: 20px 0 0;">If you did not sign up for this account, you can ignore this email.</p>
                         </td>
@@ -57,25 +49,5 @@ export const sendVerificationEmail = async (email: string, token: string) => {
             </td>
         </tr>
     </table>
-</body>`,
-  });
-};
-
-export const sendPasswordResetEmail = async (email: string, token: string) => {
-  const resetLink = `http://localhost:3000/auth/new-password?token=${token}`;
-  await resend.emails.send({
-    from: "onboarding@resend.dev",
-    to: email,
-    subject: "Reset your password",
-    html: `<p>Please reset your password by clicking <a href="${resetLink}">here</a>.</p>`,
-  });
-};
-
-export const sendTwoFactorEmail = async (email: string, token: string) => {
-  await resend.emails.send({
-    from: "onboarding@resend.dev",
-    to: email,
-    subject: "Two-Factor Authentication",
-    html: `<p>Please enter the following code to complete the authentication process: <strong>${token}</strong></p>`,
-  });
-};
+</body>
+</html>

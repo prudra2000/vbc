@@ -1,27 +1,26 @@
 import { NextResponse } from 'next/server';
-import { db } from '../../../../lib/db';
-import { auth } from '@/auth';
+import { db } from '@/lib/db';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
-  const session = await auth();
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
+  const cardId = searchParams.get('cardId');
 
-  if (!id) {
-    return NextResponse.json({ error: 'Invalid card ID' }, { status: 400 });
+  if (!userId || !cardId) {
+    return NextResponse.json({ isOwner: false }, { status: 400 });
   }
 
   try {
     const card = await db.card.findUnique({
-      where: { id },
+      where: {
+        id: cardId,
+        userId: userId,
+      },
     });
 
-    if (!card) {
-      return NextResponse.json({ error: 'Card not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(card, { status: 200 });
+    return NextResponse.json({ isOwner: card !== null }, { status: 200 });
   } catch (error) {
-    console.error('Error fetching card:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error("Error checking card ownership:", error);
+    return NextResponse.json({ isOwner: false }, { status: 500 });
   }
 }
