@@ -15,6 +15,7 @@ import {
   faReddit,
   faPinterest,
 } from "@fortawesome/free-brands-svg-icons";
+import '@/app/CardStyles.css';
 
 const socialIcons = {
   linkedin: faLinkedin,
@@ -57,12 +58,14 @@ type SocialLinksProps = {
   showUsername: boolean;
   selectedInputs: string[];
   urls: Record<string, string | undefined>;
+  type: string;
 };
 
 const SocialLinks = ({
   showUsername,
   urls,
   selectedInputs,
+  type = "primary",
 }: SocialLinksProps) => {
   const renderSocialLink = (
     platform: keyof typeof socialIcons,
@@ -96,7 +99,7 @@ const SocialLinks = ({
                 rel="noopener noreferrer"
                 key={platform}
               >
-                <div className="flex items-center gap-2 p-2 outline outline-1 outline-gray-300 rounded-md">
+                <div className={`card ${type} socials`}>
                   <FontAwesomeIcon icon={icon} className="w-4 h-4" />
                 </div>
               </a>
@@ -113,8 +116,8 @@ const SocialLinks = ({
       {showUsername ? (
         <div className="flex flex-col gap-2">
           {selectedInputs.map((key) => {
-          const url = urls[key];
-          return renderSocialLink(key as keyof typeof socialIcons, url);
+            const url = urls[key];
+            return renderSocialLink(key as keyof typeof socialIcons, url);
           })}
         </div>
       ) : (

@@ -22,6 +22,7 @@ interface EditorForm {
   onFormChange: (newValues: any) => void;
   selected: string[];
   onSelectChange: (selectedInputs: string[]) => void;
+  children: React.ReactElement
 }
 
 const EditorForm: React.FC<EditorForm> = ({
@@ -30,6 +31,7 @@ const EditorForm: React.FC<EditorForm> = ({
   formValues,
   onFormChange,
   selected,
+  children,
   onSelectChange = () => {},
 }) => {
   if (!isOpen) return null;
@@ -80,6 +82,7 @@ const EditorForm: React.FC<EditorForm> = ({
               <form
                 className="space-y-4"
                 onChange={() => handleFormChange(form.getValues())}
+                
               >
                 <FormField
                   control={form.control}
@@ -114,7 +117,7 @@ const EditorForm: React.FC<EditorForm> = ({
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="Software Developer"
+                          placeholder="Style"
                         />
                       </FormControl>
                     </FormItem>
@@ -130,6 +133,7 @@ const EditorForm: React.FC<EditorForm> = ({
                   setUrls={setUrls}
                   setSelectedInputs={setSelectedInputs}
                 />
+                {children}
               </form>
             </Form>
           </section>

@@ -26,6 +26,7 @@ export const NewPasswordSchema = z.object({
 export const CardSchema = z.object({
   userId: z.string().min(1),
   title: z.string(),
+  style: z.string().optional(),
   description: z.string().optional(),
   image: z.string().optional(),
   github: z.string().optional(),
@@ -47,6 +48,7 @@ export const CardSchema = z.object({
 export const UpdateCardSchema = z.object({
   userId: z.string().min(1),
   title: z.string(),
+  style: z.string().optional(),
   description: z.string().optional(),
   image: z.string().optional(),
   github: z.string().optional(),
@@ -69,6 +71,7 @@ export const UpdateCardSchema = z.object({
 export const EditorSchema = z.object({
   userId: z.string().min(1),
   title: z.string(),
+  style: z.string().optional(),
   description: z.string().optional(),
   image: z.string().optional(),
   github: z.string().optional(),

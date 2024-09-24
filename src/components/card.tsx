@@ -1,40 +1,53 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import SocialLinks from "@/components/ui/SocialLinks";
+import { CardStyleProvider } from "./CardStyleProvider";
+import Image from "next/image";
 
 interface CardProps {
   name: string;
   email: string;
-  location: string;
+  image: string;
   urls: Record<string, string>;
   showUsername: boolean;
   selectedInputs: string[];
+  type: "primary" | "secondary" | "success" | "danger"; // Add type prop
+  className?: string
 }
 
 export default function Card({
   name = "",
   email = "",
-  location = "",
+  image = "",
   urls = {},
   showUsername = true,
   selectedInputs = [],
+  type,
+  className
+  
 }: CardProps) {
+  console.log("image:", image); // Check the contents of urls
+  console.log("Selected Inputs:", selectedInputs);
   return (
-    <div className="bg-white w-full sm:w-72 md:w-80 lg:w-96 h-auto p-4 rounded-lg shadow-md text-black">
-      <h1 className="text-2xl font-bold ">{name}</h1>
-      <div className="flex items-center gap-2">
-        <FontAwesomeIcon icon={faEnvelope} className="" />
-        <p className="">{email}</p>
+    <CardStyleProvider type={type}>
+      <div className={`card ${type} ${className}`}>
+        <div className="flex flex-col justify-center items-center gap-5">
+        <div></div>
+        <div className="flex flex-col items-center">
+            <h1 className="text-3xl font-bold ">{name}</h1>
+            <div className="flex items-center gap-2">
+              <p className="">{email}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <SocialLinks
+              urls={urls}
+              showUsername={showUsername}
+              selectedInputs={selectedInputs}
+              type="primary"
+            />
+          </div>
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <FontAwesomeIcon icon={faLocationDot} className="" />
-        <p className="">{location}</p>
-      </div>
-      <SocialLinks
-        urls={urls}
-        showUsername={showUsername}
-        selectedInputs={selectedInputs}
-      />
-    </div>
+    </CardStyleProvider>
   );
 }

@@ -7,6 +7,8 @@ import { getCardByUserID } from "@/data/card";
 import { auth } from "@/auth";
 
 export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardID:string) => {
+
+  console.log(cardID)
   const validatedFields = UpdateCardSchema.safeParse(values);
   if (!validatedFields.success) {
     console.error("Validation failed:", validatedFields.error);
@@ -18,6 +20,7 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
   const {
     userId,
     title,
+    style,
     description,
     image,
     github,
@@ -36,7 +39,6 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
     pinterest,
   } = validatedFields.data;
 
-  const session = await auth();
 
   const card = await getCardByUserID(cardID);
   if (!card) {
@@ -54,6 +56,7 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
         title: title || card.title,
         description: description || card.description,
         image: image || card.image,
+        style: style || card.style,
         github: github || card.github,
         linkedin: linkedin || card.linkedin,
         twitter: twitter || card.twitter,

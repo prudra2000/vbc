@@ -1,6 +1,5 @@
-import Image from "next/image";
 import React from "react";
-import SocialLinks from "../ui/SocialLinks";
+import Card from "../card";
 
 interface PageProps {
   formValues: {
@@ -51,18 +50,17 @@ export const Page: React.FC<PageProps> = ({
     pinterest: formValues.urls.pinterest,
   };
   return (
-    <div className="w-screen h-screen">
-      <section title="Header">
-        <p>{formValues.title || "No title provided"}</p>
-        <p>{formValues.description || "No title provided"}</p>
-      </section>
-      <section title="socials">
-        <SocialLinks
-          urls={formValues.urls}
-          showUsername={showUsername}
-          selectedInputs={selectedInputs}
-        />
-      </section>
+    <div className="w-full h-full">
+      <Card
+        name={formValues?.title || ""}
+        email={formValues?.description || ""}
+        image={formValues?.image || ""}
+        urls={urls} // Fix: use the correct state variable
+        showUsername={false}
+        selectedInputs={selectedInputs}
+        type="primary"
+        className="rounded-2xl outline outline-1 outline-white/10"
+      />
     </div>
   );
 };

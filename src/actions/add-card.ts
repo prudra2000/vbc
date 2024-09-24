@@ -17,6 +17,7 @@ export const addCard = async (values: z.infer<typeof CardSchema>) => {
 
   const {
     userId,
+    style,
     title,
     description,
     image,
@@ -37,12 +38,14 @@ export const addCard = async (values: z.infer<typeof CardSchema>) => {
   } = validatedFields.data;
 
   const session = await auth();
+    
 
-  try {
+  try {console.log("Validated Fields Data:", validatedFields.data);
     const newCard = await db.card.create({
       data: {
         userId: session?.user?.id || "",
         title,
+        style: style || "",
         description: description || "",
         image: image || "",
         github: github || "",

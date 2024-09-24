@@ -9,12 +9,17 @@ import { CardSchema, UpdateCardSchema } from "@/schemas";
 import { useSession } from "next-auth/react";
 import { updateCard } from "@/actions/update-card";
 import { Button } from "../../../../components/ui/button";
+import { Save, ExternalLink } from "lucide-react";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
+import Link from "next/link";
 
 type FormValues = {
   userId: string;
   title: string;
   description: string;
   image: string;
+  style: string;
   urls: {
     linkedin: string;
     github: string;
@@ -42,6 +47,7 @@ const EditorPage = () => {
   const cardId = Array.isArray(id) ? id[0] : id;
   const [card, setCard] = useState<PCard | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
   const [nonEmptyCardData, setnonEmptyCardData] = useState<string[]>([]);
@@ -50,6 +56,7 @@ const EditorPage = () => {
     title: "",
     description: "",
     image: "",
+    style: "",
     urls: {
       linkedin: "",
       github: "",
@@ -79,13 +86,14 @@ const EditorPage = () => {
         try {
           const response = await fetch(`/api/editor/${id}`);
           if (response.ok) {
-            const cardData = await response.json();
+            const { card: cardData } = await response.json();
             setCard(cardData);
             setFormValues({
               userId: cardData.userId || "",
               title: cardData.title || "",
               description: cardData.description || "",
               image: cardData.image || "",
+              style: cardData.style || "",
               urls: {
                 linkedin: cardData.linkedin || "",
                 github: cardData.github || "",
@@ -139,15 +147,29 @@ const EditorPage = () => {
     fetchCard();
   }, [id]);
 
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess(null);
+      }, 10000); // 10 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
   const handleUpdateData = async (
-    formValues1: z.infer<typeof UpdateCardSchema>, cardID: string
+    formValues1: z.infer<typeof UpdateCardSchema>,
+    cardID: string,
+    e: React.SyntheticEvent
   ) => {
+    e.preventDefault();
     const values = {
       userId: session?.user?.id || "",
-      title: formValues.title || "", // Ensure title is provided here
+      title: formValues.title || "",
       description: formValues.description || "",
       image: formValues.image || "",
-      linkedin: formValues.urls.linkedin || "", // Set to empty string if undefined
+      style: formValues.image || "",
+      linkedin: formValues.urls.linkedin || "",
       github: formValues.urls.github || "",
       twitter: formValues.urls.twitter || "",
       instagram: formValues.urls.instagram || "",
@@ -166,30 +188,51 @@ const EditorPage = () => {
     startTransition(async () => {
       try {
         const data = await updateCard(values, cardId);
+        setSuccess("Card Updated");
         console.log(data);
+        if (data.error) {
+          throw new Error(data.error); // Handle error response from updateCard
+        }
+        // Optionally, you can show a success message here
       } catch (error) {
-        console.error("Error adding card:", error);
-        alert("Something went wrong.");
+        console.error("Error updating card:", error); // Log the error
       }
     });
   };
 
   return (
     <div>
-      <div className="flex w-full ">
-        <div className="w-1/2">
+      <div className="flex flex-col sm:flex-row w-full gap-5 justify-center items-center">
+        <div className="w-full sm:w-1/2">
           <Page formValues={formValues} selectedInputs={selectedInputs} />
         </div>
-        <div className="w-1/2">
+        <div className="w-full sm:w-1/2">
           <EditorForm
             formValues={formValues}
             onFormChange={handleFormChange}
             selected={selectedInputs} // Pass selectedInputs to EditorForm
             onSelectChange={setSelectedInputs}
-          />
-          <Button onClick={handleUpdateData}>Save Data</Button>
-          <p>{session?.user?.id}</p>
-          <p>{formValues.urls.github}</p>
+          >
+            <div className="flex flex-col gap-2">
+              <FormSuccess message={success || ""} />
+              <FormError message={""} />
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button
+                  onClick={(e) => handleUpdateData(formValues, cardId, e)}
+                  className="w-full gap-2"
+                >
+                  <Save className="w-5 h-5" />
+                  Save Data
+                </Button>
+                <Link href={`/card/${id}`}>
+                  <Button className="w-full gap-2">
+                    <ExternalLink className="w-5 h-5" />
+                    View Card
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </EditorForm>
         </div>
       </div>
     </div>
