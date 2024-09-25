@@ -9,10 +9,11 @@ import { CardSchema, UpdateCardSchema } from "@/schemas";
 import { useSession } from "next-auth/react";
 import { updateCard } from "@/actions/update-card";
 import { Button } from "../../../../components/ui/button";
-import { Save, ExternalLink } from "lucide-react";
+import { Save, ExternalLink, PencilRuler } from "lucide-react";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import Link from "next/link";
+import Header from "@/components/header";
 
 type FormValues = {
   userId: string;
@@ -201,10 +202,12 @@ const EditorPage = () => {
   };
 
   return (
-    <div>
-      <div className="flex flex-col sm:flex-row w-full gap-5 justify-center items-center">
+    <div className="h-full pt-8 px-10 bg-gray-100">
+      <Header headerTitle={"Editor: " + card?.title}  icon={<PencilRuler className="stroke-blue-800"/>} />
+      <div className="flex flex-col sm:flex-row w-full justify-center items-center pt-5 gap-2">
         <div className="w-full sm:w-1/2">
-          <Page formValues={formValues} selectedInputs={selectedInputs} />
+         <Page formValues={formValues} selectedInputs={selectedInputs} /> 
+          
         </div>
         <div className="w-full sm:w-1/2">
           <EditorForm
@@ -224,7 +227,7 @@ const EditorPage = () => {
                   <Save className="w-5 h-5" />
                   Save Data
                 </Button>
-                <Link href={`/card/${id}`}>
+                <Link href={`http://localhost:3000/card/${cardId}`} target="_blank" rel="noopener noreferrer">
                   <Button className="w-full gap-2">
                     <ExternalLink className="w-5 h-5" />
                     View Card

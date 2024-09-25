@@ -13,11 +13,9 @@ import {
   LayoutDashboard,
   Settings,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { auth, signOut } from "@/auth";
-import { useSession } from "next-auth/react";
-import Avatar from "./avatar";
-import LogoutButton from "./auth/logout-button";
+import LogoutButton from "../auth/logout-button";
+import UserInfo from "./user-info";
+import Divider from "../ui/divider";
 
 const NavBarLogo = ({ children }: { children: React.ReactNode }) => (
   <div className="flex flex-row gap-2 items-center justify-center font-bold">
@@ -47,7 +45,6 @@ const Navbar = ({
   logo?: React.ReactElement<typeof NavBarLogo>;
   links?: React.ReactNode;
 }) => {
-
   const [docsData, setDocsData] = useState([]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -68,8 +65,9 @@ const Navbar = ({
   const dialogRef = useRef<HTMLDivElement>(null);
 
   const toggleNavbar = () => {
-    setIsOpen(true);
+    setIsOpen((prev) => !prev);
   };
+
   const closeNavbar = () => {
     setIsOpen(false);
   };
@@ -112,7 +110,7 @@ const Navbar = ({
 
   return (
     <div className="relative z-20">
-      <div className="flex flex-row px-5 md:px-10 py-2 justify-between items-center bg-[#030711]/80 backdrop-blur-md border-b border-1 border-white/10 text-white">
+      <div className="flex flex-row px-5 md:px-10 py-2 justify-between items-center bg-blue-50 backdrop-blur-md border-b border-1 border-blue-400 text-white shadow-lg">
         {logo}
         <div
           className={`${
@@ -120,13 +118,13 @@ const Navbar = ({
           } hidden sm:hidden md:flex flex-row gap-x-2 justify-center items-center`}
         >
           <Button
-            variant="outline"
+            variant="link"
             size="sm"
             onClick={() => handleOpenDialog()}
-            className=""
+            className="hover:bg-slate-100"
           >
-            <Search className="w-4 h-4 stroke-[#F8CC38]" />
-            <span className=" hidden md:block ml-2 text-accent-primary rounded-md px-1 text-xs">
+            <Search className="w-4 h-4 stroke-blue-800" />
+            <span className=" hidden md:block ml-1 text-accent-primary rounded-md px-1 text-xs">
               {typeof navigator !== "undefined" &&
               navigator.userAgent.includes("Mac")
                 ? "⌘ K"
@@ -135,57 +133,58 @@ const Navbar = ({
           </Button>
 
           <Link href="/dashboard">
-            <Button variant="outline" size="sm">
-              <LayoutDashboard className="w-4 h-4 stroke-[#F8CC38]" />
-              <span className="ml-2 text-accent-primary rounded-md px-1">
+            <Button variant="link" size="sm" className="hover:bg-slate-100">
+              <LayoutDashboard className="w-4 h-4 stroke-blue-800" />
+              <span className="ml-1 text-accent-primary rounded-md px-1">
                 Darshboard
               </span>
             </Button>
           </Link>
-          <Link href="/settings">
-            <Button variant="outline" size="sm">
-              <Settings className="w-4 h-4 stroke-[#F8CC38]" />
-              <span className="ml-2 text-accent-primary rounded-md px-1">
-                Settings
-              </span>
+          <UserInfo />
+
+          {isOpen ? (
+            <Button
+              variant="link"
+              size="sm"
+              className="hover:bg-slate-100"
+              onClick={closeNavbar}
+            >
+              <X className="w-4 h-4 stroke-blue-800" />
             </Button>
-          </Link>
-          <LogoutButton />
+          ) : (
+            <Button
+              variant="link"
+              size="sm"
+              className="hover:bg-slate-100"
+              onClick={toggleNavbar}
+            >
+              <AlignJustify className="w-4 h-4 stroke-blue-800" />
+            </Button>
+          )}
         </div>
-        <div className="-mr-2 flex md:hidden gap-x-2 items-center">
+        <div className="flex md:hidden gap-x-2 items-center">
           <Button
-            variant="outline"
+            variant="link"
             size="sm"
             onClick={() => handleOpenDialog()}
-            className=""
+            className="hover:bg-slate-100"
           >
-            <Search className="w-4 h-4 stroke-[#F8CC38]" />
-            <span className=" hidden md:block ml-2 border border-1 border-accent-primary text-accent-primary rounded-md px-1 text-xs">
-              {typeof navigator !== "undefined" &&
-              navigator.userAgent.includes("Mac")
-                ? "⌘ K"
-                : "Ctrl+K"}
-            </span>
+            <Search className="w-4 h-4 stroke-blue-800" />
           </Button>
 
           <Link href="/dashboard">
-            <Button variant="outline" size="sm">
-              <LayoutDashboard className="w-4 h-4 stroke-[#F8CC38]" />
+            <Button variant="link" size="sm" className="hover:bg-slate-100">
+              <LayoutDashboard className="w-4 h-4 stroke-blue-800" />
             </Button>
           </Link>
-          <Link href="/dashboard">
-            <Button variant="outline" size="sm">
-              <Settings className="w-4 h-4 stroke-[#F8CC38]" />
-            </Button>
-          </Link>
-          <LogoutButton />
+          <UserInfo />
         </div>
       </div>
       <div
         ref={menuRef}
         className={`${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 absolute w-80 h-screen bg-[#030711]/90 backdrop-blur-md border-r border-1 border-white/10 `}
+        } transition-transform duration-300 absolute w-80 h-screen bg-blue-50/90 backdrop-blur-md border-r border-1 border-blue-400 `}
       >
         <div className="flex flex-col justify-between px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <div className="flex flex-row gap-2 text-white p-2">{links}</div>

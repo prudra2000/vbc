@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "../card";
+import Card from "./card";
 
 interface PageProps {
   formValues: {
@@ -59,7 +59,7 @@ export const Page: React.FC<PageProps> = ({
         showUsername={false}
         selectedInputs={selectedInputs}
         type="primary"
-        className="rounded-2xl outline outline-1 outline-white/10"
+        className="outline outline-1 outline-white/10"
       />
     </div>
   );

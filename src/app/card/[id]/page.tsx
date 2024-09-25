@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Card as PCard } from "@prisma/client"; // Import the Card type from Prisma
-import Card from "../../../components/card";
+import Card from "../../../components/card/card";
 
 const CardPage = () => {
   const { id } = useParams(); // Get the id from the URL

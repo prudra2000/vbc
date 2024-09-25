@@ -5,6 +5,14 @@
     height: 100vh;
 
   }
+  .previewCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10rem;
+    background-color: #131723;
+    color: white;
+  }
   
   .card.primary {
     background-color: #131723;

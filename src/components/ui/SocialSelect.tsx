@@ -52,7 +52,7 @@ const SocialSelect: React.FC<{
             } as React.ChangeEvent<HTMLSelectElement>);
           }}
           className={`flex items-center gap-2 p-2 border rounded ${
-            selectedInputs.includes(value) ? "border-red-500" : "border-white"
+            selectedInputs.includes(value) ? "border-red-500" : ""
           }`}
         >
           {selectedInputs.includes(value) ? (

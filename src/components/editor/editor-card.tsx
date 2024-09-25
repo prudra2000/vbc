@@ -72,11 +72,8 @@ const EditorForm: React.FC<EditorForm> = ({
 
   return (
     <div className="">
-      <div className="rounded-xl border border-neutral-200 bg-white text-neutral-950 shadow dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
+      <div className="flex flex-col h-screen border border-neutral-200 bg-white text-neutral-950 shadow dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
         <div className="flex flex-col gap-2 p-4">
-          <section title="header">
-            <h1 className="text-lg font-bold">Header</h1>
-          </section>
           <section title="form">
             <Form {...form}>
               <form

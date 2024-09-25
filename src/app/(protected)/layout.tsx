@@ -1,5 +1,5 @@
 import { SessionProvider } from "next-auth/react";
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/navbar/navbar";
 import Logo from "@/components/logo"; // Add this import
 
 export default function RootLayout({
@@ -12,13 +12,12 @@ export default function RootLayout({
       <Navbar
         logo={
           <div className="flex items-center">
-            <Logo />
-            <span className="ml-2 text-xl font-bold">VBC</span>
+            <span className="ml-2 text-xl font-bold text-black">VBC</span>
           </div>
         }
         links={undefined}
       ></Navbar>
-      <div className="p-5">
+      <div className="">
         {children}
       </div>
     </SessionProvider>

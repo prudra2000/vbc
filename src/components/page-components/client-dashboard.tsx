@@ -7,11 +7,32 @@ import { Card } from "@prisma/client";
 import { getCards } from "@/actions/get-user-cards";
 import Table from "@/components/ui/table";
 import CardModal from "../editor/card-modal";
-import { Trash2, Plus, QrCode } from "lucide-react";
+import {
+  Trash2,
+  Plus,
+  Share2,
+  PencilRuler,
+  QrCode,
+  EllipsisVertical,
+  Eye,
+} from "lucide-react";
 import { deleteCard } from "@/actions/delete-card";
 import { QRCodeSVG } from "qrcode.react";
 import Tooltip from "../ui/tooltip";
-// Update the SessionType to include id
+import DisplayCard from "../dashboard/display-card";
+import QRModal from "../card/card-qr-modal";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 type SessionType = {
   user?: {
     name?: string;
@@ -26,7 +47,8 @@ const ClientDashboard = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false); // State for QRModal visibility
+  const [currentCardId, setCurrentCardId] = useState<string | null>(null);
   useEffect(() => {
     const fetchSession = async () => {
       // Replace this with your actual method to fetch the session
@@ -77,17 +99,18 @@ const ClientDashboard = () => {
       title: data.title,
       description: data.description,
       style: data.style,
-      // Add other fields as necessary
     };
     await addCard(starterValues);
-    // Optionally, refresh the cards after adding
     const result = await getCards();
     if ("cards" in result) {
       setCards(result.cards ?? []);
     }
   };
 
-  const downloadQRCode = (svgRef: RefObject<SVGSVGElement>, fileName: string): void => {
+  const downloadQRCode = (
+    svgRef: RefObject<SVGSVGElement>,
+    fileName: string
+  ): void => {
     const svg = svgRef.current;
     if (svg) {
       const svgData = new XMLSerializer().serializeToString(svg);
@@ -109,92 +132,168 @@ const ClientDashboard = () => {
   };
 
   if (!session) return <div>Loading...</div>;
-  const buttonTableColumns = [
-    { col1: "Card Name", col2: "Y", col3: "Default" },
-  ];
-  const tableData: { prop: string; type: string; default: JSX.Element }[] =
-    cards.map((card) => ({
-      prop: card.title,
-      type: card.updatedAt.toLocaleDateString("en-US", {
-        // Modify date format
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "numeric", // Add this line
-        minute: "numeric", // Add this line
-        hour12: true, // Keep this line
-      }),
-      default: (
-        <div className="flex items-center gap-x-2">
-          <Link href={`/card/${card.id}`}>
-            <Button variant="outline" size="sm">
-              View
-            </Button>
-          </Link>
-          <Link href={`/editor/${card.id}`}>
-            <Button variant="outline" size="sm">
-              Edit
-            </Button>
-          </Link>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={async () => {
-              await deleteCard(card.id); // Wait for the deleteCard function to complete
-              window.location.reload(); // Reload the page
-            }}
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
-          <Tooltip
-            text={<QRCodeSVG ref={qrSVGRef} value={`http://localhost:3000/card/${card.id}`} />}
-            children={
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={async () => {
-                  downloadQRCode(qrSVGRef, `http://localhost:3000/card/${card.id}`)
-                }}
-              >
-                <QrCode className="w-4 h-4" />
-              </Button>
-            }
-            className="z-50"
-          ></Tooltip>
-        </div>
-      ),
-    }));
 
   return (
-    <div>
-      Dashboard
-      <div className="flex w-max justify-between items-center">
-        <h1 className="text-2xl font-bold">
-          Welcome Back, {session?.user?.name}.
-        </h1>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setIsModalOpen(true)}
-          className="flex gap-2"
-        >
-          <Plus className="w-4 h-4 " />
-          Add Card
-        </Button>
-      </div>
+    <div className=" h-max pt-8 px-10 bg-gray-100">
       <CardModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          window.location.reload();
         }}
         onSubmit={handleAddCard}
       />
-      <div className="flex flex-col gap-2">
-        <h1>Your Cards</h1>
-        {error && <p>Error: {error}</p>}
-        <Table data={tableData} columns={buttonTableColumns} />
-      </div>
+      {cards.length > 0 ? (
+        <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {cards.map((card) => {
+              console.log("Card Title:", card.title);
+              return (
+                <div key={card.id}>
+                  <DisplayCard
+                    cardID={card.id}
+                    cardTitle={card.title}
+                    cardDescription={card.description}
+                    dateUpdated={card.updatedAt.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: true,
+                    })}
+                    children={
+                      <div className="">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="secondary" size="sm">
+                              <EllipsisVertical className="w-5" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="w-56">
+                            <DropdownMenuLabel>{card.title}</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuGroup>
+                              <Link href={`/card/${card.id}`} target="_blank">
+                                <DropdownMenuItem>
+                                  <span>View Card</span>
+                                  <DropdownMenuShortcut>
+                                    <Eye className="w-4 h-4" />
+                                  </DropdownMenuShortcut>
+                                </DropdownMenuItem>
+                              </Link>
+                              <Link href={`/editor/${card.id}`}>
+                                <DropdownMenuItem>
+                                  <span>Edit</span>
+                                  <DropdownMenuShortcut>
+                                    <PencilRuler className="w-4 h-4" />
+                                  </DropdownMenuShortcut>
+                                </DropdownMenuItem>
+                              </Link>
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setCurrentCardId(card.id);
+                                  setIsQRModalOpen(true);
+                                }}
+                              >
+                                <span>Share</span>
+                                <DropdownMenuShortcut>
+                                  <Share2 className="w-4 h-4" />
+                                </DropdownMenuShortcut>
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={async () => {
+                                  await deleteCard(card.id);
+                                  window.location.reload();
+                                }}
+                              >
+                                <span className="text-destructive">Delete</span>
+                                <DropdownMenuShortcut>
+                                  <Trash2 className="w-4 h-4 stroke-destructive" />
+                                </DropdownMenuShortcut>
+                              </DropdownMenuItem>
+                            </DropdownMenuGroup>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    }
+                  />
+                </div>
+              );
+            })}
+            <div
+          className="flex flex-col justify-center items-center bg-white w-full h-64 shadow-md border border-gray-300 rounded-lg overflow-hidden text-black p-6"
+        >
+          <div className="flex flex-col items-center gap-4">
+            <svg
+              className="w-12 h-12 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 4v16m8-8H4"
+              ></path>
+            </svg>
+            <p className="text-gray-600 text-lg">Add more cards</p>
+            <p className="text-gray-500 text-sm">Get started by adding more cards.</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsModalOpen(true)}
+              className="flex gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Add Card
+            </Button>
+          </div>
+        </div>
+          </div>
+        </div>
+      ) : (
+        <div
+          className="flex flex-col justify-center items-center bg-white w-full h-64 shadow-md border border-gray-300 rounded-lg overflow-hidden text-black p-6"
+        >
+          <div className="flex flex-col items-center gap-4">
+            <svg
+              className="w-12 h-12 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 4v16m8-8H4"
+              ></path>
+            </svg>
+            <p className="text-gray-600 text-lg">No cards added yet</p>
+            <p className="text-gray-500 text-sm">Get started by adding your first card.</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsModalOpen(true)}
+              className="flex gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Add Card
+            </Button>
+          </div>
+        </div>
+      )}
+      {isQRModalOpen && (
+        <QRModal
+          isOpen={isQRModalOpen}
+          onClose={() => setIsQRModalOpen(false)}
+          cardId={currentCardId || ""}
+        />
+      )}
     </div>
   );
 };

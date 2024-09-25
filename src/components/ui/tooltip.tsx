@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
 
 const tooltipVariants = cva(
-  "absolute w-auto text-xs text-center transition-opacity duration-300 whitespace-normal z-20",
+  "absolute w-auto text-xs text-center transition-opacity duration-300 whitespace-normal",
   {
     variants: {
       variant: {

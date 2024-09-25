@@ -1,19 +1,19 @@
 import SocialLinks from "@/components/ui/SocialLinks";
-import { CardStyleProvider } from "./CardStyleProvider";
+import { CardStyleProvider } from "../CardStyleProvider";
 import Image from "next/image";
 
-interface CardProps {
+interface PreviewCardProps {
   name: string;
   email: string;
-  image: string;
-  urls: Record<string, string>;
+  image?: string;
+  urls?: Record<string, string>;
   showUsername: boolean;
-  selectedInputs: string[];
+  selectedInputs?: string[];
   type: "primary" | "secondary" | "success" | "danger"; // Add type prop
   className?: string
 }
 
-export default function Card({
+export default function PreviewCard({
   name = "",
   email = "",
   image = "",
@@ -23,12 +23,12 @@ export default function Card({
   type,
   className
   
-}: CardProps) {
+}: PreviewCardProps) {
   console.log("image:", image); // Check the contents of urls
   console.log("Selected Inputs:", selectedInputs);
   return (
     <CardStyleProvider type={type}>
-      <div className={`card ${type} ${className}`}>
+      <div className={`previewCard ${type} ${className}`}>
         <div className="flex flex-col justify-center items-center gap-5">
         <div></div>
         <div className="flex flex-col items-center">
