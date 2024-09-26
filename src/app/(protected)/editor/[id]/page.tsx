@@ -14,14 +14,21 @@ import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import Link from "next/link";
 import Header from "@/components/header";
+import { EditorPreview } from "@/components/editor/editor-preview";
 
 type FormValues = {
   userId: string;
-  title: string;
-  description: string;
+  cardTitle: string;
+  cardStyle: string;
+  name: string;
   image: string;
-  style: string;
-  urls: {
+  tagline: string;
+  company: string;
+  email: string;
+  phone: string;
+  location: string;
+  website: string;
+  socialMedia: {
     linkedin: string;
     github: string;
     twitter: string;
@@ -39,9 +46,6 @@ type FormValues = {
   };
 };
 
-// Define UrlKeys type
-type UrlKeys = keyof FormValues["urls"];
-
 const EditorPage = () => {
   const { data: session } = useSession();
   const { id } = useParams();
@@ -54,11 +58,17 @@ const EditorPage = () => {
   const [nonEmptyCardData, setnonEmptyCardData] = useState<string[]>([]);
   const [formValues, setFormValues] = useState<FormValues>({
     userId: "",
-    title: "",
-    description: "",
+    cardTitle: "",
+    cardStyle: "",
+    name: "",
     image: "",
-    style: "",
-    urls: {
+    tagline: "",
+    company: "",
+    email: "",
+    phone: "",
+    location: "",
+    website: "",
+    socialMedia: {
       linkedin: "",
       github: "",
       twitter: "",
@@ -91,25 +101,31 @@ const EditorPage = () => {
             setCard(cardData);
             setFormValues({
               userId: cardData.userId || "",
-              title: cardData.title || "",
-              description: cardData.description || "",
+              cardTitle: cardData.cardTitle || "",
+              cardStyle: cardData.cardStyle || "",
+              name: cardData.name || "",
               image: cardData.image || "",
-              style: cardData.style || "",
-              urls: {
-                linkedin: cardData.linkedin || "",
-                github: cardData.github || "",
-                twitter: cardData.twitter || "",
-                instagram: cardData.instagram || "",
-                facebook: cardData.facebook || "",
-                tiktok: cardData.tiktok || "",
-                youtube: cardData.youtube || "",
-                twitch: cardData.twitch || "",
-                discord: cardData.discord || "",
-                snapchat: cardData.snapchat || "",
-                whatsapp: cardData.whatsapp || "",
-                telegram: cardData.telegram || "",
-                reddit: cardData.reddit || "",
-                pinterest: cardData.pinterest || "",
+              tagline: cardData.tagline || "",
+              company: cardData.company || "",
+              email: cardData.email || "",
+              phone: cardData.phone || "",
+              location: cardData.location || "",
+              website: cardData.website || "",
+              socialMedia: {
+                linkedin: cardData.socialMedia.linkedin || "",
+                github: cardData.socialMedia.github || "",
+                twitter: cardData.socialMedia.twitter || "",
+                instagram: cardData.socialMedia.instagram || "",
+                facebook: cardData.socialMedia.facebook || "",
+                tiktok: cardData.socialMedia.tiktok || "",
+                youtube: cardData.socialMedia.youtube || "",
+                twitch: cardData.socialMedia.twitch || "",
+                discord: cardData.socialMedia.discord || "",
+                snapchat: cardData.socialMedia.snapchat || "",
+                whatsapp: cardData.socialMedia.whatsapp || "",
+                telegram: cardData.socialMedia.telegram || "",
+                reddit: cardData.socialMedia.reddit || "",
+                pinterest: cardData.socialMedia.pinterest || "",
               },
             });
             const keysToRetain = [
@@ -166,24 +182,31 @@ const EditorPage = () => {
     e.preventDefault();
     const values = {
       userId: session?.user?.id || "",
-      title: formValues.title || "",
-      description: formValues.description || "",
+      cardTitle: formValues.cardTitle || "",
+      cardStyle: formValues.cardStyle || "",
+      name: formValues.name || "",
       image: formValues.image || "",
+      tagline: formValues.tagline || "",
+      company: formValues.company || "",
+      email: formValues.email || "",
+      phone: formValues.phone || "",
+      location: formValues.location || "",
+      website: formValues.website || "",
       style: formValues.image || "",
-      linkedin: formValues.urls.linkedin || "",
-      github: formValues.urls.github || "",
-      twitter: formValues.urls.twitter || "",
-      instagram: formValues.urls.instagram || "",
-      facebook: formValues.urls.facebook || "",
-      tiktok: formValues.urls.tiktok || "",
-      youtube: formValues.urls.youtube || "",
-      twitch: formValues.urls.twitch || "",
-      discord: formValues.urls.discord || "",
-      snapchat: formValues.urls.snapchat || "",
-      whatsapp: formValues.urls.whatsapp || "",
-      telegram: formValues.urls.telegram || "",
-      reddit: formValues.urls.reddit || "",
-      pinterest: formValues.urls.pinterest || "",
+      linkedin: formValues.socialMedia.linkedin || "",
+      github: formValues.socialMedia.github || "",
+      twitter: formValues.socialMedia.twitter || "",
+      instagram: formValues.socialMedia.instagram || "",
+      facebook: formValues.socialMedia.facebook || "",
+      tiktok: formValues.socialMedia.tiktok || "",
+      youtube: formValues.socialMedia.youtube || "",
+      twitch: formValues.socialMedia.twitch || "",
+      discord: formValues.socialMedia.discord || "",
+      snapchat: formValues.socialMedia.snapchat || "",
+      whatsapp: formValues.socialMedia.whatsapp || "",
+      telegram: formValues.socialMedia.telegram || "",
+      reddit: formValues.socialMedia.reddit || "",
+      pinterest: formValues.socialMedia.pinterest || "",
     };
 
     startTransition(async () => {
@@ -203,10 +226,10 @@ const EditorPage = () => {
 
   return (
     <div className="h-full pt-8 px-10 bg-gray-100">
-      <Header headerTitle={"Editor: " + card?.title}  icon={<PencilRuler className="stroke-blue-800"/>} />
+      <Header headerTitle={"Editor: " + card?.cardTitle}  icon={<PencilRuler className="stroke-blue-800"/>} />
       <div className="flex flex-col sm:flex-row w-full justify-center items-center pt-5 gap-2">
-        <div className="w-full sm:w-1/2">
-         <Page formValues={formValues} selectedInputs={selectedInputs} /> 
+        <div className="w-full h-1/2">
+         <EditorPreview formValues={formValues} selectedInputs={selectedInputs} /> 
           
         </div>
         <div className="w-full sm:w-1/2">

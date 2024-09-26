@@ -26,6 +26,7 @@ model User {
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
   cards                 Card[]
+  personalCards         PersonalCard[]
 }
 
 model Account {
@@ -48,26 +49,38 @@ model Account {
 }
 
 model Card {
-  id          String   @id @default(cuid())
+  id        String   @id @default(cuid())
+  cardTitle String
   userId      String
-  style       String
-  title       String
-  description String
-  image       String
-  github      String
-  linkedin    String
-  twitter     String
-  instagram   String
-  facebook    String
-  tiktok      String
-  youtube     String
-  twitch      String
-  discord     String
-  snapchat    String
-  whatsapp    String
-  telegram    String
-  reddit      String
-  pinterest   String
+  cardStyle   String
+  name      String
+  image     String
+  tagline     String
+  company   String
+  email     String
+  phone     String
+  location  String
+  website   String
+  socialMedia Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model PersonalCard {
+  id        String   @id @default(cuid())
+  cardTitle String
+  userId      String
+  cardStyle   String
+  name      String
+  image     String
+  tagline     String
+  company   String
+  email     String
+  phone     String
+  location  String
+  website   String
+  socialMedia Json
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])

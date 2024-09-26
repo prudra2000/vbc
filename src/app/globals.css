@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
-html, body, :root {
+html,
+body,
+:root {
   height: 100%;
 }
 
@@ -94,4 +95,34 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes fadeInGrow {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOutGrow {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.modal-enter {
+  animation: fadeInGrow 0.5s ease forwards;
+}
+
+.modal-exit {
+  animation: fadeOutGrow 0.5s ease forwards;
 }

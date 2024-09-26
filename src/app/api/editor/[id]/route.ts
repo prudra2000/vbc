@@ -12,14 +12,14 @@ export async function GET(request: Request) {
     return NextResponse.json({ isOwner: false }, { status: 400 });
   }
   try {
-    const card = await db.card.findUnique({
+    const personalCard = await db.personalCard.findUnique({
       where: {
         id: cardId,
         userId: userId,
       },
     });
 
-    return NextResponse.json({ card: card }, { status: 200 });
+    return NextResponse.json({ card: personalCard }, { status: 200 });
   } catch (error) {
     console.error("Error checking card ownership:", error);
     return NextResponse.json({ isOwner: false }, { status: 500 });

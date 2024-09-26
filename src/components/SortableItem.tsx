@@ -80,7 +80,7 @@ export function SortableItem(props: {
           placeholder={
             props.social.charAt(0).toUpperCase() + props.social.slice(1)
           }
-          value={props.urls[props.social] || ""}
+          value={props.urls?.[props.social] || ""} // Use optional chaining
           onChange={(e) => {
             props.setUrls((prev) => ({
               ...prev,

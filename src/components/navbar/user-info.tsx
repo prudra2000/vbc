@@ -14,7 +14,7 @@ import { handleSignOut } from "@/actions/logout";
 import { signOut } from "next-auth/react";
 
 import Link from "next/link";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut, Settings, LayoutDashboard } from "lucide-react";
 
 const UserInfo = () => {
   const { data: session, status } = useSession();
@@ -46,14 +46,25 @@ const UserInfo = () => {
               </div>
             </MenubarItem>
             <MenubarSeparator />
-            <MenubarItem>New Window</MenubarItem>
+            <Link href="/dashboard"> 
+              <MenubarItem>
+                <span>
+                    Dashboard
+                </span>
+              <MenubarShortcut>
+                <LayoutDashboard className="w-4 h-4" />
+              </MenubarShortcut>
+            </MenubarItem>
+            </Link>
             <MenubarSeparator />
-            <MenubarItem>
-              <span>Setting</span>
+            <Link href="/settings"> 
+              <MenubarItem>
+                <span>Setting</span>
               <MenubarShortcut>
                 <Settings className="w-4 h-4" />
               </MenubarShortcut>
             </MenubarItem>
+            </Link>
             <MenubarSeparator />
             <MenubarItem onClick={() => signOut({ redirectTo: "/" })}>
               <span className="text-destructive">Logout</span>

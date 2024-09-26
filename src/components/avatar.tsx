@@ -24,6 +24,10 @@ const avatarVariants = cva(
         default: "w-10 h-10 text-sm",
         small: "w-8 h-8 text-xs",
         large: "w-12 h-12 text-lg",
+        xl: "w-16 h-16 text-xl",
+        xxl: "w-20 h-20 text-2xl",
+        xxxl: "w-24 h-24 text-3xl",
+        xxxxl: "w-28 h-28 text-4xl",
       },
       disabled: {
         true: "opacity-50 cursor-not-allowed",
@@ -47,7 +51,7 @@ interface AvatarProps extends VariantProps<typeof avatarVariants> {
   className?: string;
   variant?: "default" | "secondary";
   border?: boolean;
-  size?: "default" | "small" | "large";
+  size?: "default" | "small" | "large" | "xl" | "xxl" | "xxxl" | "xxxxl";
   disabled?: boolean;
   rounded?: "none" | "large" | "full";
   onLoad?: () => void;

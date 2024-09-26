@@ -57,7 +57,7 @@ const QRModal: React.FC<QRModalProps> = ({ isOpen, onClose, cardId }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="flex flex-col bg-white rounded-lg shadow-lg p-6 w-96 text-black border border-1 border-gray-300 gap-4">
+      <div className="flex flex-col bg-white rounded-lg shadow-lg p-6 w-96 text-black border border-1 border-gray-300 gap-4 modal-enter">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">Share Card</h2>
           <span

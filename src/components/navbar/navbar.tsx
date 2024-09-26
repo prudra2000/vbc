@@ -110,7 +110,7 @@ const Navbar = ({
 
   return (
     <div className="relative z-20">
-      <div className="flex flex-row px-5 md:px-10 py-2 justify-between items-center bg-blue-50 backdrop-blur-md border-b border-1 border-blue-400 text-white shadow-lg">
+      <div className="flex flex-row px-5 md:px-10 py-2 justify-between items-center bg-white backdrop-blur-md border-b border-1 border-blue-400 text-white shadow-lg">
         {logo}
         <div
           className={`${

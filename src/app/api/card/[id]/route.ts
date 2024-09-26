@@ -10,15 +10,15 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 
   try {
-    const card = await db.card.findUnique({
+    const personalCard = await db.personalCard.findUnique({
       where: { id },
     });
   
-    if (!card) {
+    if (!personalCard) {
       return NextResponse.json({ error: 'Card not found' }, { status: 404 });
     }
   
-    return NextResponse.json(card, { status: 200 });
+    return NextResponse.json(personalCard, { status: 200 });
   } catch (error) {
     console.error('Error fetching card:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

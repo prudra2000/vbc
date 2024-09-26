@@ -17,6 +17,13 @@ import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import { X } from "lucide-react";
 import Link from "next/link";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "../ui/select";
 
 interface CardModalProps {
   isOpen: boolean;
@@ -37,12 +44,12 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
     setSuccess("");
     const starterValues = {
       userId: session?.user?.id || "",
-      title: data.title,
-      description: data.description,
-      style: "primary",
+      cardTitle: data.title,
+      name: data.description,
+      cardStyle: data.cardStyle,
     };
     startTransition(async () => {
-      const newCard = await addCard(starterValues); // Await the addCard call
+      const newCard = await addCard(starterValues);
       setNewCard(newCard);
       setError(newCard?.error || "");
       setSuccess(newCard?.success || "");
@@ -58,7 +65,9 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="flex flex-col bg-white rounded-lg shadow-lg p-6 w-96 text-black border border-1 border-gray-300 gap-4">
+      <div
+        className={`flex flex-col bg-white rounded-lg shadow-lg p-6 w-96 text-black border border-1 border-gray-300 gap-4 modal-enter`}
+      >
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">Add Card</h2>
           <span
@@ -76,7 +85,8 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
               const formData = new FormData(e.currentTarget); // Get form data
               const data = {
                 title: formData.get("title") as string,
-                description: formData.get("description") as string,
+                cardStyle: formData.get("cardStyle") as string,
+                description: formData.get("name") as string, // Changed to 'description' for clarity
               };
               await handleAddCard(data); // Call handleAddCard with the form data
             }}
@@ -103,16 +113,68 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
               />
               <FormField
                 control={form.control}
-                name="description"
+                name="cardStyle"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Card Style</FormLabel>
+                    <FormControl>
+                      <Select
+                        {...field}
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a style" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="primary">Primary</SelectItem>
+                          <SelectItem value="secondary">Secondary</SelectItem>
+                          <SelectItem value="success">Success</SelectItem>
+                          <SelectItem value="danger">Danger</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* <FormField
+                control={form.control}
+                name="cardStyle" // Ensure this matches the name used in starterValues
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Card Style</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value || ""}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a style" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="primary">Primary</SelectItem>
+                          <SelectItem value="secondary">Secondary</SelectItem>
+                          <SelectItem value="success">Success</SelectItem>
+                          <SelectItem value="danger">Danger</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
+
+              <FormField
+                control={form.control}
+                name="name" // Ensure this matches the name used in starterValues
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="Description"
-                        type="description"
-                        required
+                        placeholder="Card Name"
+                        required // This should be required
                       />
                     </FormControl>
                     <FormMessage />
@@ -127,17 +189,18 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
                 <Link href={`/editor/${newCard?.card?.id}`}>
                   <Button
                     type="button" // Change type to "button" to prevent form submission
-                    className="bg-blue-500 text-white rounded p-2 hover:bg-blue-600"
+                    className="rounded p-2 border border-1 border-blue-800 text-blue-800"
                   >
                     Edit Card
                   </Button>
                 </Link>
               </div>
             ) : (
-              <div className="flex text-green-500 justify-end items-end">
+              <div className="flex justify-end items-end">
                 <Button
+                  variant="outline"
                   type="submit"
-                  className="bg-blue-500 text-white rounded p-2 hover:bg-blue-600"
+                  className="rounded p-2 border-blue-800 text-blue-800"
                 >
                   Submit
                 </Button>

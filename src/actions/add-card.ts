@@ -2,12 +2,11 @@
 
 import * as z from "zod";
 import { db } from "@/lib/db";
-import { CardSchema } from "@/schemas/index";
-import { getUserByEmail, getUserById } from "@/data/user";
+import { PersonalCardSchema } from "@/schemas/index";
 import { auth } from "@/auth";
 
-export const addCard = async (values: z.infer<typeof CardSchema>) => {
-  const validatedFields = CardSchema.safeParse(values);
+export const addCard = async (values: z.infer<typeof PersonalCardSchema>) => {
+  const validatedFields = PersonalCardSchema.safeParse(values);
   if (!validatedFields.success) {
     console.error("Validation failed:", validatedFields.error);
     return {
@@ -17,57 +16,42 @@ export const addCard = async (values: z.infer<typeof CardSchema>) => {
 
   const {
     userId,
-    style,
-    title,
-    description,
+    cardStyle,
+    cardTitle,
+    name,
     image,
-    github,
-    linkedin,
-    twitter,
-    instagram,
-    facebook,
-    tiktok,
-    youtube,
-    twitch,
-    discord,
-    snapchat,
-    whatsapp,
-    telegram,
-    reddit,
-    pinterest,
+    tagline,
+    company,
+    email,
+    phone,
+    location,
+    website,
+    socialMedia,
   } = validatedFields.data;
 
   const session = await auth();
-    
 
-  try {console.log("Validated Fields Data:", validatedFields.data);
-    const newCard = await db.card.create({
+  try {
+    const newCard = await db.personalCard.create({
       data: {
         userId: session?.user?.id || "",
-        title,
-        style: style || "",
-        description: description || "",
+        cardTitle: cardTitle || "",
+        cardStyle: cardStyle || "",
+        name: name || "",
         image: image || "",
-        github: github || "",
-        linkedin: linkedin || "",
-        twitter: twitter || "",
-        instagram: instagram || "",
-        facebook: facebook || "",
-        tiktok: tiktok || "",
-        youtube: youtube || "",
-        twitch: twitch || "",
-        discord: discord || "",
-        snapchat: snapchat || "",
-        whatsapp: whatsapp || "",
-        telegram: telegram || "",
-        reddit: reddit || "",
-        pinterest: pinterest || "",
+        tagline: tagline || "",
+        company: company || "",
+        email: email || "",
+        phone: phone || "",
+        location: location || "",
+        website: website || "",
+        socialMedia: socialMedia || {},
       },
     });
 
     return {
       success: "Card created successfully",
-      card: newCard,
+      personalCard: newCard,
     };
   } catch (error) {
     console.error("Error creating card:", error);

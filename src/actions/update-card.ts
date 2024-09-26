@@ -19,25 +19,18 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
 
   const {
     userId,
-    title,
-    style,
-    description,
+    cardTitle,
+    cardStyle,
+    name,
     image,
-    github,
-    linkedin,
-    twitter,
-    instagram,
-    facebook,
-    tiktok,
-    youtube,
-    twitch,
-    discord,
-    snapchat,
-    whatsapp,
-    telegram,
-    reddit,
-    pinterest,
+    tagline,
+    company,
+    email,
+    phone,
+    location,
+    website,
   } = validatedFields.data;
+  const socialMedia = validatedFields.data.socialMedia || {};
 
 
   const card = await getCardByUserID(cardID);
@@ -50,29 +43,21 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
   try {
     await db.card.update({
       where: {
-        id: card.id,
+        id: cardID,
       },
       data: {
-        title: title || card.title,
-        description: description || card.description,
+        cardTitle: cardTitle || card.cardTitle,
+        cardStyle: cardStyle || card.cardStyle,
+        name: name || card.name,
         image: image || card.image,
-        style: style || card.style,
-        github: github || card.github,
-        linkedin: linkedin || card.linkedin,
-        twitter: twitter || card.twitter,
-        instagram: instagram || card.instagram,
-        facebook: facebook || card.facebook,
-        tiktok: tiktok || card.tiktok,
-        youtube: youtube || card.youtube,
-        twitch: twitch || card.twitch,
-        discord: discord || card.discord,
-        snapchat: snapchat || card.snapchat,
-        whatsapp: whatsapp || card.whatsapp,
-        telegram: telegram || card.telegram,
-        reddit: reddit || card.reddit,
-        pinterest: pinterest || card.pinterest,
-      },
-    });
+        tagline: tagline || card.tagline,
+        company: company || card.company,
+        email: email || card.email,
+        phone: phone || card.phone,
+        location: location || card.location,
+        website: website   || card.website,
+        socialMedia: socialMedia || card.socialMedia,
+    }});
 
     return {
       success: "Card updated successfully",
