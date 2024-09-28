@@ -84,7 +84,7 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
               e.preventDefault(); // Prevent default form submission
               const formData = new FormData(e.currentTarget); // Get form data
               const data = {
-                title: formData.get("title") as string,
+                name: formData.get("name") as string,
                 cardStyle: formData.get("cardStyle") as string,
                 description: formData.get("name") as string, // Changed to 'description' for clarity
               };
@@ -95,7 +95,7 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
             <div className="space-y-4">
               <FormField
                 control={form.control}
-                name="title"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Card Name</FormLabel>

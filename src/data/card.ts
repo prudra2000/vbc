@@ -33,3 +33,20 @@ export const isCardOwner = async (userId: string, cardId: string) => {
     return false;
   }
 };
+
+
+
+export const getPersonalCardByUserID = async (cardId: string) => {
+  const session = await auth();
+  try {
+    const card = await db.personalCard.findFirst({
+      where: {
+        id: cardId,
+        userId: session?.user?.id,
+      },
+    });
+    return card;
+  } catch {
+    return null;
+  }
+};

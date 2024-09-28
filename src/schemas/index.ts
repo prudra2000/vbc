@@ -78,7 +78,7 @@ export const UpdateCardSchema = z.object({
 export const EditorSchema = z.object({
   userId: z.string().min(1),
   cardTitle: z.string(),
-  cardStyle: z.string().optional(), // Make this optional if it can be null
+  cardStyle: z.string().optional(),
   name: z.string().min(1),
   image: z.string().optional(),
   tagline: z.string().optional(),

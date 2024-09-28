@@ -98,6 +98,7 @@ const EditorPage = () => {
           const response = await fetch(`/api/editor/${id}`);
           if (response.ok) {
             const { card: cardData } = await response.json();
+            console.log("cardData", cardData)
             setCard(cardData);
             setFormValues({
               userId: cardData.userId || "",
@@ -211,9 +212,9 @@ const EditorPage = () => {
 
     startTransition(async () => {
       try {
-        const data = await updateCard(values, cardId);
+        const data = await updateCard(values, card?.id || "");
         setSuccess("Card Updated");
-        console.log(data);
+        console.log("test",data);
         if (data.error) {
           throw new Error(data.error); // Handle error response from updateCard
         }

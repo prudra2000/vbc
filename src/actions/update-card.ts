@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { db } from "@/lib/db";
 import { UpdateCardSchema } from "@/schemas/index";
-import { getCardByUserID } from "@/data/card";
+import { getPersonalCardByUserID } from "@/data/card";
 import { auth } from "@/auth";
 
 export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardID:string) => {
@@ -32,18 +32,21 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
   } = validatedFields.data;
   const socialMedia = validatedFields.data.socialMedia || {};
 
+  const session = await auth();
 
-  const card = await getCardByUserID(cardID);
+  const card = await getPersonalCardByUserID(cardID);
   if (!card) {
     return {
       error: "Card not found",
     };
   }
+  console.log("Personal Card", card)
 
   try {
-    await db.card.update({
+    await db.personalCard.update({
       where: {
         id: cardID,
+        userId: session?.user?.id,
       },
       data: {
         cardTitle: cardTitle || card.cardTitle,
