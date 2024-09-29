@@ -50,8 +50,6 @@ const ClientDashboard = () => {
 
     fetchCards();
   }, []);
-
-  console.log(cards);
   const starterValues = {
     userId: session?.user?.id || "",
     title: "",
@@ -103,84 +101,86 @@ const ClientDashboard = () => {
       {cards.length > 0 ? (
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {cards.map((card) => {
-              console.log("Card Title:", card.cardTitle);
-              return (
-                <div key={card.id}>
-                  <DisplayCard
-                    cardID={card.id}
-                    cardTitle={card.cardTitle}
-                    cardDescription={card.name}
-                    dateUpdated={card.updatedAt.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                      hour: "numeric",
-                      minute: "numeric",
-                      hour12: true,
-                    })}
-                    children={
-                      <div className="">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="secondary" size="sm">
-                              <EllipsisVertical className="w-5" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="w-56">
-                            <DropdownMenuLabel>
-                              {card.cardTitle}
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuGroup>
-                              <Link href={`/card/${card.id}`} target="_blank">
-                                <DropdownMenuItem>
-                                  <span>View Card</span>
-                                  <DropdownMenuShortcut>
-                                    <Eye className="w-4 h-4" />
-                                  </DropdownMenuShortcut>
-                                </DropdownMenuItem>
-                              </Link>
-                              <Link href={`/editor/${card.id}`}>
-                                <DropdownMenuItem>
-                                  <span>Edit</span>
-                                  <DropdownMenuShortcut>
-                                    <PencilRuler className="w-4 h-4" />
-                                  </DropdownMenuShortcut>
-                                </DropdownMenuItem>
-                              </Link>
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  setCurrentCardId(card.id);
-                                  setIsQRModalOpen(true);
-                                }}
-                              >
-                                <span>Share</span>
-                                <DropdownMenuShortcut>
-                                  <Share2 className="w-4 h-4" />
-                                </DropdownMenuShortcut>
-                              </DropdownMenuItem>
+            {cards
+              .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()) // Sort by updatedAt in descending order
+              .map((card) => {
+                return (
+                  <div key={card.id}>
+                    <DisplayCard
+                      cardID={card.id}
+                      cardTitle={card.cardTitle}
+                      cardDescription={card.name}
+                      formValues={card}
+                      dateUpdated={card.updatedAt.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                      })}
+                      children={
+                        <div className="">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="secondary" size="sm">
+                                <EllipsisVertical className="w-5" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56">
+                              <DropdownMenuLabel>
+                                {card.cardTitle}
+                              </DropdownMenuLabel>
                               <DropdownMenuSeparator />
-                              <DropdownMenuItem
-                                onClick={async () => {
-                                  await deleteCard(card.id);
-                                  window.location.reload();
-                                }}
-                              >
-                                <span className="text-destructive">Delete</span>
-                                <DropdownMenuShortcut>
-                                  <Trash2 className="w-4 h-4 stroke-destructive" />
-                                </DropdownMenuShortcut>
-                              </DropdownMenuItem>
-                            </DropdownMenuGroup>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    }
-                  />
-                </div>
-              );
-            })}
+                              <DropdownMenuGroup>
+                                <Link href={`/card/${card.id}`} target="_blank">
+                                  <DropdownMenuItem>
+                                    <span>View Card</span>
+                                    <DropdownMenuShortcut>
+                                      <Eye className="w-4 h-4" />
+                                    </DropdownMenuShortcut>
+                                  </DropdownMenuItem>
+                                </Link>
+                                <Link href={`/editor/${card.id}`}>
+                                  <DropdownMenuItem>
+                                    <span>Edit</span>
+                                    <DropdownMenuShortcut>
+                                      <PencilRuler className="w-4 h-4" />
+                                    </DropdownMenuShortcut>
+                                  </DropdownMenuItem>
+                                </Link>
+                                <DropdownMenuItem
+                                  onClick={() => {
+                                    setCurrentCardId(card.id);
+                                    setIsQRModalOpen(true);
+                                  }}
+                                >
+                                  <span>Share</span>
+                                  <DropdownMenuShortcut>
+                                    <Share2 className="w-4 h-4" />
+                                  </DropdownMenuShortcut>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={async () => {
+                                    await deleteCard(card.id);
+                                    window.location.reload();
+                                  }}
+                                >
+                                  <span className="text-destructive">Delete</span>
+                                  <DropdownMenuShortcut>
+                                    <Trash2 className="w-4 h-4 stroke-destructive" />
+                                  </DropdownMenuShortcut>
+                                </DropdownMenuItem>
+                              </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      }
+                    />
+                  </div>
+                );
+              })}
             <div
               className="flex flex-col justify-center items-center bg-white w-full h-64 shadow-md border border-gray-300 hover:border-blue-800 transition-colors duration-300 rounded-lg overflow-hidden text-black p-6 group"
               onClick={() => setIsModalOpen(true)}

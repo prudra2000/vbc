@@ -9,6 +9,7 @@ interface DisplayCardProps {
   cardTitle: string;
   cardDescription: string;
   children: React.ReactNode;
+  formValues?: any;
 }
 
 const DisplayCard: React.FC<DisplayCardProps> = ({
@@ -17,6 +18,7 @@ const DisplayCard: React.FC<DisplayCardProps> = ({
   cardTitle,
   cardDescription,
   children,
+  formValues,
 }) => {
   return (
     <div
@@ -28,8 +30,10 @@ const DisplayCard: React.FC<DisplayCardProps> = ({
           name={cardTitle || ""}
           email={cardDescription || ""}
           showUsername={false}
-          type="primary"
-          className="rounded-lg"
+          type="dashboard"
+          removeAvatar={true}
+          cardValues={formValues}
+          removeSocials={true}
         />
         <div className="absolute bottom-0 left-1/2 w-full h-10 transform -translate-x-1/2 opacity-0 bg-white/10 group-hover:opacity-100 transition-opacity duration-300">
           <div className="flex justify-center items-center gap-2 p-3">

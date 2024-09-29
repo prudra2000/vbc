@@ -64,7 +64,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
         urls={urls}
         showUsername={false}
         selectedInputs={selectedInputs}
-        type="primary"
+        type={formValues.cardStyle as "primary" | "secondary" | "success" | "danger"}
         className="outline outline-1 outline-white/10"
       />
     </div>

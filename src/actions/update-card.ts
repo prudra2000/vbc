@@ -8,7 +8,6 @@ import { auth } from "@/auth";
 
 export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardID:string) => {
 
-  console.log(cardID)
   const validatedFields = UpdateCardSchema.safeParse(values);
   if (!validatedFields.success) {
     console.error("Validation failed:", validatedFields.error);
@@ -40,7 +39,6 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
       error: "Card not found",
     };
   }
-  console.log("Personal Card", card)
 
   try {
     await db.personalCard.update({

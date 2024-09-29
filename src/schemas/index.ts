@@ -49,7 +49,7 @@ export const UpdateCardSchema = z.object({
   userId: z.string().min(1),
   cardTitle: z.string(),
   cardStyle: z.string().optional(), // Make this optional if it can be null
-  name: z.string().min(1),
+  name: z.string().optional(),
   image: z.string().optional(),
   tagline: z.string().optional(),
   company: z.string().optional(),
@@ -60,6 +60,7 @@ export const UpdateCardSchema = z.object({
   socialMedia: z.object({
       linkedin: z.string().optional(),
       twitter: z.string().optional(),
+      github: z.string().optional(),
       instagram: z.string().optional(),
       facebook: z.string().optional(),
       tiktok: z.string().optional(),
@@ -79,7 +80,7 @@ export const EditorSchema = z.object({
   userId: z.string().min(1),
   cardTitle: z.string(),
   cardStyle: z.string().optional(),
-  name: z.string().min(1),
+  name: z.string().optional(),
   image: z.string().optional(),
   tagline: z.string().optional(),
   company: z.string().optional(),
@@ -89,6 +90,7 @@ export const EditorSchema = z.object({
   website: z.string().optional(),
   socialMedia: z.object({
       linkedin: z.string().optional(),
+      github: z.string().optional(),
       twitter: z.string().optional(),
       instagram: z.string().optional(),
       facebook: z.string().optional(),
@@ -109,7 +111,7 @@ export const PersonalCardSchema = z.object({
   userId: z.string().min(1),
   cardTitle: z.string(),
   cardStyle: z.string().optional(), // Make this optional if it can be null
-  name: z.string().min(1),
+  name: z.string().optional(),
   image: z.string().optional(),
   tagline: z.string().optional(),
   company: z.string().optional(),
@@ -119,6 +121,7 @@ export const PersonalCardSchema = z.object({
   website: z.string().optional(),
   socialMedia: z.object({
       linkedin: z.string().optional(),
+      github: z.string().optional(),
       twitter: z.string().optional(),
       instagram: z.string().optional(),
       facebook: z.string().optional(),

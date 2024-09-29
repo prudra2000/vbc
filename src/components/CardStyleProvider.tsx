@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import '@/app/CardStyles.css';
 
-type CardType = 'primary' | 'secondary' | 'success' | 'danger';
+type CardType = 'primary' | 'secondary' | 'success' | 'danger' | 'dashboard';
 
 interface CardStyleContextProps {
   type: CardType;

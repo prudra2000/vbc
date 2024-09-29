@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 export async function deleteCard(cardId: string) {
     const session = await auth();
   
-    const existingCard = await db.card.findUnique({
+    const existingCard = await db.personalCard.findUnique({
       where: { id: cardId, userId: session?.user?.id },
     });
   
@@ -13,7 +13,7 @@ export async function deleteCard(cardId: string) {
       throw new Error("Card not found or does not belong to the user.");
     }
   
-    const card = await db.card.delete({
+    const card = await db.personalCard.delete({
       where: { id: cardId, userId: session?.user?.id },
     });
     return card; 

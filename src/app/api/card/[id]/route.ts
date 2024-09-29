@@ -12,12 +12,14 @@ export async function GET(request: Request, { params }: { params: { id: string }
   try {
     const personalCard = await db.personalCard.findUnique({
       where: { id },
+      // Add any necessary update logic here if needed
     });
   
     if (!personalCard) {
       return NextResponse.json({ error: 'Card not found' }, { status: 404 });
     }
-  
+
+    console.log(personalCard);
     return NextResponse.json(personalCard, { status: 200 });
   } catch (error) {
     console.error('Error fetching card:', error);

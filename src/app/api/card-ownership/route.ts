@@ -7,10 +7,7 @@ export async function GET(request: Request) {
     const userId = searchParams.get('userId');
     const cardId = searchParams.get('cardId');
 
-    console.log('Checking ownership for userId:', userId, 'cardId:', cardId);
-
     if (!userId || !cardId) {
-      console.log('Missing userId or cardId');
       return NextResponse.json({ isOwner: false, error: 'Missing userId or cardId' }, { status: 400 });
     }
 
@@ -21,7 +18,6 @@ export async function GET(request: Request) {
       },
     });
 
-    console.log('Card found:', card);
 
     return NextResponse.json({ isOwner: card !== null });
   } catch (error) {

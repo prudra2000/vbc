@@ -24,6 +24,13 @@ import {
   SelectItem,
   SelectValue,
 } from "../ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 interface CardModalProps {
   isOpen: boolean;
@@ -44,8 +51,7 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
     setSuccess("");
     const starterValues = {
       userId: session?.user?.id || "",
-      cardTitle: data.title,
-      name: data.description,
+      cardTitle: data.cardTitle,
       cardStyle: data.cardStyle,
     };
     startTransition(async () => {
@@ -61,48 +67,39 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
     });
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div
-        className={`flex flex-col bg-white rounded-lg shadow-lg p-6 w-96 text-black border border-1 border-gray-300 gap-4 modal-enter`}
-      >
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Add Card</h2>
-          <span
-            className="close text-gray-600 hover:text-gray-800 cursor-pointer"
-            onClick={onClose}
-          >
-            <X />
-          </span>
-        </div>
-        <hr />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="text-black">Add Card</DialogTitle>
+          <DialogDescription>
+            {/* Optional description */}
+          </DialogDescription>
+        </DialogHeader>
         <Form {...form}>
           <form
             onSubmit={async (e) => {
-              e.preventDefault(); // Prevent default form submission
+              e.preventDefault();
               const formData = new FormData(e.currentTarget); // Get form data
               const data = {
-                name: formData.get("name") as string,
+                cardTitle: formData.get("cardTitle") as string,
                 cardStyle: formData.get("cardStyle") as string,
-                description: formData.get("name") as string, // Changed to 'description' for clarity
               };
               await handleAddCard(data); // Call handleAddCard with the form data
             }}
             className="space-y-4"
           >
-            <div className="space-y-4">
+            <div className="space-y-4 text-black">
               <FormField
                 control={form.control}
-                name="name"
+                name="cardTitle"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Card Name</FormLabel>
+                    <FormLabel>Card Title</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="Card Name"
+                        placeholder="Card Title"
                         type="title"
                         required
                       />
@@ -137,50 +134,6 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
                   </FormItem>
                 )}
               />
-              {/* <FormField
-                control={form.control}
-                name="cardStyle" // Ensure this matches the name used in starterValues
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Card Style</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value || ""}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a style" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="primary">Primary</SelectItem>
-                          <SelectItem value="secondary">Secondary</SelectItem>
-                          <SelectItem value="success">Success</SelectItem>
-                          <SelectItem value="danger">Danger</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
-              <FormField
-                control={form.control}
-                name="name" // Ensure this matches the name used in starterValues
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Card Name"
-                        required // This should be required
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
             <FormError message={error || ""} />
             <FormSuccess message={success || ""} />
@@ -208,8 +161,8 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
             )}
           </form>
         </Form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

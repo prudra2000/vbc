@@ -1,47 +1,55 @@
 .card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.previewCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #131723;
+  color: white;
+  border-radius: 1rem;
+}
 
-  }
-  .previewCard {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 10rem;
-    background-color: #131723;
-    color: white;
-  }
-  
-  .card.primary {
-    background-color: #131723;
-    color: white;
-  }
+.card.dashboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: min-content;
+  padding: 2rem;
+}
 
-  .card.primary.socials{
-    display: flex;
-    align-items: center;
-    height: min-content;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    outline-style: solid;
-    outline-width: 1px;
-    outline-color: #d1d5db;
-    border-radius: calc(var(--radius) - 2px);
-  }
-  
-  .card.secondary {
-    background-color: #6c757d;
-    color: white;
-  }
-  
-  .card.success {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  .card.danger {
-    background-color: #dc3545;
-    color: white;
-  }
+.card.primary {
+  background-color: #131723;
+  color: white;
+}
+
+.card.primary.socials {
+  display: flex;
+  align-items: center;
+  height: min-content;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: #d1d5db;
+  border-radius: calc(var(--radius) - 2px);
+}
+
+.card.secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.card.success {
+  background-color: #28a745;
+  color: white;
+}
+
+.card.danger {
+  background-color: #dc3545;
+  color: white;
+}

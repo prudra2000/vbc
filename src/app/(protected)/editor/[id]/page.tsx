@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState, startTransition } from "react";
 import EditorForm from "../../../../components/editor/editor-card";
-import { Page } from "@/components/card/page-renderer";
 import { Card as PCard } from "@prisma/client";
 import { useParams } from "next/navigation";
 import * as z from "zod";
@@ -28,6 +27,22 @@ type FormValues = {
   phone: string;
   location: string;
   website: string;
+  urls: {
+    linkedin: string;
+    github: string;
+    twitter: string;
+    instagram: string;
+    facebook: string;
+    tiktok: string;
+    youtube: string;
+    twitch: string;
+    discord: string;
+    snapchat: string;
+    whatsapp: string;
+    telegram: string;
+    reddit: string;
+    pinterest: string;
+  };
   socialMedia: {
     linkedin: string;
     github: string;
@@ -68,6 +83,22 @@ const EditorPage = () => {
     phone: "",
     location: "",
     website: "",
+    urls: {
+      linkedin: "",
+      github: "",
+      twitter: "",
+      instagram: "",
+      facebook: "",
+      tiktok: "",
+      youtube: "",
+      twitch: "",
+      discord: "",
+      snapchat: "",
+      whatsapp: "",
+      telegram: "",
+      reddit: "",
+      pinterest: "",
+    },
     socialMedia: {
       linkedin: "",
       github: "",
@@ -88,7 +119,6 @@ const EditorPage = () => {
 
   const handleFormChange = (newValues: FormValues) => {
     setFormValues(newValues);
-    console.log("ne", newValues);
   };
 
   useEffect(() => {
@@ -98,7 +128,6 @@ const EditorPage = () => {
           const response = await fetch(`/api/editor/${id}`);
           if (response.ok) {
             const { card: cardData } = await response.json();
-            console.log("cardData", cardData)
             setCard(cardData);
             setFormValues({
               userId: cardData.userId || "",
@@ -112,6 +141,22 @@ const EditorPage = () => {
               phone: cardData.phone || "",
               location: cardData.location || "",
               website: cardData.website || "",
+              urls: {
+                linkedin: cardData.socialMedia.linkedin || "",
+                github: cardData.socialMedia.github || "",
+                twitter: cardData.socialMedia.twitter || "",
+                instagram: cardData.socialMedia.instagram || "",
+                facebook: cardData.socialMedia.facebook || "",
+                tiktok: cardData.socialMedia.tiktok || "",
+                youtube: cardData.socialMedia.youtube || "",
+                twitch: cardData.socialMedia.twitch || "",
+                discord: cardData.socialMedia.discord || "",
+                snapchat: cardData.socialMedia.snapchat || "",
+                whatsapp: cardData.socialMedia.whatsapp || "",
+                telegram: cardData.socialMedia.telegram || "",
+                reddit: cardData.socialMedia.reddit || "",
+                pinterest: cardData.socialMedia.pinterest || "",
+              },
               socialMedia: {
                 linkedin: cardData.socialMedia.linkedin || "",
                 github: cardData.socialMedia.github || "",
@@ -145,10 +190,9 @@ const EditorPage = () => {
               "reddit",
               "pinterest",
             ];
-            const filteredData = Object.entries(cardData)
+            const filteredData = Object.entries(cardData.socialMedia)
               .filter(([key, value]) => keysToRetain.includes(key) && value)
               .map(([key]) => key);
-            console.log(filteredData); // Log filtered data before setting state
             setnonEmptyCardData(filteredData);
             setSelectedInputs(filteredData);
           } else {
@@ -194,27 +238,30 @@ const EditorPage = () => {
       location: formValues.location || "",
       website: formValues.website || "",
       style: formValues.image || "",
-      linkedin: formValues.socialMedia.linkedin || "",
-      github: formValues.socialMedia.github || "",
-      twitter: formValues.socialMedia.twitter || "",
-      instagram: formValues.socialMedia.instagram || "",
-      facebook: formValues.socialMedia.facebook || "",
-      tiktok: formValues.socialMedia.tiktok || "",
-      youtube: formValues.socialMedia.youtube || "",
-      twitch: formValues.socialMedia.twitch || "",
-      discord: formValues.socialMedia.discord || "",
-      snapchat: formValues.socialMedia.snapchat || "",
-      whatsapp: formValues.socialMedia.whatsapp || "",
-      telegram: formValues.socialMedia.telegram || "",
-      reddit: formValues.socialMedia.reddit || "",
-      pinterest: formValues.socialMedia.pinterest || "",
+      socialMedia: {
+        linkedin: formValues.urls.linkedin || "",
+        github: formValues.urls.github || "",
+        twitter: formValues.urls.twitter || "",
+        instagram: formValues.urls.instagram || "",
+        facebook: formValues.urls.facebook || "",
+        tiktok: formValues.urls.tiktok || "",
+        youtube: formValues.urls.youtube || "",
+        twitch: formValues.urls.twitch || "",
+        discord: formValues.urls.discord || "",
+        snapchat: formValues.urls.snapchat || "",
+        whatsapp: formValues.urls.whatsapp || "",
+        telegram: formValues.urls.telegram || "",
+        reddit: formValues.urls.reddit || "",
+        pinterest: formValues.urls.pinterest || "",
+      },
+      
     };
+    console.log("values", formValues)
 
     startTransition(async () => {
       try {
         const data = await updateCard(values, card?.id || "");
         setSuccess("Card Updated");
-        console.log("test",data);
         if (data.error) {
           throw new Error(data.error); // Handle error response from updateCard
         }
@@ -228,7 +275,7 @@ const EditorPage = () => {
   return (
     <div className="h-full pt-8 px-10 bg-gray-100">
       <Header headerTitle={"Editor: " + card?.cardTitle}  icon={<PencilRuler className="stroke-blue-800"/>} />
-      <div className="flex flex-col sm:flex-row w-full justify-center items-center pt-5 gap-2">
+      <div className="flex flex-col sm:flex-row w-full justify-center items-center pt-5 gap-5">
         <div className="w-full h-1/2">
          <EditorPreview formValues={formValues} selectedInputs={selectedInputs} /> 
           
