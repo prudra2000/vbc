@@ -16,6 +16,7 @@ import {
   faPinterest,
 } from "@fortawesome/free-brands-svg-icons";
 import '@/app/CardStyles.css';
+import { Button } from "./button";
 
 const socialIcons = {
   linkedin: faLinkedin,
@@ -77,20 +78,18 @@ const SocialLinks = ({
       return username ? (
         <>
           {showUsername ? (
-            <div className="flex flex-row gap-2">
               <a
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
                 key={platform}
               >
-                <div className="flex items-center gap-2">
-                  <FontAwesomeIcon icon={icon} className="w-4 h-4" />
+                <Button variant="outline" className="w-full justify-start">
+                  <FontAwesomeIcon icon={icon} className=" mr-2 w-4 h-4" />
 
-                  <p className=" underline hover:text-blue-500">{username}</p>
-                </div>
+                  <p className=" underline hover:text-blue-500 text-sm">{username}</p>
+                </Button>
               </a>
-            </div>
           ) : (
             <div className="flex flex-col gap-2 w-min">
               <a

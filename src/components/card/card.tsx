@@ -3,8 +3,24 @@ import { CardStyleProvider } from "../CardStyleProvider";
 import { MapPin, Mail, Phone, Link } from "lucide-react";
 import { Button } from "../ui/button";
 import Avatar from "../avatar";
+import { cva, type VariantProps } from "class-variance-authority"
 
-interface CardProps {
+const cardVariants = cva(
+  "",
+  {
+    variants: {
+      text: {
+        primary: "text-white",
+        secondary: "text-black",
+      },
+    },
+    defaultVariants: {
+      text: "primary",
+    },
+  }
+)
+
+interface CardProps extends VariantProps<typeof cardVariants> {
   cardValues?: Record<string, string>;
   urls?: Record<string, string>;
   showUsername: boolean;
@@ -13,6 +29,7 @@ interface CardProps {
   removeSocials?: boolean;
   type: "primary" | "secondary" | "success" | "danger" | "dashboard";
   className?: string;
+  text?: "primary" | "secondary";
 }
 
 export default function Card({
@@ -21,6 +38,7 @@ export default function Card({
   showUsername = true,
   selectedInputs = [],
   type,
+  text,
   className,
   removeAvatar = false,
   removeSocials = false,
@@ -29,7 +47,7 @@ export default function Card({
   return (
     <CardStyleProvider type={type}>
       <div className={`card ${type} ${className}`}>
-        <div className="flex flex-col justify-center items-center gap-5">
+        <div className={`flex flex-col justify-center items-center gap-5 ${cardVariants({text})}`}>
           <div className="flex flex-col justify-center items-center gap-y-10 md:gap-x-10 md:flex-row">
             {!removeAvatar && (
             <div className="flex justify-center items-center">
@@ -45,10 +63,10 @@ export default function Card({
               <div className="flex flex-col items-center md:items-start">
                 <h1 className="text-3xl font-bold ">{cardValues.name}</h1>
                 {cardValues.tagline && (
-                  <p className="text-base text-gray-500">{cardValues.tagline}</p>
+                  <p className="text-base ">{cardValues.tagline}</p>
                 )}
                 {cardValues.company && (
-                  <p className="text-base text-gray-500">{cardValues.company}</p>
+                  <p className="text-base ">{cardValues.company}</p>
                 )}
               </div>
               <hr />
@@ -66,14 +84,14 @@ export default function Card({
                     <Mail className="w-4 h-4" />
                     <a
                       href="mailto:rudra@gmail.com"
-                      className="p-0 text-white"
+                      className="p-0"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <Button
                         variant="link"
                         size="none"
-                        className="p-0 text-white"
+                        className="p-0"
                       >
                         {cardValues.email}
                       </Button>
@@ -85,14 +103,14 @@ export default function Card({
                     <Link className="w-4 h-4" />
                     <a
                       href={cardValues.website}
-                      className="p-0 text-white"
+                      className="p-0"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <Button
                         variant="link"
                         size="none"
-                        className="p-0 text-white "
+                        className="p-0"
                       >
                         {cardValues.website}
                       </Button>
@@ -123,7 +141,7 @@ export default function Card({
               urls={urls}
               showUsername={showUsername}
               selectedInputs={selectedInputs}
-              type="primary"
+              type={cardValues.cardStyle}
             />
           </div>
           )}

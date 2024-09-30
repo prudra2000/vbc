@@ -44,6 +44,18 @@
   color: white;
 }
 
+.card.secondary.socials {
+  display: flex;
+  align-items: center;
+  height: min-content;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: #d1d5db;
+  border-radius: calc(var(--radius) - 2px);
+}
+
 .card.success {
   background-color: #28a745;
   color: white;

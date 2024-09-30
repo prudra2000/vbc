@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Card as PCard } from "@prisma/client"; // Import the Card type from Prisma
 import Card from "../../../components/card/card";
+import BasicCard from "@/components/card-components/basic-card";
 
 type FormValues = {
   userId: string;
@@ -16,22 +17,6 @@ type FormValues = {
   phone: string;
   location: string;
   website: string;
-  urls: {
-    linkedin: string;
-    github: string;
-    twitter: string;
-    instagram: string;
-    facebook: string;
-    tiktok: string;
-    youtube: string;
-    twitch: string;
-    discord: string;
-    snapchat: string;
-    whatsapp: string;
-    telegram: string;
-    reddit: string;
-    pinterest: string;
-  };
   socialMedia: {
     linkedin: string;
     github: string;
@@ -85,22 +70,6 @@ const CardPage = () => {
     phone: "",
     location: "",
     website: "",
-    urls: {
-      linkedin: "",
-      github: "",
-      twitter: "",
-      instagram: "",
-      facebook: "",
-      tiktok: "",
-      youtube: "",
-      twitch: "",
-      discord: "",
-      snapchat: "",
-      whatsapp: "",
-      telegram: "",
-      reddit: "",
-      pinterest: "",
-    },
     socialMedia: {
       linkedin: "",
       github: "",
@@ -126,9 +95,9 @@ const CardPage = () => {
         try {
           const response = await fetch(`/api/card/${id}`);
           if (response.ok) {
-            const cardData = await response.json();
+            const { card: cardData } = await response.json();
+            setCard(cardData);
             if (cardData) {
-              // Check if cardData is not null
               setFormValues({
                 userId: cardData.userId || "",
                 cardTitle: cardData.cardTitle || "",
@@ -141,22 +110,6 @@ const CardPage = () => {
                 phone: cardData.phone || "",
                 location: cardData.location || "",
                 website: cardData.website || "",
-                urls: {
-                  linkedin: cardData.socialMedia.linkedin || "",
-                  github: cardData.socialMedia.github || "",
-                  twitter: cardData.socialMedia.twitter || "",
-                  instagram: cardData.socialMedia.instagram || "",
-                  facebook: cardData.socialMedia.facebook || "",
-                  tiktok: cardData.socialMedia.tiktok || "",
-                  youtube: cardData.socialMedia.youtube || "",
-                  twitch: cardData.socialMedia.twitch || "",
-                  discord: cardData.socialMedia.discord || "",
-                  snapchat: cardData.socialMedia.snapchat || "",
-                  whatsapp: cardData.socialMedia.whatsapp || "",
-                  telegram: cardData.socialMedia.telegram || "",
-                  reddit: cardData.socialMedia.reddit || "",
-                  pinterest: cardData.socialMedia.pinterest || "",
-                },
                 socialMedia: {
                   linkedin: cardData.socialMedia.linkedin || "",
                   github: cardData.socialMedia.github || "",
@@ -206,8 +159,7 @@ const CardPage = () => {
                 "reddit",
                 "pinterest",
               ];
-              console.log("CS", cardData.cardStyle);
-              const filteredData = Object.entries(cardData)
+              const filteredData = Object.entries(cardData.socialMedia)
                 .filter(([key, value]) => keysToRetain.includes(key) && value)
                 .map(([key]) => key);
               setnonEmptyCardData(filteredData);
@@ -238,15 +190,27 @@ const CardPage = () => {
         cardValues={{
           ...formValues,
           socialMedia: JSON.stringify(formValues.socialMedia),
-          urls: JSON.stringify(formValues.urls),
+          urls: JSON.stringify(formValues.socialMedia),
         }}
         urls={urls}
         showUsername={false}
         selectedInputs={selectedInputs}
         type={
-          formValues.cardStyle as "primary" | "secondary" | "success" | "danger"
+          formValues.cardStyle as "primary" | "secondary" | "success" | "danger" | "dashboard"
         }
       />
+    <BasicCard
+    cardValues={{
+      ...formValues,
+      socialMedia: JSON.stringify(formValues.socialMedia),
+      urls: JSON.stringify(formValues.socialMedia),
+    }}
+    urls={urls}
+    showUsername={true}
+    selectedInputs={selectedInputs}
+    type={
+      formValues.cardStyle as "primary" | "secondary" | "success" | "danger" | "dashboard"
+    }/>
     </div>
   );
 };
