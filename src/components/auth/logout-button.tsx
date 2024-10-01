@@ -1,5 +1,4 @@
 import React from "react";
-import { auth, signOut } from "@/auth";
 import { Button } from "../ui/button";
 import { handleSignOut } from "@/actions/logout";
 import { LogOut } from "lucide-react";

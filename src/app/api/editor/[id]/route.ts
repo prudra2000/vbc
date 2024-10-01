@@ -4,7 +4,7 @@ import { auth } from '@/auth'
 
 export async function GET(request: Request) {
   const session = await auth();
-  const { searchParams, pathname } = new URL(request.url);
+  const {  pathname } = new URL(request.url);
   const userId = session?.user?.id
   const cardId = pathname.split('/').pop();
 

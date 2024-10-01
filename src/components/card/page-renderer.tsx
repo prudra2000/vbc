@@ -23,16 +23,13 @@ interface PageProps {
       pinterest: string;
     };
   };
-  style?: string;
   selectedInputs: string[];
 }
 
 export const Page: React.FC<PageProps> = ({
-  style,
   formValues,
   selectedInputs,
 }) => {
-  const showUsername = true;
   const urls = {
     linkedin: formValues.urls.linkedin,
     github: formValues.urls.github,

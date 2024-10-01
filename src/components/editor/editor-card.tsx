@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../../components/ui/input";
@@ -54,7 +54,7 @@ const EditorForm: React.FC<EditorForm> = ({
   }, [formValues]);
 
   const [urls, setUrls] = useState<Record<string, string>>(
-    formValues.socialMedia?.urls || {}
+    formValues.socialMedia || {} // Ensure socialMedia is an object
   );
 
   const handleFormChange = (values: any) => {
@@ -104,24 +104,25 @@ const EditorForm: React.FC<EditorForm> = ({
     fetchCountryCodes();
   }, []);
 
-  const [selectedLocation, setSelectedLocation] =
-    useState<google.maps.places.PlaceResult | null>(null);
-
-  const handleLocationSelect = (place: google.maps.places.PlaceResult) => {
-    setSelectedLocation(place);
-  };
-
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setSelectedInputs((prev) => {
       const newSelectedInputs = prev.includes(value)
         ? prev.filter((item) => item !== value)
         : [...prev, value];
-      onSelectChange(newSelectedInputs); // Call onSelectChange here
-      return newSelectedInputs; // Return the new state
+      onSelectChange(newSelectedInputs);
+      return newSelectedInputs;
     });
   };
 
+  const removeInput = (social: string) => {
+    setSelectedInputs((prev) => prev.filter((input) => input !== social));
+    setUrls((prev) => {
+      const newUrls = { ...prev };
+      delete newUrls[social];
+      return newUrls;
+    });
+  };
   useEffect(() => {
     setSelectedInputs(selected);
     setUrls(formValues.urls);
@@ -368,6 +369,25 @@ const EditorForm: React.FC<EditorForm> = ({
                   </FormItem>
                 )}
               ></FormField>
+              <FormField
+                control={form.control}
+                name="showName"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormControl>
+                      <div className="flex justify-start items-center gap-2 text-sm">
+                        Show Username:
+                        <Switch
+                          checked={!!field.value}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked ? "email@example.com" : "");
+                          }}
+                        />
+                      </div>
+                    </FormControl>
+                  </FormItem>
+                )}
+              ></FormField>
               <SocialSelect
                 selectedInputs={selectedInputs}
                 handleSelectChange={handleSelectChange}
@@ -377,6 +397,7 @@ const EditorForm: React.FC<EditorForm> = ({
                 urls={urls}
                 setUrls={setUrls}
                 setSelectedInputs={setSelectedInputs}
+                removeInput={removeInput}
               />
               {children}
             </form>

@@ -15,7 +15,6 @@ export const addCard = async (values: z.infer<typeof PersonalCardSchema>) => {
   }
 
   const {
-    userId,
     cardStyle,
     cardTitle,
     name,

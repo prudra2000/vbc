@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef } from 'react';
 import { useLoadScript } from '@react-google-maps/api';
 import { Input } from '@/components/ui/input'; // shadcn input component

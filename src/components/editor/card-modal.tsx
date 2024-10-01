@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
-import { X } from "lucide-react";
+import { IdCard, X } from "lucide-react";
 import Link from "next/link";
 import {
   Select,
@@ -69,11 +69,17 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="">
         <DialogHeader>
-          <DialogTitle className="text-black">Add Card</DialogTitle>
+          <DialogTitle className="text-black flex items-center justify-between w-full">
+
+              <div className="flex items-center w-full">
+                <IdCard className="mr-2" />
+                Add Card
+              </div>          
+          </DialogTitle>
           <DialogDescription>
-            {/* Optional description */}
+            Start by creating a card title and selecting a style.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -102,6 +108,7 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
                         placeholder="Card Title"
                         type="title"
                         required
+                        autoComplete="off"
                       />
                     </FormControl>
                     <FormMessage />
@@ -115,10 +122,7 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
                   <FormItem>
                     <FormLabel>Card Style</FormLabel>
                     <FormControl>
-                      <Select
-                        {...field}
-                        required
-                      >
+                      <Select {...field} required>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a style" />
                         </SelectTrigger>

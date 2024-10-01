@@ -1,9 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Card as PCard } from "@prisma/client"; // Import the Card type from Prisma
-import Card from "../../../components/card/card";
+import { Card as PCard } from "@prisma/client";
 import BasicCard from "@/components/card-components/basic-card";
+import FloatButton from "@/components/ui/floatButton";
+import { Share2 } from "lucide-react";
+import ShareModal from "@/components/card/card-qr-modal";
+import { GridLoader } from "react-spinners";
 
 type FormValues = {
   userId: string;
@@ -41,6 +44,7 @@ const CardPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [nonEmptyCardData, setnonEmptyCardData] = useState<string[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({
     linkedin: "",
@@ -181,36 +185,46 @@ const CardPage = () => {
     fetchCard();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex flex-col justify-center items-center h-screen gap-4">
+        <GridLoader color="#3b82f6" />
+        <h1 className="text-gray-500">Loading DigiMe...</h1>
+      </div>
+    ); 
   if (error) return <div>{error}</div>;
+  
 
   return (
     <div className="w-screen h-screen">
-      <Card
+      {isQRModalOpen && (
+        <ShareModal
+          isOpen={isQRModalOpen}
+          onClose={() => setIsQRModalOpen(false)}
+          cardId={typeof id === 'string' ? id : ""}
+        />
+      )}
+      <FloatButton onClick={() => setIsQRModalOpen(true)} >
+        <Share2 className="w-4 h-4 text-white" />
+      </FloatButton>
+      <BasicCard
         cardValues={{
           ...formValues,
           socialMedia: JSON.stringify(formValues.socialMedia),
           urls: JSON.stringify(formValues.socialMedia),
         }}
         urls={urls}
-        showUsername={false}
+        showUsername={true}
         selectedInputs={selectedInputs}
         type={
-          formValues.cardStyle as "primary" | "secondary" | "success" | "danger" | "dashboard"
+          formValues.cardStyle as
+            | "primary"
+            | "secondary"
+            | "success"
+            | "danger"
+            | "dashboard"
         }
       />
-    <BasicCard
-    cardValues={{
-      ...formValues,
-      socialMedia: JSON.stringify(formValues.socialMedia),
-      urls: JSON.stringify(formValues.socialMedia),
-    }}
-    urls={urls}
-    showUsername={true}
-    selectedInputs={selectedInputs}
-    type={
-      formValues.cardStyle as "primary" | "secondary" | "success" | "danger" | "dashboard"
-    }/>
     </div>
   );
 };

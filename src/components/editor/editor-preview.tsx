@@ -1,5 +1,6 @@
 import React from "react";
 import PreviewCard from "../card/preview-card";
+import BasicCard from "../card-components/basic-card";
 
 interface EditorPreviewProps {
   formValues: {
@@ -56,11 +57,8 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   };
   return (
     <div className="">
-      <PreviewCard
+      <BasicCard
         cardValues={{ ...formValues, socialMedia: JSON.stringify(formValues.socialMedia) }}
-        name={formValues?.cardTitle || ""}
-        email={formValues?.email || ""}
-        image={formValues?.image || ""}
         urls={urls}
         showUsername={false}
         selectedInputs={selectedInputs}

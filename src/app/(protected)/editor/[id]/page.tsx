@@ -4,16 +4,16 @@ import EditorForm from "../../../../components/editor/editor-card";
 import { Card as PCard } from "@prisma/client";
 import { useParams } from "next/navigation";
 import * as z from "zod";
-import { CardSchema, UpdateCardSchema } from "@/schemas";
+import { UpdateCardSchema } from "@/schemas";
 import { useSession } from "next-auth/react";
 import { updateCard } from "@/actions/update-card";
 import { Button } from "../../../../components/ui/button";
-import { Save, ExternalLink, PencilRuler } from "lucide-react";
+import {  Save, PencilRuler } from "lucide-react";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import Link from "next/link";
-import Header from "@/components/header";
+import EditorHeader from "@/components/editorHeader";
 import { EditorPreview } from "@/components/editor/editor-preview";
+import { GridLoader } from "react-spinners";
 
 type FormValues = {
   userId: string;
@@ -123,6 +123,7 @@ const EditorPage = () => {
 
   useEffect(() => {
     const fetchCard = async () => {
+      setLoading(true);
       if (id) {
         try {
           const response = await fetch(`/api/editor/${id}`);
@@ -272,10 +273,18 @@ const EditorPage = () => {
     });
   };
 
+  if (loading)
+    return (
+      <div className="flex flex-col justify-center items-center h-screen gap-4 bg-gray-100">
+        <GridLoader color="#3b82f6" />
+        <h1 className="text-gray-500">Loading Editor...</h1>
+      </div>
+    ); // Replace with your spinner component
+
   return (
     <div className="h-full pt-8 px-10 bg-gray-100">
-      <Header headerTitle={"Editor: " + card?.cardTitle}  icon={<PencilRuler className="stroke-blue-800"/>} />
-      <div className="flex flex-col sm:flex-row w-full justify-center items-center pt-5 gap-5">
+      <EditorHeader headerTitle={"Editor:"} cardTitle={card?.cardTitle || ""} cardID={card?.id || ""} icon={<PencilRuler className="text-white"/>} />
+      <div className="flex flex-col md:flex-row w-full justify-center items-center pt-5 gap-x-5">
         <div className="w-full h-1/2">
          <EditorPreview formValues={formValues} selectedInputs={selectedInputs} /> 
           
@@ -284,7 +293,7 @@ const EditorPage = () => {
           <EditorForm
             formValues={formValues}
             onFormChange={handleFormChange}
-            selected={selectedInputs} // Pass selectedInputs to EditorForm
+            selected={selectedInputs}
             onSelectChange={setSelectedInputs}
           >
             <div className="flex flex-col gap-2">
@@ -296,14 +305,8 @@ const EditorPage = () => {
                   className="w-full gap-2"
                 >
                   <Save className="w-5 h-5" />
-                  Save Data
+                  Save Card
                 </Button>
-                <Link href={`http://localhost:3000/card/${cardId}`} target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full gap-2">
-                    <ExternalLink className="w-5 h-5" />
-                    View Card
-                  </Button>
-                </Link>
               </div>
             </div>
           </EditorForm>

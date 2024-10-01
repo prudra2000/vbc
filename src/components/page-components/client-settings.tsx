@@ -5,12 +5,18 @@ import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Avatar from "../avatar";
+import { GridLoader } from "react-spinners";
 
 const ClientSettings = () => {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col justify-center items-center h-max pt-[30vh] gap-4">
+        <GridLoader color="#3b82f6" />
+        <h1 className="text-gray-500">Loading....</h1>
+      </div>
+    );
   }
 
   if (!session) {

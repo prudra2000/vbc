@@ -32,7 +32,7 @@ export default function PreviewCard({
 }: PreviewCardProps) {
   return (
     <CardStyleProvider type={type}>
-      <div className={`card previewCard ${type} ${className}`}>
+      <div className={`previewCard ${type} ${className}`}>
         <div className="flex flex-col justify-center items-center gap-5">
           <div className="flex flex-col justify-center items-center gap-y-10 md:gap-x-10 md:flex-row">
             {!removeAvatar && (

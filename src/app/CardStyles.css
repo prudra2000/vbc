@@ -11,6 +11,8 @@
   background-color: #131723;
   color: white;
   border-radius: 1rem;
+  min-height: 17rem;
+  padding: 1rem;
 }
 
 .card.dashboard {

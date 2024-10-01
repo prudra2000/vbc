@@ -2,76 +2,77 @@
 import dynamic from "next/dynamic"; // Import dynamic from next/dynamic
 import React from "react";
 import {
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { SortableItem } from "@/components/SortableItem";
-
-// Dynamic import for DndContext
-const DndContextWithNoSSR = dynamic(
-  () => import("@dnd-kit/core").then((mod) => mod.DndContext),
-  { ssr: false }
-);
+  faLinkedin,
+  faGithub,
+  faTwitter,
+  faInstagram,
+  faFacebook,
+  faTiktok,
+  faYoutube,
+  faTwitch,
+  faDiscord,
+  faSnapchat,
+  faWhatsapp,
+  faTelegram,
+  faReddit,
+  faPinterest,
+} from "@fortawesome/free-brands-svg-icons";
+import { Input } from "@/components/ui/input";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const SocialInputs: React.FC<{
   selectedInputs: string[];
   urls: Record<string, string>;
   setUrls: React.Dispatch<React.SetStateAction<Record<string, string>>>;
   setSelectedInputs: React.Dispatch<React.SetStateAction<string[]>>;
-}> = ({ selectedInputs, urls, setUrls, setSelectedInputs }) => {
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (active.id !== over?.id) {
-      setSelectedInputs((items) => {
-        const oldIndex = items.indexOf(active.id as string);
-        const newIndex = items.indexOf(over?.id as string);
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
+  removeInput: (social: string) => void;
+}> = ({ selectedInputs, urls, setUrls, setSelectedInputs, removeInput  }) => {
+  const socialIcons = {
+    linkedin: faLinkedin,
+    github: faGithub,
+    twitter: faTwitter,
+    instagram: faInstagram,
+    facebook: faFacebook,
+    tiktok: faTiktok,
+    youtube: faYoutube,
+    twitch: faTwitch,
+    discord: faDiscord,
+    snapchat: faSnapchat,
+    whatsapp: faWhatsapp,
+    telegram: faTelegram,
+    reddit: faReddit,
+    pinterest: faPinterest,
   };
 
   return (
     <div>
-      <DndContextWithNoSSR
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={selectedInputs}
-          strategy={verticalListSortingStrategy}
-        >
-          <div className="flex flex-col gap-2">
-            {selectedInputs.map((social) => (
-              <SortableItem
-                key={social}
-                id={social}
-                social={social}
-                urls={urls}
-                setUrls={setUrls}
-              />
-            ))}
+      {selectedInputs.map((social) => (
+        <div key={social} className="flex flex-row gap-2 group">
+          <div className="flex items-center gap-2">
+            <FontAwesomeIcon
+              icon={socialIcons[social as keyof typeof socialIcons]} // Ensure social is a key of socialIcons
+              className="w-4 h-4"
+            />
           </div>
-        </SortableContext>
-      </DndContextWithNoSSR>
+          <Input
+            placeholder={social.charAt(0).toUpperCase() + social.slice(1)}
+            value={urls?.[social] || ""} // Use optional chaining
+            onChange={(e) => {
+              setUrls((prev) => ({
+                ...prev,
+                [social]: e.target.value,
+              }));
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => removeInput(social)} // Call removeInput on click
+            className="text-red-500 hover:text-red-700"
+          >
+            Delete
+          </button>
+        </div>
+      ))}
     </div>
   );
 };

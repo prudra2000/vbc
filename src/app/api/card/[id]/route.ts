@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "../../../../lib/db";
 
 export async function GET(request: Request) {
-  const { searchParams, pathname } = new URL(request.url);
+  const {  pathname } = new URL(request.url);
   const cardId = pathname.split("/").pop();
   if (!cardId) {
     return NextResponse.json({ error: "Invalid card ID" }, { status: 400 });

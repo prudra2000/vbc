@@ -17,7 +17,6 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
   }
 
   const {
-    userId,
     cardTitle,
     cardStyle,
     name,
