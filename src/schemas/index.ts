@@ -9,8 +9,12 @@ export const LoginSchema = z.object({
 export const RegisterSchema = z.object({
   email: z.string().email({ message: "Email is required" }),
   password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
+  .string()
+  .min(8, {message: "Password must be at least 6 characters"})
+  .regex(new RegExp('.*[A-Z].*'), {message: "Must contain at least 1 uppercase letter"})
+  .regex(new RegExp('.*[a-z].*'), {message: "Must contain at least 1 lowercase letter"})
+  .regex(new RegExp('.*[0-9].*'), {message: "Must contain at least 1 number"})
+  .regex(new RegExp('.*[`~<>?,./!@#$%^&*()\\-_+="\'|{}\\[\\];:\\\\].*'), {message: "Must contain at least 1 special character"}),
   name: z.string().min(1, { message: "Name is required" }),
 });
 
@@ -20,8 +24,12 @@ export const ResetSchema = z.object({
 
 export const NewPasswordSchema = z.object({
   password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
+  .string()
+  .min(8, {message: "Password must be at least 6 characters"})
+  .regex(new RegExp('.*[A-Z].*'), {message: "Must contain at least 1 uppercase letter"})
+  .regex(new RegExp('.*[a-z].*'), {message: "Must contain at least 1 lowercase letter"})
+  .regex(new RegExp('.*[0-9].*'), {message: "Must contain at least 1 number"})
+  .regex(new RegExp('.*[`~<>?,./!@#$%^&*()\\-_+="\'|{}\\[\\];:\\\\].*'), {message: "Must contain at least 1 special character"}),
 });
 export const CardSchema = z.object({
   userId: z.string().min(1),

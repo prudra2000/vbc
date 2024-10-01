@@ -1,5 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import { Navbar } from "@/components/navbar/navbar";
+import DigiMeLogo from "@/components/DigiMeLogo";
 
 export default function RootLayout({
   children,
@@ -10,11 +11,7 @@ export default function RootLayout({
     <SessionProvider>
       <Navbar
         logo={
-          <div className="flex items-center">
-            <h1 className="text-xl font-bold text-blue-800 font-poppins">
-            DigiMe
-          </h1>
-          </div>
+          <DigiMeLogo />
         }
         links={undefined}
       ></Navbar>

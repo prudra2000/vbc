@@ -80,17 +80,11 @@ const ClientDashboard = () => {
   const handleAddCard = async (data: any) => {
     const starterValues = {
       userId: session?.user?.id || "",
-      cardTitle: data.cardTitle || "", // Ensure this is correctly referenced
-      cardStyle: data.cardStyle || "", // Provide a default value if necessary
-      name: data.name || "Untitled Card", // Provide a default value if necessary
+      cardTitle: data.cardTitle || "",
+      cardStyle: data.cardStyle || "",
+      name: data.name || "Untitled Card",
     };
-
-    // Call your addCard function with starterValues
     await addCard(starterValues);
-    // const result = await getCards();
-    // if ("cards" in result) {
-    //   setCards(result.cards ?? []);
-    // }
   };
 
   if (!session) return <div>Loading...</div>;
@@ -100,9 +94,9 @@ const ClientDashboard = () => {
         <GridLoader color="#3b82f6" />
         <h1 className="text-gray-500">Loading Cards...</h1>
       </div>
-    ); // Replace with your spinner component
+    );
   return (
-    <div className=" py-8 px-10 ">
+    <div className=" py-8 px-4 sm:px-10  ">
       <CardModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -114,7 +108,7 @@ const ClientDashboard = () => {
         <div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {cards
-              .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()) // Sort by updatedAt in descending order
+              .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
               .map((card) => {
                 return (
                   <div key={card.id} className="flex flex-col h-full">

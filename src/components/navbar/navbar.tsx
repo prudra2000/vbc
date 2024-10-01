@@ -1,21 +1,16 @@
 "use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
-
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   AlignJustify,
-  Github,
   Search,
-  Home,
   X,
   LayoutDashboard,
   Settings,
 } from "lucide-react";
-import LogoutButton from "../auth/logout-button";
 import UserInfo from "./user-info";
-import Divider from "../ui/divider";
 
 const NavBarLogo = ({ children }: { children: React.ReactNode }) => (
   <div className="flex flex-row gap-2 items-center justify-center font-bold">

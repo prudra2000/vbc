@@ -2,30 +2,43 @@
 import LoginButton from "@/components/auth/login-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { LogIn, Smartphone, Globe, Zap, IdCard, CircleUserRound  } from "lucide-react";
+import {
+  LogIn,
+  Smartphone,
+  Globe,
+  Zap,
+  IdCard,
+  CircleUserRound,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import DigiMeLogo from "@/components/DigiMeLogo";
 const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-200">
       <header className="container mx-auto px-4 h-10 w-full">
         <nav className="flex justify-between items-center pt-4">
-          <h1 className="text-xl font-bold text-blue-800 font-poppins">
-            DigiMe
-          </h1>
+          <DigiMeLogo />
           <div className="flex gap-2">
             <LoginButton>
-            <Button variant="link" className="text-blue-800 font-semibold hover:bg-slate-100">
-              <LogIn className="w-4 h-4 mr-2" />
-              Login
-            </Button>
-          </LoginButton>
-          <Button variant="link" className="text-blue-800 font-semibold hover:bg-slate-100">
-              <CircleUserRound className="w-4 h-4 mr-2" />
-              Sign Up
-            </Button>
+              <Button
+                variant="link"
+                className="text-blue-800 font-semibold hover:bg-slate-100"
+              >
+                <LogIn className="w-4 h-4 mr-2" />
+                Login
+              </Button>
+            </LoginButton>
+            <Link href="/auth/register">
+              <Button
+                variant="link"
+                className="text-blue-800 font-semibold hover:bg-slate-100"
+              >
+                <CircleUserRound className="w-4 h-4 mr-2" />
+                Sign Up
+              </Button>
+            </Link>
           </div>
-          
         </nav>
       </header>
       <main className="container mx-auto px-4">
@@ -153,7 +166,7 @@ const HomePage: React.FC = () => {
 
       <footer className="bg-gray-100 py-8 mt-16">
         <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
-          <p>&copy; 2024 DigiCard. All rights reserved.</p>
+          <p>&copy; 2024 DigiMe. All rights reserved.</p>
         </div>
       </footer>
     </div>

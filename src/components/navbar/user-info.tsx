@@ -10,7 +10,6 @@ import {
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { handleSignOut } from "@/actions/logout";
 import { signOut } from "next-auth/react";
 
 import Link from "next/link";
