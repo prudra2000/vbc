@@ -1,15 +1,17 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Avatar from "../avatar";
 import { GridLoader } from "react-spinners";
+import UploadProfilePicModal from "../settings/uploadProfilePicModal";
 
 const ClientSettings = () => {
   const { data: session, status } = useSession();
-
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   if (status === "loading") {
     return (
       <div className="flex flex-col justify-center items-center h-max pt-[30vh] gap-4">
@@ -24,6 +26,7 @@ const ClientSettings = () => {
   }
 
   return (
+    
     <div className=" h-max pt-8 bg-gray-100">
       <div className="flex flex-col gap-4 bg-white p-4 rounded-lg">
         <h1 className="text-2xl font-bold text-black">Your Account:</h1>
@@ -36,7 +39,16 @@ const ClientSettings = () => {
               size="large"
               className="w-24 h-24"
             />
-            <Button variant="outline">Upload Image</Button>
+            <Button variant="outline" onClick={() => setIsUploadModalOpen(true)}>Upload Image</Button>
+            <UploadProfilePicModal 
+                isOpen={isUploadModalOpen} 
+                onClose={() => setIsUploadModalOpen(false)} 
+                onSubmit={async () => { 
+                    // Your submit logic here
+                    return; // Ensure it returns a Promise
+                }} 
+                cardID={""} 
+            />
           </div>
           <hr />
           <div className="flex flex-row justify-between items-center">

@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
             <div className="flex flex-col lg:flex-row items-center justify-center gap-20">
               <div className="flex justify-center">
                 <Image
-                  alt="Digital Business Card Mockup"
+                  alt="DigiMe Mockup"
                   className="w-full max-w-3xl md:max-w-5xl lg:max-w-7xl aspect-[1/1] overflow-hidden object-contain object-center"
                   height="600"
                   src="/004.png"
@@ -66,7 +66,7 @@ const HomePage: React.FC = () => {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Link href="/auth/register">
-                    <Button className="inline-flex h-10 items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-purple-500 text-white text-md font-semibold hover:scale-105 shadow-md transition-all duration-300 hover:outline-white">
+                    <Button className="inline-flex h-10 items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-purple-500 text-white text-md font-semibold hover:scale-105 shadow-md transition-all duration-300 hover:outline-white ">
                       <IdCard className="mr-2" />
                       Create Your DigiMe Card
                     </Button>
@@ -81,51 +81,7 @@ const HomePage: React.FC = () => {
           <div className="flex flex-col items-center">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Features</h2>
             <p className="text-xl text-gray-600 mb-8">
-              Join thousands of professionals using DigiCard
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Smartphone,
-                title: "Mobile-First",
-                description: "Optimized for smartphones and tablets",
-              },
-              {
-                icon: Globe,
-                title: "Share Anywhere",
-                description: "Easy to share via QR code or link",
-              },
-              {
-                icon: Zap,
-                title: "Instant Updates",
-                description: "Change your info in real-time",
-              },
-            ].map((feature, index) => (
-              <div key={index}>
-                <Card className="shadow-md rounded-lg border border-blue-600">
-                  <CardContent className="flex flex-col items-center p-6">
-                    <feature.icon className="w-12 h-12 text-blue-600 mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 text-center">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="flex flex-col  items-center mt-20">
-          <div className="flex flex-col items-center">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Business Options
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Join thousands of professionals using DigiCard
+              Join thousands of professionals using DigiMe
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
