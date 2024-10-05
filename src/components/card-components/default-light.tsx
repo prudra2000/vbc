@@ -20,7 +20,7 @@ interface CardProps {
   selectedInputs?: string[];
   removeAvatar?: boolean;
   removeSocials?: boolean;
-  type: "primary" | "secondary" | "success" | "danger" | "dashboard";
+  type: string;
   className?: string;
 }
 
@@ -35,7 +35,7 @@ export default function BasicCard({
   removeSocials = false,
 }: CardProps) {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 px-6 sm:px-0">
+    <div className="flex items-center justify-center min-h-screen bg-neutral-200 px-6 sm:px-0">
       <Card className="w-full max-w-md mx-auto rounded-3xl overflow-hidden">
         <CardHeader className="p-6 pb-0">
           <div className="flex flex-col items-center text-center">

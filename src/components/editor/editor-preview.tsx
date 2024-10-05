@@ -1,6 +1,6 @@
 import React from "react";
 import PreviewCard from "../card/preview-card";
-import BasicCard from "../card-components/basic-card";
+import BasicCard from "../card-components/default-light";
 
 interface EditorPreviewProps {
   formValues: {

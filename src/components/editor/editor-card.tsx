@@ -358,10 +358,9 @@ const EditorForm: React.FC<EditorForm> = ({
                           <SelectValue placeholder="Select a style" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="primary">Primary</SelectItem>
-                          <SelectItem value="secondary">Secondary</SelectItem>
-                          <SelectItem value="success">Success</SelectItem>
-                          <SelectItem value="danger">Danger</SelectItem>
+                          <SelectItem value="default">Default</SelectItem>
+                          <SelectItem value="defaultDark">Default Dark</SelectItem>
+                          <SelectItem value="glassLight">Glass Light</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

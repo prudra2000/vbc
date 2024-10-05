@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Card as PCard } from "@prisma/client";
-import BasicCard from "@/components/card-components/basic-card";
+import BasicCard from "@/components/card-components/default-light";
 import FloatButton from "@/components/ui/floatButton";
 import { Share2 } from "lucide-react";
 import ShareModal from "@/components/card/card-qr-modal";
 import { GridLoader } from "react-spinners";
+import BasicDarkCard from "@/components/card-components/default-dark";
+import GlassLightCard from "@/components/card-components/glass-light";
 
 type FormValues = {
   userId: string;
@@ -191,9 +193,8 @@ const CardPage = () => {
         <GridLoader color="#3b82f6" />
         <h1 className="text-gray-500">Loading DigiMe...</h1>
       </div>
-    ); 
+    );
   if (error) return <div>{error}</div>;
-  
 
   return (
     <div className="w-screen h-screen">
@@ -201,13 +202,56 @@ const CardPage = () => {
         <ShareModal
           isOpen={isQRModalOpen}
           onClose={() => setIsQRModalOpen(false)}
-          cardId={typeof id === 'string' ? id : ""}
+          cardId={typeof id === "string" ? id : ""}
         />
       )}
-      <FloatButton onClick={() => setIsQRModalOpen(true)} >
+      <FloatButton onClick={() => setIsQRModalOpen(true)}>
         <Share2 className="w-4 h-4 text-white" />
       </FloatButton>
-      <BasicCard
+      {formValues.cardStyle === "default" && (
+          <BasicCard
+            cardValues={{
+              ...formValues,
+              socialMedia: JSON.stringify(formValues.socialMedia),
+              urls: JSON.stringify(formValues.socialMedia),
+            }}
+            urls={urls}
+            showUsername={true}
+            selectedInputs={selectedInputs}
+            type={
+              formValues.cardStyle as
+                | "default"
+                | "defaultDark"
+                | "success"
+                | "danger"
+                | "dashboard"
+            }
+          />
+      )}
+      {formValues.cardStyle === "defaultDark" && (
+        <>
+          <BasicDarkCard
+            cardValues={{
+              ...formValues,
+              socialMedia: JSON.stringify(formValues.socialMedia),
+              urls: JSON.stringify(formValues.socialMedia),
+            }}
+            urls={urls}
+            showUsername={true}
+            selectedInputs={selectedInputs}
+            type={
+              formValues.cardStyle as
+                | "primary"
+                | "secondary"
+                | "success"
+                | "danger"
+                | "dashboard"
+            }
+          />
+        </>
+      )}
+      {formValues.cardStyle === "glassLight" && (
+        <GlassLightCard
         cardValues={{
           ...formValues,
           socialMedia: JSON.stringify(formValues.socialMedia),
@@ -217,14 +261,10 @@ const CardPage = () => {
         showUsername={true}
         selectedInputs={selectedInputs}
         type={
-          formValues.cardStyle as
-            | "primary"
-            | "secondary"
-            | "success"
-            | "danger"
-            | "dashboard"
+          formValues.cardStyle
         }
-      />
+        />
+      )}
     </div>
   );
 };
