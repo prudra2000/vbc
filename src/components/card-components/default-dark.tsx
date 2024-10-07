@@ -20,7 +20,7 @@ interface CardProps {
   selectedInputs?: string[];
   removeAvatar?: boolean;
   removeSocials?: boolean;
-  type: "primary" | "secondary" | "success" | "danger" | "dashboard";
+  type: "defaultDark";
   className?: string;
 }
 
@@ -148,7 +148,7 @@ export default function BasicDarkCard({
                   urls={urls}
                   showUsername={showUsername}
                   selectedInputs={selectedInputs}
-                  type="cardDark"
+                  type={type}
                 />{" "}
               </div>
             )}

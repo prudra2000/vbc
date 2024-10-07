@@ -206,27 +206,20 @@ const CardPage = () => {
         />
       )}
       <FloatButton onClick={() => setIsQRModalOpen(true)}>
-        <Share2 className="w-4 h-4 text-white" />
+        <Share2 className="w-4 h-4" />
       </FloatButton>
-      {formValues.cardStyle === "default" && (
-          <BasicCard
-            cardValues={{
-              ...formValues,
-              socialMedia: JSON.stringify(formValues.socialMedia),
-              urls: JSON.stringify(formValues.socialMedia),
-            }}
-            urls={urls}
-            showUsername={true}
-            selectedInputs={selectedInputs}
-            type={
-              formValues.cardStyle as
-                | "default"
-                | "defaultDark"
-                | "success"
-                | "danger"
-                | "dashboard"
-            }
-          />
+      {formValues.cardStyle === "defaultLight" && (
+        <BasicCard
+          cardValues={{
+            ...formValues,
+            socialMedia: JSON.stringify(formValues.socialMedia),
+            urls: JSON.stringify(formValues.socialMedia),
+          }}
+          urls={urls}
+          showUsername={true}
+          selectedInputs={selectedInputs}
+          type={formValues.cardStyle}
+        />
       )}
       {formValues.cardStyle === "defaultDark" && (
         <>
@@ -239,30 +232,21 @@ const CardPage = () => {
             urls={urls}
             showUsername={true}
             selectedInputs={selectedInputs}
-            type={
-              formValues.cardStyle as
-                | "primary"
-                | "secondary"
-                | "success"
-                | "danger"
-                | "dashboard"
-            }
+            type={formValues.cardStyle}
           />
         </>
       )}
       {formValues.cardStyle === "glassLight" && (
         <GlassLightCard
-        cardValues={{
-          ...formValues,
-          socialMedia: JSON.stringify(formValues.socialMedia),
-          urls: JSON.stringify(formValues.socialMedia),
-        }}
-        urls={urls}
-        showUsername={true}
-        selectedInputs={selectedInputs}
-        type={
-          formValues.cardStyle
-        }
+          cardValues={{
+            ...formValues,
+            socialMedia: JSON.stringify(formValues.socialMedia),
+            urls: JSON.stringify(formValues.socialMedia),
+          }}
+          urls={urls}
+          showUsername={true}
+          selectedInputs={selectedInputs}
+          type={formValues.cardStyle}
         />
       )}
     </div>

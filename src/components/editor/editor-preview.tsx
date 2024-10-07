@@ -1,6 +1,8 @@
 import React from "react";
 import PreviewCard from "../card/preview-card";
 import BasicCard from "../card-components/default-light";
+import BasicDarkCard from "../card-components/default-dark";
+import GlassLightCard from "../card-components/glass-light";
 
 interface EditorPreviewProps {
   formValues: {
@@ -57,14 +59,47 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   };
   return (
     <div className="">
-      <BasicCard
-        cardValues={{ ...formValues, socialMedia: JSON.stringify(formValues.socialMedia) }}
-        urls={urls}
-        showUsername={false}
-        selectedInputs={selectedInputs}
-        type={formValues.cardStyle as "primary" | "secondary" | "success" | "danger"}
-        className="outline outline-1 outline-white/10"
-      />
+     {formValues.cardStyle === "defaultLight" && (
+        <BasicCard
+          cardValues={{
+            ...formValues,
+            socialMedia: JSON.stringify(formValues.socialMedia),
+            urls: JSON.stringify(formValues.socialMedia),
+          }}
+          urls={urls}
+          showUsername={true}
+          selectedInputs={selectedInputs}
+          type={formValues.cardStyle}
+        />
+      )}
+      {formValues.cardStyle === "defaultDark" && (
+        <>
+          <BasicDarkCard
+            cardValues={{
+              ...formValues,
+              socialMedia: JSON.stringify(formValues.socialMedia),
+              urls: JSON.stringify(formValues.socialMedia),
+            }}
+            urls={urls}
+            showUsername={true}
+            selectedInputs={selectedInputs}
+            type={formValues.cardStyle}
+          />
+        </>
+      )}
+      {formValues.cardStyle === "glassLight" && (
+        <GlassLightCard
+          cardValues={{
+            ...formValues,
+            socialMedia: JSON.stringify(formValues.socialMedia),
+            urls: JSON.stringify(formValues.socialMedia),
+          }}
+          urls={urls}
+          showUsername={true}
+          selectedInputs={selectedInputs}
+          type={formValues.cardStyle}
+        />
+      )}
     </div>
   );
 };

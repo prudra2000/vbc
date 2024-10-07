@@ -21,8 +21,11 @@ import {
   SelectItem,
   SelectValue,
 } from "../../components/ui/select";
-import LocationInput from "./LocationInput";
+import LocationInput from "../editor/LocationInput";
 import { Switch } from "../ui/switch";
+import { Button } from "../ui/button";
+import { Plus, X } from "lucide-react";
+import AddElementsModal from "./addElements";
 interface EditorForm {
   isOpen?: boolean;
   onClose?: () => void;
@@ -63,6 +66,7 @@ const EditorForm: React.FC<EditorForm> = ({
   };
 
   const [selectedInputs, setSelectedInputs] = useState<string[]>(selected);
+  const [selectedElements, setSelectedElements] = useState<string[]>([]);
   const [countryCodes, setCountryCodes] = useState<
     { code: string; dialCode: string; flag: string; name: string }[]
   >([]);
@@ -128,9 +132,44 @@ const EditorForm: React.FC<EditorForm> = ({
     setUrls(formValues.urls);
   }, [selected, formValues.urls]);
 
+  const [isAddElementsOpen, setIsAddElementsOpen] = useState(false);
+
+  const formTitles = {
+    Name: "",
+    Tagline: "",
+    Company: "",
+    Email: "",
+    Phone: "",
+    Location: "",
+    Website: "",
+    Image: "",
+  };
+
+  const handleAddElements = async (newElements: string[]): Promise<void> => {
+    setSelectedElements((prev) => [
+      ...(new Set([...prev, ...newElements]) as any),
+    ]);
+  };
+
   return (
-    <div className="flex flex-col h-max rounded-[1rem] border border-neutral-200 bg-white text-neutral-950 shadow dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
+    <div className="flex flex-col h-max border border-neutral-200 bg-white text-neutral-950 shadow dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
       <div className="flex flex-col gap-2 p-4">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Edit Card</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsAddElementsOpen(true)}
+          >
+            <Plus />
+          </Button>
+          <AddElementsModal
+            isOpen={isAddElementsOpen}
+            onClose={() => setIsAddElementsOpen(false)}
+            onSubmit={handleAddElements}
+            formValues={formTitles}
+          />
+        </div>
         <section title="form">
           <Form {...form}>
             <form
@@ -149,30 +188,34 @@ const EditorForm: React.FC<EditorForm> = ({
                   </FormItem>
                 )}
               ></FormField>
-              <FormField
-                control={form.control}
-                name="tagline"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Tagline:</FormLabel>
-                    <FormControl>
-                      <div className="flex justify-center items-center gap-2">
-                        <Input
-                          {...field}
-                          placeholder="Software Developer"
-                          disabled={!field.value}
-                        />
-                        <Switch
-                          checked={!!field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked ? "Software Developer" : "");
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
+              {selectedElements.includes("tagline") && (
+                <FormField
+                  control={form.control}
+                  name="tagline"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Tagline:</FormLabel>
+                      <FormControl>
+                        <div className="flex justify-center items-center gap-2">
+                          <Input
+                            {...field}
+                            placeholder="Software Developer"
+                            disabled={!field.value}
+                          />
+                          <Switch
+                            checked={!!field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(
+                                checked ? "Software Developer" : ""
+                              );
+                            }}
+                          />
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                ></FormField>
+              )}
               <FormField
                 control={form.control}
                 name="company"
@@ -358,9 +401,15 @@ const EditorForm: React.FC<EditorForm> = ({
                           <SelectValue placeholder="Select a style" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="defaultLight">Default Light</SelectItem>
-                          <SelectItem value="defaultDark">Default Dark</SelectItem>
-                          <SelectItem value="glassLight">Glass Light</SelectItem>
+                          <SelectItem value="defaultLight">
+                            Default Light
+                          </SelectItem>
+                          <SelectItem value="defaultDark">
+                            Default Dark
+                          </SelectItem>
+                          <SelectItem value="glassLight">
+                            Glass Light
+                          </SelectItem>
                           <SelectItem value="glassDark">Glass Dark</SelectItem>
                         </SelectContent>
                       </Select>

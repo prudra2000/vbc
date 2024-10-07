@@ -2,9 +2,7 @@ import Avatar from "../avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
-  CheckCircle2,
   Link,
-  Linkedin,
   Mail,
   MapPin,
   Phone,
@@ -20,7 +18,7 @@ interface CardProps {
   selectedInputs?: string[];
   removeAvatar?: boolean;
   removeSocials?: boolean;
-  type: string;
+  type: "defaultLight";
   className?: string;
 }
 

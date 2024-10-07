@@ -16,7 +16,7 @@ const FloatButton: React.FC<FloatButtonProps> = ({  children,  disabled, onClick
             variant="outline"
             
             {...props}
-            className="fixed bottom-5 right-5 p-5 rounded-full bg-transparent z-50 hover:bg-white/10"
+            className={`fixed bottom-5 right-5 p-5 rounded-full `}
             onClick={onClick}
         >
           <div className="flex flex-row gap-x-2 items-center justify-center">
