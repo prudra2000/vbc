@@ -135,7 +135,7 @@ const EditorForm: React.FC<EditorForm> = ({
   const [isAddElementsOpen, setIsAddElementsOpen] = useState(false);
 
   const formTitles = {
-    Name: "",
+    Name: "ttt",
     Tagline: "",
     Company: "",
     Email: "",
