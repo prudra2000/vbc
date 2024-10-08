@@ -20,6 +20,7 @@ interface AddElementsModalProps {
   onClose: () => void;
   onSubmit: (data: any) => Promise<void>;
   formValues: any;
+  selectedElements: string[];
 }
 
 const AddElementsModal: React.FC<AddElementsModalProps> = ({
@@ -27,8 +28,9 @@ const AddElementsModal: React.FC<AddElementsModalProps> = ({
   onClose,
   onSubmit,
   formValues,
+  selectedElements: initialSelectedElements = [], // Rename the prop
 }) => {
-  const [selectedElements, setSelectedElements] = useState<string[]>([]);
+  const [selectedElements, setSelectedElements] = useState<string[]>(initialSelectedElements);
 
   const handleElementClick = (key: string) => {
     setSelectedElements((prev) =>

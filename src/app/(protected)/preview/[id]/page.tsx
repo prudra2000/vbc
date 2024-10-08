@@ -4,13 +4,15 @@ import { useParams } from "next/navigation";
 import { Card as PCard } from "@prisma/client";
 import BasicCard from "@/components/card-components/default-light";
 import FloatButton from "@/components/ui/floatButton";
-import { Share2 } from "lucide-react";
+import { Eye, Fullscreen, PencilRuler, Share2 } from "lucide-react";
 import ShareModal from "@/components/card/card-qr-modal";
 import { GridLoader } from "react-spinners";
 import BasicDarkCard from "@/components/card-components/default-dark";
 import GlassLightCard from "@/components/card-components/glass-light";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import EditorHeader from "@/components/editor/editorHeader";
+import PreviewHeader from "@/components/preview/editorHeader";
 
 type FormValues = {
   userId: string;
@@ -42,13 +44,12 @@ type FormValues = {
   };
 };
 
-const CardPage = () => {
+const PreviewPage = () => {
   const { id } = useParams(); // Get the id from the URL
   const [card, setCard] = useState<PCard | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
-  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [nonEmptyCardData, setnonEmptyCardData] = useState<string[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({
     linkedin: "",
@@ -101,7 +102,7 @@ const CardPage = () => {
       setLoading(true); // Set loading to true at the start
       if (id) {
         try {
-          const response = await fetch(`/api/card/${id}`);
+          const response = await fetch(`/api/preview/${id}`);
           if (response.ok) {
             const { card: cardData } = await response.json();
             setCard(cardData);
@@ -191,50 +192,27 @@ const CardPage = () => {
 
   if (loading)
     return (
-      <div className="flex flex-col justify-center items-center h-screen gap-4">
+      <div className="flex flex-col justify-center items-center h-screen gap-4 bg-gray-100">
         <GridLoader color="#3b82f6" />
         <h1 className="text-gray-500">Loading DigiMe...</h1>
       </div>
     );
-  if (!card || !card.isPublished) {
-    return (
-      <div className="flex flex-col justify-center items-center h-screen gap-4">
-        <h1 className="text-gray-500">This card is not published or does not exist.</h1>
-        <Link href="/">
-          <Button >Visit DigiMe</Button>
-        </Link>
-      </div>
-    );
-  }
+  if (error) return <div>{error}</div>;
 
   return (
-    <div className="w-screen h-screen">
-      {isQRModalOpen && (
-        <ShareModal
-          isOpen={isQRModalOpen}
-          onClose={() => setIsQRModalOpen(false)}
-          cardId={typeof id === "string" ? id : ""}
+    <div className="relative h-full pt-8 px-10 bg-gray-100 gap-4">
+      <div className="mb-5">
+        <PreviewHeader
+          headerTitle={"Preview:"}
+          cardTitle={card?.cardTitle || ""}
+          cardID={card?.id || ""}
+          icon={<Eye className="text-white" />}
+          isPublished={card?.isPublished || false}
         />
-      )}
-      <FloatButton onClick={() => setIsQRModalOpen(true)}>
-        <Share2 className="w-4 h-4" />
-      </FloatButton>
-      {formValues.cardStyle === "defaultLight" && (
-        <BasicCard
-          cardValues={{
-            ...formValues,
-            socialMedia: JSON.stringify(formValues.socialMedia),
-            urls: JSON.stringify(formValues.socialMedia),
-          }}
-          urls={urls}
-          showUsername={true}
-          selectedInputs={selectedInputs}
-          type={formValues.cardStyle}
-        />
-      )}
-      {formValues.cardStyle === "defaultDark" && (
-        <>
-          <BasicDarkCard
+      </div>
+      <div className="overflow-hidden rounded-md">
+        {formValues.cardStyle === "defaultLight" && (
+          <BasicCard
             cardValues={{
               ...formValues,
               socialMedia: JSON.stringify(formValues.socialMedia),
@@ -245,23 +223,38 @@ const CardPage = () => {
             selectedInputs={selectedInputs}
             type={formValues.cardStyle}
           />
-        </>
-      )}
-      {formValues.cardStyle === "glassLight" && (
-        <GlassLightCard
-          cardValues={{
-            ...formValues,
-            socialMedia: JSON.stringify(formValues.socialMedia),
-            urls: JSON.stringify(formValues.socialMedia),
-          }}
-          urls={urls}
-          showUsername={true}
-          selectedInputs={selectedInputs}
-          type={formValues.cardStyle}
-        />
-      )}
+        )}
+        {formValues.cardStyle === "defaultDark" && (
+          <>
+            <BasicDarkCard
+              cardValues={{
+                ...formValues,
+                socialMedia: JSON.stringify(formValues.socialMedia),
+                urls: JSON.stringify(formValues.socialMedia),
+              }}
+              urls={urls}
+              showUsername={true}
+              selectedInputs={selectedInputs}
+              type={formValues.cardStyle}
+            />
+          </>
+        )}
+        {formValues.cardStyle === "glassLight" && (
+          <GlassLightCard
+            cardValues={{
+              ...formValues,
+              socialMedia: JSON.stringify(formValues.socialMedia),
+              urls: JSON.stringify(formValues.socialMedia),
+            }}
+            urls={urls}
+            showUsername={true}
+            selectedInputs={selectedInputs}
+            type={formValues.cardStyle}
+          />
+        )}
+      </div>
     </div>
   );
 };
 
-export default CardPage;
+export default PreviewPage;

@@ -8,10 +8,10 @@ import { UpdateCardSchema } from "@/schemas";
 import { useSession } from "next-auth/react";
 import { updateCard } from "@/actions/update-card";
 import { Button } from "../../../../components/ui/button";
-import {  Save, PencilRuler } from "lucide-react";
+import { Save, PencilRuler } from "lucide-react";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import EditorHeader from "@/components/editorHeader";
+import EditorHeader from "@/components/editor/editorHeader";
 import { EditorPreview } from "@/components/editor/editor-preview";
 import { GridLoader } from "react-spinners";
 
@@ -255,9 +255,8 @@ const EditorPage = () => {
         reddit: formValues.urls.reddit || "",
         pinterest: formValues.urls.pinterest || "",
       },
-      
     };
-    console.log("values", formValues)
+    console.log("values", formValues);
 
     startTransition(async () => {
       try {
@@ -283,11 +282,19 @@ const EditorPage = () => {
 
   return (
     <div className="h-full pt-8 px-10 bg-gray-100">
-      <EditorHeader headerTitle={"Editor:"} cardTitle={card?.cardTitle || ""} cardID={card?.id || ""} icon={<PencilRuler className="text-white"/>} />
+      <EditorHeader
+        headerTitle={"Editor:"}
+        cardTitle={card?.cardTitle || ""}
+        cardID={card?.id || ""}
+        icon={<PencilRuler className="text-white" />}
+        isPublished={card?.isPublished || false}
+      />
       <div className="flex flex-col md:flex-row w-full justify-center items-center pt-5 gap-x-5">
         <div className="w-full h-1/2 border-2 border-gray-300 rounded-[1rem] overflow-hidden">
-         <EditorPreview formValues={formValues} selectedInputs={selectedInputs} /> 
-          
+          <EditorPreview
+            formValues={formValues}
+            selectedInputs={selectedInputs}
+          />
         </div>
         <div className="w-full sm:w-1/2">
           <EditorForm

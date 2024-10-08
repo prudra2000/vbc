@@ -72,11 +72,10 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
       <DialogContent className="">
         <DialogHeader>
           <DialogTitle className="text-black flex items-center justify-between w-full">
-
-              <div className="flex items-center w-full">
-                <IdCard className="mr-2" />
-                Add Card
-              </div>          
+            <div className="flex items-center w-full">
+              <IdCard className="mr-2" />
+              Add Card
+            </div>
           </DialogTitle>
           <DialogDescription>
             Start by creating a card title and selecting a style.
@@ -127,10 +126,16 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
                           <SelectValue placeholder="Select a style" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="primary">Primary</SelectItem>
-                          <SelectItem value="secondary">Secondary</SelectItem>
-                          <SelectItem value="success">Success</SelectItem>
-                          <SelectItem value="danger">Danger</SelectItem>
+                          <SelectItem value="defaultLight">
+                            Default Light
+                          </SelectItem>
+                          <SelectItem value="defaultDark">
+                            Default Dark
+                          </SelectItem>
+                          <SelectItem value="glassLight">
+                            Glass Light
+                          </SelectItem>
+                          <SelectItem value="glassDark">Glass Dark</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

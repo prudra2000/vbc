@@ -35,6 +35,7 @@ const DisplayCard: React.FC<DisplayCardProps> = ({
             cardValues={formValues}
             removeSocials={true}
           />
+          
           <div className="absolute bottom-0 left-1/2 w-full transform -translate-x-1/2 opacity-0 bg-white/10 group-hover:opacity-100 transition-opacity duration-300">
             <div className="flex justify-center items-center gap-2 p-3">
               <p className="text-white text-sm">Preview</p>

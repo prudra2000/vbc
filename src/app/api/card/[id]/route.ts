@@ -10,10 +10,10 @@ export async function GET(request: Request) {
   }
   try {
     const personalCard = await db.personalCard.findUnique({
-      where: { id: cardId },
+      where: { id: cardId, isPublished: true },
     });
-    if (!personalCard) {
-      return NextResponse.json({ error: "Card not found" }, { status: 404 });
+    if (!personalCard?.isPublished) {
+      return NextResponse.json({ error: "Card is not published" }, { status: 403 });
     }
     return NextResponse.json({ card: personalCard }, { status: 200 });
   } catch (error) {

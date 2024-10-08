@@ -136,7 +136,7 @@ const EditorForm: React.FC<EditorForm> = ({
 
   const formTitles = {
     Name: "",
-    Tagline: "",
+    tagline: "",
     Company: "",
     Email: "",
     Phone: "",
@@ -168,6 +168,7 @@ const EditorForm: React.FC<EditorForm> = ({
             onClose={() => setIsAddElementsOpen(false)}
             onSubmit={handleAddElements}
             formValues={formTitles}
+            selectedElements={selectedElements}
           />
         </div>
         <section title="form">
@@ -176,46 +177,35 @@ const EditorForm: React.FC<EditorForm> = ({
               className="space-y-4"
               onChange={() => handleFormChange(form.getValues())}
             >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Name:</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Jane Doe" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
-              {selectedElements.includes("tagline") && (
+              {selectedElements.includes("name") && (
                 <FormField
                   control={form.control}
-                  name="tagline"
+                  name="name"
                   render={({ field }) => (
                     <FormItem className="">
-                      <FormLabel>Tagline:</FormLabel>
+                      <FormLabel>Name:</FormLabel>
                       <FormControl>
-                        <div className="flex justify-center items-center gap-2">
-                          <Input
-                            {...field}
-                            placeholder="Software Developer"
-                            disabled={!field.value}
-                          />
-                          <Switch
-                            checked={!!field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(
-                                checked ? "Software Developer" : ""
-                              );
-                            }}
-                          />
-                        </div>
+                        <Input {...field} placeholder="Jane Doe" />
                       </FormControl>
                     </FormItem>
                   )}
                 ></FormField>
               )}
+              <FormField
+                control={form.control}
+                name="tagline"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Tagline:</FormLabel>
+                    <FormControl>
+                      <div className="flex justify-center items-center gap-2">
+                        <Input {...field} placeholder="Software Developer" />
+                      </div>
+                    </FormControl>
+                  </FormItem>
+                )}
+              ></FormField>
+
               <FormField
                 control={form.control}
                 name="company"
@@ -227,19 +217,8 @@ const EditorForm: React.FC<EditorForm> = ({
                         <Input
                           {...field}
                           placeholder="Company"
-                          disabled={!field.value}
                           value={field.value}
                           onChange={(e) => field.onChange(e.target.value)}
-                        />
-                        <Switch
-                          checked={!!field.value}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              field.onChange("Company Name"); // Set to "Company Name" if enabled
-                            } else {
-                              field.onChange(""); // Set to blank if disabled
-                            }
-                          }}
                         />
                       </div>
                     </FormControl>
@@ -255,17 +234,7 @@ const EditorForm: React.FC<EditorForm> = ({
                     <FormLabel>Email:</FormLabel>
                     <FormControl>
                       <div className="flex justify-center items-center gap-2">
-                        <Input
-                          {...field}
-                          placeholder="email@example.com"
-                          disabled={!field.value}
-                        />
-                        <Switch
-                          checked={!!field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked ? "email@example.com" : "");
-                          }}
-                        />
+                        <Input {...field} placeholder="email@example.com" />
                       </div>
                     </FormControl>
                   </FormItem>
@@ -415,25 +384,6 @@ const EditorForm: React.FC<EditorForm> = ({
                       </Select>
                     </FormControl>
                     <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
-              <FormField
-                control={form.control}
-                name="showName"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormControl>
-                      <div className="flex justify-start items-center gap-2 text-sm">
-                        Show Username:
-                        <Switch
-                          checked={!!field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked ? "email@example.com" : "");
-                          }}
-                        />
-                      </div>
-                    </FormControl>
                   </FormItem>
                 )}
               ></FormField>

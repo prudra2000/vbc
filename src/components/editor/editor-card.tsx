@@ -369,25 +369,6 @@ const EditorForm: React.FC<EditorForm> = ({
                   </FormItem>
                 )}
               ></FormField>
-              <FormField
-                control={form.control}
-                name="showName"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormControl>
-                      <div className="flex justify-start items-center gap-2 text-sm">
-                        Show Username:
-                        <Switch
-                          checked={!!field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked ? "email@example.com" : "");
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
               <SocialSelect
                 selectedInputs={selectedInputs}
                 handleSelectChange={handleSelectChange}

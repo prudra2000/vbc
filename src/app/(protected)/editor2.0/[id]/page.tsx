@@ -11,7 +11,7 @@ import { Button } from "../../../../components/ui/button";
 import { Save, PencilRuler } from "lucide-react";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import EditorHeader from "@/components/editorHeader";
+import EditorHeader from "@/components/editor/editorHeader";
 import { EditorPreview } from "@/components/editor/editor-preview";
 import { GridLoader } from "react-spinners";
 

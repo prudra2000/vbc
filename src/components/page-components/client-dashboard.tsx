@@ -14,6 +14,7 @@ import {
   EllipsisVertical,
   Eye,
   CodeXml,
+  Send,
 } from "lucide-react";
 import { deleteCard } from "@/actions/delete-card";
 import DisplayCard from "../dashboard/display-card";
@@ -32,6 +33,7 @@ import {
 import { useSession } from "next-auth/react";
 import { GridLoader } from "react-spinners";
 import EmbedModal from "../editor/embedModal";
+import PublishCardModal from "../editor/publishCard";
 const ClientDashboard = () => {
   const { data: session, status } = useSession();
   const [cards, setCards] = useState<PersonalCard[]>([]);
@@ -41,6 +43,8 @@ const ClientDashboard = () => {
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [isEmbedModalOpen, setIsEmbedModalOpen] = useState(false);
   const [currentCardId, setCurrentCardId] = useState<string | null>(null);
+  const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
   useEffect(() => {
     const fetchCards = async () => {
       setLoading(true);
@@ -56,27 +60,6 @@ const ClientDashboard = () => {
 
     fetchCards();
   }, []);
-  const starterValues = {
-    userId: session?.user?.id || "",
-    title: "",
-    description: "",
-    image: "",
-    linkedin: "",
-    github: "",
-    twitter: "",
-    instagram: "",
-    facebook: "",
-    tiktok: "",
-    youtube: "",
-    twitch: "",
-    discord: "",
-    snapchat: "",
-    whatsapp: "",
-    telegram: "",
-    reddit: "",
-    pinterest: "",
-  };
-
   const handleAddCard = async (data: any) => {
     const starterValues = {
       userId: session?.user?.id || "",
@@ -111,92 +94,124 @@ const ClientDashboard = () => {
               .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
               .map((card) => {
                 return (
-                  <div key={card.id} className="flex flex-col h-full">
-                    <DisplayCard
-                      cardID={card.id}
-                      cardTitle={card.cardTitle}
-                      cardDescription={card.name}
-                      formValues={card}
-                      dateUpdated={card.updatedAt.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric",
-                        hour12: true,
-                      })}
-                      children={
-                        <div className="">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="secondary" size="sm">
-                                <EllipsisVertical className="w-5" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-56">
-                              <DropdownMenuLabel>
-                                {card.cardTitle}
-                              </DropdownMenuLabel>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuGroup>
-                                <Link href={`/card/${card.id}`} target="_blank">
-                                  <DropdownMenuItem>
-                                    <span>View Card</span>
-                                    <DropdownMenuShortcut>
-                                      <Eye className="w-4 h-4" />
-                                    </DropdownMenuShortcut>
-                                  </DropdownMenuItem>
-                                </Link>
-                                <Link href={`/editor/${card.id}`}>
-                                  <DropdownMenuItem>
-                                    <span>Edit</span>
-                                    <DropdownMenuShortcut>
-                                      <PencilRuler className="w-4 h-4" />
-                                    </DropdownMenuShortcut>
-                                  </DropdownMenuItem>
-                                </Link>
-                                <DropdownMenuItem
-                                  onClick={() => {
-                                    setCurrentCardId(card.id);
-                                    setIsQRModalOpen(true);
-                                  }}
-                                >
-                                  <span>Share</span>
-                                  <DropdownMenuShortcut>
-                                    <Share2 className="w-4 h-4" />
-                                  </DropdownMenuShortcut>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => {
-                                    setIsEmbedModalOpen(true);
-                                  }}
-                                >
-                                  <span>Embed Card</span>
-                                  <DropdownMenuShortcut>
-                                    <CodeXml className="w-4 h-4" />
-                                  </DropdownMenuShortcut>
-                                </DropdownMenuItem>
+                  <>
+                    {isPublishModalOpen && (
+                      <PublishCardModal
+                        cardID={card.id}
+                        isOpen={isPublishModalOpen}
+                        onClose={() => setIsPublishModalOpen(false)}
+                        isPublished={card.isPublished}
+                      />
+                    )}
+                    <div key={card.id} className="flex flex-col h-full">
+                      <DisplayCard
+                        cardID={card.id}
+                        cardTitle={card.cardTitle}
+                        cardDescription={card.name}
+                        formValues={card}
+                        dateUpdated={card.updatedAt.toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          }
+                        )}
+                        children={
+                          <div className="">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="secondary" size="sm">
+                                  <EllipsisVertical className="w-5" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="w-56">
+                                <DropdownMenuLabel>
+                                  {card.cardTitle}
+                                </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                  onClick={async () => {
-                                    await deleteCard(card.id);
-                                    window.location.reload();
-                                  }}
-                                >
-                                  <span className="text-destructive">
-                                    Delete
-                                  </span>
-                                  <DropdownMenuShortcut>
-                                    <Trash2 className="w-4 h-4 stroke-destructive" />
-                                  </DropdownMenuShortcut>
-                                </DropdownMenuItem>
-                              </DropdownMenuGroup>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      }
-                    />
-                  </div>
+                                <DropdownMenuGroup>
+                                  {card.isPublished && (
+                                    <Link
+                                      href={`/card/${card.id}`}
+                                      target="_blank"
+                                    >
+                                      <DropdownMenuItem>
+                                        <span>View Card</span>
+                                        <DropdownMenuShortcut>
+                                          <Eye className="w-4 h-4" />
+                                        </DropdownMenuShortcut>
+                                      </DropdownMenuItem>
+                                    </Link>
+                                  )}
+                                  {card.isPublished === false && (
+                                    <Link
+                                      href={`/preview/${card.id}`}
+                                      target="_blank"
+                                    >
+                                      <DropdownMenuItem>
+                                        <span>Preview Card</span>
+                                        <DropdownMenuShortcut>
+                                          <Eye className="w-4 h-4" />
+                                        </DropdownMenuShortcut>
+                                      </DropdownMenuItem>
+                                    </Link>
+                                  )}
+
+                                  <Link href={`/editor/${card.id}`}>
+                                    <DropdownMenuItem>
+                                      <span>Edit</span>
+                                      <DropdownMenuShortcut>
+                                        <PencilRuler className="w-4 h-4" />
+                                      </DropdownMenuShortcut>
+                                    </DropdownMenuItem>
+                                  </Link>
+                                  <DropdownMenuItem
+                                    onClick={() => {
+                                      setCurrentCardId(card.id);
+                                      setIsQRModalOpen(true);
+                                    }}
+                                  >
+                                    <span>Share</span>
+                                    <DropdownMenuShortcut>
+                                      <Share2 className="w-4 h-4" />
+                                    </DropdownMenuShortcut>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() => {
+                                      setIsEmbedModalOpen(true);
+                                    }}
+                                  >
+                                    <span>Embed Card</span>
+                                    <DropdownMenuShortcut>
+                                      <CodeXml className="w-4 h-4" />
+                                    </DropdownMenuShortcut>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem
+                                    onClick={async () => {
+                                      await deleteCard(card.id);
+                                      window.location.reload();
+                                    }}
+                                  >
+                                    <span className="text-destructive">
+                                      Delete
+                                    </span>
+                                    <DropdownMenuShortcut>
+                                      <Trash2 className="w-4 h-4 stroke-destructive" />
+                                    </DropdownMenuShortcut>
+                                  </DropdownMenuItem>
+                                </DropdownMenuGroup>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        }
+                      />
+                    </div>
+                  </>
                 );
               })}
             <div
