@@ -268,7 +268,7 @@ const EditorForm: React.FC<EditorForm> = ({
                           <SelectContent>
                             {countryCodes.map((country) => (
                               <SelectItem
-                                key={country.code}
+                              key={`${country.code}-${country.dialCode}`}
                                 value={country.dialCode}
                               >
                                 {country.flag} {country.name} (

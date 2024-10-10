@@ -278,15 +278,16 @@ const EditorPage = () => {
         <GridLoader color="#3b82f6" />
         <h1 className="text-gray-500">Loading Editor...</h1>
       </div>
-    ); // Replace with your spinner component
+    ); 
 
   return (
-    <div className="h-full pt-8 bg-gray-100">
+    <div className="h-full pt-8 px-10 bg-gray-100">
       <EditorHeader
         headerTitle={"Editor:"}
         cardTitle={card?.cardTitle || ""}
         cardID={card?.id || ""}
-        icon={<PencilRuler className="text-white" />}
+        icon={<PencilRuler className="text-white" />} 
+        isPublished={card?.isPublished || false}        
       />
       <div className="flex flex-col md:flex-row w-full justify-center items-center pt-5 gap-x-5 bg-white">
         <div className="w-full h-1/2 border-2 border-gray-300 rounded-[1rem] overflow-hidden">

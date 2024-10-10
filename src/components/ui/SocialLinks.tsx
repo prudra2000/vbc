@@ -76,7 +76,7 @@ const SocialLinks = ({
       const username = platformRegex(url, platform);
       const icon = socialIcons[platform];
       return username ? (
-        <>
+        <div key={platform}> {/* Add a unique key here */}
           {showUsername ? (
             <a
               href={url}
@@ -86,7 +86,6 @@ const SocialLinks = ({
             >
               <Button variant="outline" className={`w-full justify-start ${type === "defaultDark" ? "border-neutral-700 text-white hover:bg-neutral-700 hover:text-white" : ""} ${type === "glassLight" ? "border-white/15 text-white hover:bg-white/10 hover:text-white" : ""}`}>
                 <FontAwesomeIcon icon={icon} className=" mr-2 w-4 h-4" />
-
                 <p className=" underline hover:text-blue-500 text-xs">
                   {username}
                 </p>
@@ -107,7 +106,7 @@ const SocialLinks = ({
               </a>
             </div>
           )}
-        </>
+        </div>
       ) : null;
     }
     return null;

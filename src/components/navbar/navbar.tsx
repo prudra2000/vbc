@@ -112,20 +112,6 @@ const Navbar = ({
             isOpen ? "hidden" : "block"
           } hidden sm:hidden md:flex flex-row gap-x-2 justify-center items-center`}
         >
-          <Button
-            variant="link"
-            size="sm"
-            onClick={() => handleOpenDialog()}
-            className="hover:bg-slate-100"
-          >
-            <Search className="w-4 h-4 stroke-blue-800" />
-            <span className=" hidden md:block ml-1 text-accent-primary rounded-md px-1 text-xs">
-              {typeof navigator !== "undefined" &&
-              navigator.userAgent.includes("Mac")
-                ? "⌘ K"
-                : "Ctrl+K"}
-            </span>
-          </Button>
 
           <Link href="/dashboard">
             <Button variant="link" size="sm" className="hover:bg-slate-100">

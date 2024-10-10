@@ -26,6 +26,8 @@ import { Switch } from "../ui/switch";
 import { Button } from "../ui/button";
 import { Plus, X } from "lucide-react";
 import AddElementsModal from "./addElements";
+import { useSession } from "next-auth/react";
+
 interface EditorForm {
   isOpen?: boolean;
   onClose?: () => void;
@@ -35,6 +37,7 @@ interface EditorForm {
   onSelectChange: (selectedInputs: string[]) => void;
   children: React.ReactElement;
 }
+
 
 const EditorForm: React.FC<EditorForm> = ({
   isOpen = true,
@@ -46,6 +49,9 @@ const EditorForm: React.FC<EditorForm> = ({
   onSelectChange = () => {},
 }) => {
   if (!isOpen) return null;
+
+  const { data: session } = useSession();
+  console.log("session", session);
 
   const form = useForm<z.infer<typeof EditorSchema>>({
     resolver: zodResolver(EditorSchema),
@@ -135,20 +141,23 @@ const EditorForm: React.FC<EditorForm> = ({
   const [isAddElementsOpen, setIsAddElementsOpen] = useState(false);
 
   const formTitles = {
-    Name: "",
+    name: "",
     tagline: "",
-    Company: "",
-    Email: "",
-    Phone: "",
-    Location: "",
-    Website: "",
-    Image: "",
+    company: "",
+    email: "",
+    phone: "",
+    location: "",
+    website: "",
+    image: "",
   };
 
   const handleAddElements = async (newElements: string[]): Promise<void> => {
-    setSelectedElements((prev) => [
-      ...(new Set([...prev, ...newElements]) as any),
-    ]);
+    console.log("newElements", newElements);
+    setSelectedElements((prev) => {
+      const updatedElements = Array.from(new Set([...prev, ...newElements]));
+      console.log("selectedElements", updatedElements); // Log the updated state
+      return updatedElements;
+    });
   };
 
   return (
@@ -177,183 +186,195 @@ const EditorForm: React.FC<EditorForm> = ({
               className="space-y-4"
               onChange={() => handleFormChange(form.getValues())}
             >
-              {selectedElements.includes("name") && (
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Name:</FormLabel>
+                    <FormControl>
+                      <div className="flex justify-between items-center">
+                      <Input
+                          {...field}
+                          placeholder="Jane Doe"
+                          value={field.value || session?.user?.name || ""}
+                          onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      </div>
+                    </FormControl>
+                  </FormItem>
+                )}
+              ></FormField>
+              {selectedElements.includes("tagline") && (
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="tagline"
                   render={({ field }) => (
                     <FormItem className="">
-                      <FormLabel>Name:</FormLabel>
+                      <FormLabel>Tagline:</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Jane Doe" />
+                        <div className="flex justify-center items-center gap-2">
+                          <Input {...field} placeholder="Software Developer" />
+                        </div>
                       </FormControl>
                     </FormItem>
                   )}
                 ></FormField>
               )}
-              <FormField
-                control={form.control}
-                name="tagline"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Tagline:</FormLabel>
-                    <FormControl>
-                      <div className="flex justify-center items-center gap-2">
-                        <Input {...field} placeholder="Software Developer" />
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
-
-              <FormField
-                control={form.control}
-                name="company"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company:</FormLabel>
-                    <FormControl>
-                      <div className="flex justify-center items-center gap-2">
-                        <Input
-                          {...field}
-                          placeholder="Company"
-                          value={field.value}
-                          onChange={(e) => field.onChange(e.target.value)}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Email:</FormLabel>
-                    <FormControl>
-                      <div className="flex justify-center items-center gap-2">
-                        <Input {...field} placeholder="email@example.com" />
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Country Code:</FormLabel>
-                    <FormControl>
-                      <div className="flex items-center gap-2">
-                        <Select
-                          value={field.value ? field.value.split(" ")[0] : ""} // Set the value to the dial code
-                          onValueChange={(value) => {
-                            const dialCode = value; // Get the selected dial code
-                            const phoneNumber = field.value
-                              ? field.value.split(" ").slice(1).join(" ")
-                              : ""; // Get the existing phone number
-                            field.onChange(`${dialCode} ${phoneNumber}`); // Update the phone field with dial code and phone number
-                          }}
-                          disabled={!field.value}
-                          required
-                        >
-                          <SelectTrigger className="w-min">
-                            <SelectValue>
-                              {field.value
-                                ? countryCodes.find(
-                                    (country) =>
-                                      country.dialCode ===
-                                      field.value?.split(" ")[0]
-                                  )?.flag +
-                                  " " +
-                                  countryCodes.find(
-                                    (country) =>
-                                      country.dialCode ===
-                                      field.value?.split(" ")[0]
-                                  )?.dialCode
-                                : "Select a country code"}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {countryCodes.map((country) => (
-                              <SelectItem
-                                key={country.code}
-                                value={country.dialCode}
-                              >
-                                {country.flag} {country.name} (
-                                {country.dialCode})
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Input
-                          {...field}
-                          placeholder="Phone"
-                          value={
-                            field.value
-                              ? field.value.split(" ").slice(1).join(" ")
-                              : ""
-                          } // Set the input value to the phone number part
-                          onChange={(e) => {
-                            const dialCode = field.value
-                              ? field.value.split(" ")[0]
-                              : ""; // Get the current dial code
-                            field.onChange(`${dialCode} ${e.target.value}`); // Update the phone field with dial code and new phone number
-                          }}
-                          disabled={!field.value}
-                        />
-                        <Switch
-                          checked={!!field.value}
-                          onCheckedChange={(checked) => {
-                            field.onChange(checked ? "1234567890" : "");
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Location:</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="New York, NY" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
-              <FormField
-                control={form.control}
-                name="website"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Website:</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="www.example.com" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Image:</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Image" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              ></FormField>
+              {selectedElements.includes("company") && (
+                <FormField
+                  control={form.control}
+                  name="company"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Company:</FormLabel>
+                      <FormControl>
+                        <div className="flex justify-center items-center gap-2">
+                          <Input
+                            {...field}
+                            placeholder="Company"
+                            value={field.value}
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                ></FormField>
+              )}
+              {selectedElements.includes("email") && (
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Email:</FormLabel>
+                      <FormControl>
+                        <div className="flex justify-center items-center gap-2">
+                          <Input {...field} placeholder="email@example.com" />
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                ></FormField>
+              )}
+              {selectedElements.includes("phone") && (
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Country Code:</FormLabel>
+                      <FormControl>
+                        <div className="flex items-center gap-2">
+                          <Select
+                            value={field.value ? field.value.split(" ")[0] : ""} // Set the value to the dial code
+                            onValueChange={(value) => {
+                              const dialCode = value; // Get the selected dial code
+                              const phoneNumber = field.value
+                                ? field.value.split(" ").slice(1).join(" ")
+                                : ""; // Get the existing phone number
+                              field.onChange(`${dialCode} ${phoneNumber}`); // Update the phone field with dial code and phone number
+                            }}
+                            disabled={!field.value}
+                            required
+                          >
+                            <SelectTrigger className="w-min">
+                              <SelectValue>
+                                {field.value
+                                  ? countryCodes.find(
+                                      (country) =>
+                                        country.dialCode ===
+                                        field.value?.split(" ")[0]
+                                    )?.flag +
+                                    " " +
+                                    countryCodes.find(
+                                      (country) =>
+                                        country.dialCode ===
+                                        field.value?.split(" ")[0]
+                                    )?.dialCode
+                                  : "Select a country code"}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                              {countryCodes.map((country) => (
+                                <SelectItem
+                                  key={`${country.code}-${country.dialCode}`} // Combine code and dialCode for a unique key
+                                  value={country.dialCode}
+                                >
+                                  {country.flag} {country.name} (
+                                  {country.dialCode})
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Input
+                            {...field}
+                            placeholder="Phone"
+                            value={
+                              field.value
+                                ? field.value.split(" ").slice(1).join(" ")
+                                : ""
+                            } // Set the input value to the phone number part
+                            onChange={(e) => {
+                              const dialCode = field.value
+                                ? field.value.split(" ")[0]
+                                : ""; // Get the current dial code
+                              field.onChange(`${dialCode} ${e.target.value}`); // Update the phone field with dial code and new phone number
+                            }}
+                            disabled={!field.value}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                ></FormField>
+              )}
+              {selectedElements.includes("location") && (
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Location:</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="New York, NY" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                ></FormField>
+              )}
+              {selectedElements.includes("website") && (
+                <FormField
+                  control={form.control}
+                  name="website"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Website:</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="www.example.com" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                ></FormField>
+              )}
+              {selectedElements.includes("image") && (
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Image:</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="Image" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                ></FormField>
+              )}
               <FormField
                 control={form.control}
                 name="cardStyle"
@@ -387,6 +408,7 @@ const EditorForm: React.FC<EditorForm> = ({
                   </FormItem>
                 )}
               ></FormField>
+
               <SocialSelect
                 selectedInputs={selectedInputs}
                 handleSelectChange={handleSelectChange}

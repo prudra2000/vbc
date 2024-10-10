@@ -124,6 +124,7 @@ export default function GlassLightCard({
                 </Button>
               </a>
             )}
+            {cardValues.name !== "" && (
             <a
             href={`data:text/vcard;charset=utf-8,BEGIN:VCARD%0AVERSION:3.0%0AN:;${encodeURIComponent(cardValues.name)};;;%0AFN:${encodeURIComponent(cardValues.name)}%0AORG:${encodeURIComponent(cardValues.company)}%0ATEL;TYPE=WORK,VOICE:${encodeURIComponent(cardValues.phone)}%0AEMAIL:${encodeURIComponent(cardValues.email)}%0AURL:${encodeURIComponent(cardValues.website)}%0AIMAGE;VALUE=URI:${encodeURIComponent(cardValues.image)}%0A%0AEND:VCARD`}
             // Ensure cardValues.image contains a valid URL
@@ -137,6 +138,7 @@ export default function GlassLightCard({
                 </div>
               </Button>
             </a>
+            )}
           </div>
           <div>
             {cardValues.socialMedia.length > 0 && (

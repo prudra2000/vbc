@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { twMerge } from "tailwind-merge";
+import { User } from "lucide-react";
 
 const avatarVariants = cva(
   "relative ",
@@ -84,11 +85,14 @@ const Avatar: React.FC<AvatarProps> = ({
           className={twMerge(avatarVariants({rounded}))} 
           loading="lazy" // Enable lazy loading
         />
-      ) : (
+      ) : alt ? (
           <span className={twMerge(size)}>
             {alt.split(' ').slice(0, 2).map(word => word.charAt(0)).join('').toUpperCase()}
           </span>
+      ) : (
+          <User className={twMerge(size)} />
       )}
+
     </div>
   );
 };

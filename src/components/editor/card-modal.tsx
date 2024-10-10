@@ -45,8 +45,10 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [success, setSuccess] = useState<string | undefined>("");
   const form = useForm();
   const [newCard, setNewCard] = useState<any>(null); // Add state for newCard
+  const [currentStep, setCurrentStep] = useState(0); // Add state for current step
 
   const handleAddCard = async (data: any) => {
+    console.log("data", data);
     setError("");
     setSuccess("");
     const starterValues = {
@@ -67,6 +69,14 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
     });
   };
 
+  const handleNextStep = () => {
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  const handlePreviousStep = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="">
@@ -78,7 +88,9 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
             </div>
           </DialogTitle>
           <DialogDescription>
-            Start by creating a card title and selecting a style.
+            {currentStep === 0 && "Start by creating a card title and selecting a style."}
+            {currentStep === 1 && "Review your card details."}
+            {/* Add more descriptions for additional steps if needed */}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -89,85 +101,103 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
               const data = {
                 cardTitle: formData.get("cardTitle") as string,
                 cardStyle: formData.get("cardStyle") as string,
-              };
-              await handleAddCard(data); // Call handleAddCard with the form data
+              };// Call handleAddCard with the form data
             }}
             className="space-y-4"
           >
-            <div className="space-y-4 text-black">
-              <FormField
-                control={form.control}
-                name="cardTitle"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Card Title</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Card Title"
-                        type="title"
-                        required
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="cardStyle"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Card Style</FormLabel>
-                    <FormControl>
-                      <Select {...field} required>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a style" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="defaultLight">
-                            Default Light
-                          </SelectItem>
-                          <SelectItem value="defaultDark">
-                            Default Dark
-                          </SelectItem>
-                          <SelectItem value="glassLight">
-                            Glass Light
-                          </SelectItem>
-                          <SelectItem value="glassDark">Glass Dark</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            {currentStep === 0 && (
+              <div className="space-y-4 text-black">
+                {/* Step 1: Card Details */}
+                <FormField
+                  control={form.control}
+                  name="cardTitle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Card Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Card Title"
+                          type="title"
+                          required
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="cardStyle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Card Style</FormLabel>
+                      <FormControl>
+                        <Select {...field} required>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a style" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="defaultLight">
+                              Default Light
+                            </SelectItem>
+                            <SelectItem value="defaultDark">
+                              Default Dark
+                            </SelectItem>
+                            <SelectItem value="glassLight">
+                              Glass Light
+                            </SelectItem>
+                            <SelectItem value="glassDark">Glass Dark</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+            {currentStep === 1 && (
+              <div className="space-y-4 text-black">
+                <p>Review your card details here...</p>
+                
+              </div>
+            )}
+            {/* Add more steps as needed */}
             <FormError message={error || ""} />
             <FormSuccess message={success || ""} />
-            {CardCreated ? (
-              <div className="flex text-green-500 justify-end item-end">
-                <Link href={`/editor/${newCard?.card?.id}`}>
-                  <Button
-                    type="button" // Change type to "button" to prevent form submission
-                    className="rounded p-2 border border-1 border-blue-800 text-blue-800"
-                  >
-                    Edit Card
-                  </Button>
-                </Link>
-              </div>
-            ) : (
-              <div className="flex justify-end items-end">
+            <div className="flex justify-between items-end">
+              {currentStep > 0 && (
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={handlePreviousStep}
+                  className="rounded p-2 border-blue-800 text-blue-800"
+                >
+                  Previous
+                </Button>
+              )}
+              {currentStep < 1 ? ( // Adjust the condition based on the number of steps
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={handleNextStep}
+                  className="rounded p-2 border-blue-800 text-blue-800"
+                >
+                  Next
+                </Button>
+              ) : (
                 <Button
                   variant="outline"
                   type="submit"
                   className="rounded p-2 border-blue-800 text-blue-800"
+                  onClick={() => handleAddCard(form.getValues())}
                 >
                   Submit
                 </Button>
-              </div>
-            )}
+              )}
+            </div>
           </form>
         </Form>
       </DialogContent>
