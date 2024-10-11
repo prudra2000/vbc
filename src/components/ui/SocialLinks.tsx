@@ -37,22 +37,28 @@ const socialIcons = {
 
 const platformRegex = (url: string, platform: string) => {
   const regexMap: { [key: string]: RegExp } = {
-    linkedin: /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/([^\/]+)/,
-    github: /^(https?:\/\/)?(www\.)?github\.com\/([^\/]+)(\/.*)?$/,
-    twitter: /^(https?:\/\/)?(www\.)?x\.com\/([^\/]+)/,
-    instagram: /^(https?:\/\/)?(www\.)?instagram\.com\/([^\/]+)/,
-    facebook: /^(https?:\/\/)?(www\.)?facebook\.com\/([^\/]+)/,
-    tiktok: /^(https?:\/\/)?(www\.)?tiktok\.com\/@([^\/]+)/,
-    youtube: /^(https?:\/\/)?(www\.)?youtube\.com\/@([^\/]+)/,
-    twitch: /^(https?:\/\/)?(www\.)?twitch\.tv\/([^\/]+)/,
-    discord: /^(https?:\/\/)?(www\.)?discord\.gg\/([^\/]+)/,
-    snapchat: /^(https?:\/\/)?(www\.)?snapchat\.com\/add\/([^\/]+)/,
-    whatsapp: /^(https?:\/\/)?(api\.)?whatsapp\.com\/send\?phone=([^\/]+)/,
-    telegram: /^(https?:\/\/)?t\.me\/([^\/]+)/,
-    reddit: /^(https?:\/\/)?(www\.)?reddit\.com\/user\/([^\/]+)/,
-    pinterest: /^(https?:\/\/)?(www\.)?pinterest\.com\/([^\/]+)/,
+    linkedin: /^(https?:\/\/)?(www\.)?linkedin\.com\/in\/([^\/]+)\/?/,
+    github: /^(https?:\/\/)?(www\.)?github\.com\/([^\/]+)(\/.*)?\/?$/,
+    twitter: /^(https?:\/\/)?(www\.)?x\.com\/([^\/]+)\/?/,
+    instagram: /^(https?:\/\/)?(www\.)?instagram\.com\/([^\/]+)\/?/,
+    facebook: /^(https?:\/\/)?(www\.)?facebook\.com\/([^\/]+)\/?/,
+    tiktok: /^(https?:\/\/)?(www\.)?tiktok\.com\/@([^\/]+)\/?/,
+    youtube: /^(https?:\/\/)?(www\.)?youtube\.com\/@([^\/]+)\/?/,
+    twitch: /^(https?:\/\/)?(www\.)?twitch\.tv\/([^\/]+)\/?/,
+    discord: /^(https?:\/\/)?(www\.)?discord\.gg\/([^\/]+)\/?/,
+    snapchat: /^(https?:\/\/)?(www\.)?snapchat\.com\/add\/([^\/]+)\/?/,
+    whatsapp: /^(https?:\/\/)?(api\.)?whatsapp\.com\/send\?phone=([^\/]+)\/?/,
+    telegram: /^(https?:\/\/)?t\.me\/([^\/]+)\/?/,
+    reddit: /^(https?:\/\/)?(www\.)?reddit\.com\/user\/([^\/]+)\/?/,
+    pinterest: /^(https?:\/\/)?(www\.)?pinterest\.com\/([^\/]+)\/?/,
   };
-  return regexMap[platform].exec(url)?.[3] || null;
+
+  const regex = regexMap[platform];
+  if (!regex) {
+    throw new Error(`Platform ${platform} is not supported`);
+  }
+
+  return regex.exec(url)?.[3] || null;
 };
 
 type SocialLinksProps = {

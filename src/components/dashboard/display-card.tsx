@@ -27,13 +27,8 @@ const DisplayCard: React.FC<DisplayCardProps> = ({
       <div className="relative group">
         <Link href={`/card/${cardID}`}>
           <PreviewCard
-            name={cardTitle || ""}
-            email={cardDescription || ""}
-            showUsername={false}
             type="dashboard"
-            removeAvatar={true}
             cardValues={formValues}
-            removeSocials={true}
           />
           
           <div className="absolute bottom-0 left-1/2 w-full transform -translate-x-1/2 opacity-0 bg-white/10 group-hover:opacity-100 transition-opacity duration-300">

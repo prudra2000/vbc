@@ -4,25 +4,18 @@
   align-items: center;
   height: 100vh;
 }
+
 .previewCard {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #131723;
-  color: white;
   border-radius: 1rem;
   min-height: 17rem;
+  color: white;
+  background-color: #131723;
   padding: 1rem;
 }
 
-.card.dashboard {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: min-content;
-  padding: 2rem;
-}
 
 .card.primary {
   background-color: #131723;

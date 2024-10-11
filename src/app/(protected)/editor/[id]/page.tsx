@@ -263,9 +263,8 @@ const EditorPage = () => {
         const data = await updateCard(values, card?.id || "");
         setSuccess("Card Updated");
         if (data.error) {
-          throw new Error(data.error); // Handle error response from updateCard
+          throw new Error(data.error); 
         }
-        // Optionally, you can show a success message here
       } catch (error) {
         console.error("Error updating card:", error); // Log the error
       }

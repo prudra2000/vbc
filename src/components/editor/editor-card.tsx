@@ -268,7 +268,7 @@ const EditorForm: React.FC<EditorForm> = ({
                           <SelectContent>
                             {countryCodes.map((country) => (
                               <SelectItem
-                              key={`${country.code}-${country.dialCode}`}
+                                key={`${country.code}-${country.dialCode}`}
                                 value={country.dialCode}
                               >
                                 {country.flag} {country.name} (
@@ -279,24 +279,24 @@ const EditorForm: React.FC<EditorForm> = ({
                         </Select>
                         <Input
                           {...field}
-                          placeholder="Phone"
                           value={
                             field.value
                               ? field.value.split(" ").slice(1).join(" ")
                               : ""
-                          } // Set the input value to the phone number part
+                          } 
                           onChange={(e) => {
                             const dialCode = field.value
                               ? field.value.split(" ")[0]
                               : ""; // Get the current dial code
-                            field.onChange(`${dialCode} ${e.target.value}`); // Update the phone field with dial code and new phone number
+                            field.onChange(`${dialCode} ${e.target.value}`); 
                           }}
+                          placeholder="555-555-5555"
                           disabled={!field.value}
                         />
                         <Switch
                           checked={!!field.value}
                           onCheckedChange={(checked) => {
-                            field.onChange(checked ? "1234567890" : "");
+                            field.onChange(checked ? "555-555-5555" : "");
                           }}
                         />
                       </div>
@@ -312,7 +312,19 @@ const EditorForm: React.FC<EditorForm> = ({
                   <FormItem className="">
                     <FormLabel>Location:</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="New York, NY" />
+                      <div className="flex justify-center items-center gap-2">
+                        <Input
+                          {...field}
+                          placeholder="New York, NY"
+                          disabled={!field.value}
+                        />
+                        <Switch
+                          checked={!!field.value}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked ? "New York, NY" : "");
+                          }}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -325,7 +337,19 @@ const EditorForm: React.FC<EditorForm> = ({
                   <FormItem className="">
                     <FormLabel>Website:</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="www.example.com" />
+                      <div className="flex justify-center items-center gap-2">
+                        <Input
+                          {...field}
+                          placeholder="www.example.com"
+                          disabled={!field.value}
+                        />
+                        <Switch
+                          checked={!!field.value}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked ? "www.example.com" : "");
+                          }}
+                        />
+                      </div>
                     </FormControl>
                   </FormItem>
                 )}
@@ -358,9 +382,15 @@ const EditorForm: React.FC<EditorForm> = ({
                           <SelectValue placeholder="Select a style" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="defaultLight">Default Light</SelectItem>
-                          <SelectItem value="defaultDark">Default Dark</SelectItem>
-                          <SelectItem value="glassLight">Glass Light</SelectItem>
+                          <SelectItem value="defaultLight">
+                            Default Light
+                          </SelectItem>
+                          <SelectItem value="defaultDark">
+                            Default Dark
+                          </SelectItem>
+                          <SelectItem value="glassLight">
+                            Glass Light
+                          </SelectItem>
                           <SelectItem value="glassDark">Glass Dark</SelectItem>
                         </SelectContent>
                       </Select>
@@ -377,7 +407,6 @@ const EditorForm: React.FC<EditorForm> = ({
                 selectedInputs={selectedInputs}
                 urls={urls}
                 setUrls={setUrls}
-                setSelectedInputs={setSelectedInputs}
                 removeInput={removeInput}
               />
               {children}
