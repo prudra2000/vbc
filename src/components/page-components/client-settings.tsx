@@ -65,6 +65,14 @@ const ClientSettings = () => {
             <Button variant="outline">Edit</Button>
           </div>
           <hr />
+          <h1 className="text-xl font-bold">Socials:</h1>
+          <div className="flex flex-row justify-between items-center">
+            <p>
+              <strong>LinkedIn:</strong>
+            </p>
+            <Button variant="outline">Link</Button>
+          </div>
+          
 
           {/* <div className="flex flex-row justify-between items-center">
             <Button variant="outline">Change Password</Button>

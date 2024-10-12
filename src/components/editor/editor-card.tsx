@@ -129,7 +129,7 @@ const EditorForm: React.FC<EditorForm> = ({
   }, [selected, formValues.urls]);
 
   return (
-    <div className="flex flex-col h-max rounded-[1rem] border border-neutral-200 bg-white text-neutral-950 shadow dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
+    <div className="flex flex-col h-max   text-neutral-950 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
       <div className="flex flex-col gap-2 p-4">
         <section title="form">
           <Form {...form}>

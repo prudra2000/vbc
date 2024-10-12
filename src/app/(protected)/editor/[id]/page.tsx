@@ -282,14 +282,14 @@ const EditorPage = () => {
     ); // Replace with your spinner component
 
   return (
-    <div className="h-full pt-8 px-10 bg-gray-100">
+    <div className="h-full pt-8 px-10 bg-white">
       <EditorHeader headerTitle={"Editor:"} cardTitle={card?.cardTitle || ""} cardID={card?.id || ""} icon={<PencilRuler className="text-white"/>} />
-      <div className="flex flex-col md:flex-row w-full justify-center items-center pt-5 gap-x-5">
-        <div className="w-full h-1/2 border-2 border-gray-300 rounded-[1rem] overflow-hidden">
+      <div className="flex flex-col md:flex-row w-full justify-center items-center gap-x-5  bg-neutral-100">
+        <div className="w-full h-full shadow-md rounded-lg overflow-hidden">
          <EditorPreview formValues={formValues} selectedInputs={selectedInputs} /> 
           
         </div>
-        <div className="w-full sm:w-1/2">
+        <div className="w-full sm:w-1/2 sm:border-l-2 sm:border-neutral-200 bg-white">
           <EditorForm
             formValues={formValues}
             onFormChange={handleFormChange}
