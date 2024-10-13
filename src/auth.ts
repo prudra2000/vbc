@@ -51,6 +51,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (token.sub && session.user) {
         session.user.id = token.sub
+        const user = await getUserById(token.sub);
+        session.user.authenticatedSocials = user?.authenticatedSocials as {
+          linkedin?: { linkedinId: string };
+          github?: { githubId: string; githubUsername: string };
+        } | undefined;
       }
       return session;
     },
