@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
   const session = await auth();
   const searchParams = req.nextUrl.searchParams;
   const code = searchParams.get("code");
+  const state = searchParams.get("state");
   console.log("code", code);
 
   if (!code) {
@@ -15,23 +16,41 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
+  let codeVerifier: string | null = null;
+  try {
+    const decodedState = Buffer.from(state!, "base64").toString("utf-8");
+    const stateObj = JSON.parse(decodedState);
+    codeVerifier = stateObj.codeVerifier;
+  } catch (error) {
+    console.error("Error decoding state parameter:", error);
+    return NextResponse.json(
+      { error: "Invalid state parameter" },
+      { status: 400 }
+    );
+  }
+
+  if (!codeVerifier) {
+    return NextResponse.json(
+      { error: "Code verifier missing in state" },
+      { status: 400 }
+    );
+  }
 
   try {
     const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID!;
     const clientSecret = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET!;
-    const redirectUri = 'https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/linkedin/callback';
+    const redirectUri =
+      "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/linkedin/callback";
 
-
-    // Exchange authorization code for access token
     const tokenResponse = await fetch(
       "https://www.linkedin.com/oauth/v2/accessToken",
       {
         method: "POST",
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          grant_type: 'authorization_code',
+          grant_type: "authorization_code",
           code: code,
           redirect_uri: redirectUri,
           client_id: clientId,
@@ -41,16 +60,16 @@ export async function GET(req: NextRequest) {
     );
 
     if (!tokenResponse.ok) {
-      console.error('Token response error:', await tokenResponse.text());
+      console.error("Token response error:", await tokenResponse.text());
       return NextResponse.json(
         { error: "Failed to retrieve access token" },
         { status: 500 }
       );
     }
-
+    console.log("tokenResponse", tokenResponse);
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
-
+    console.log("accessToken", accessToken);
     if (!accessToken) {
       return NextResponse.json(
         { error: "Failed to retrieve access token" },
@@ -58,14 +77,15 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const profileResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
+    const profileResponse = await fetch("https://api.linkedin.com/v2/userinfo", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    console.log("profileResponse", profileResponse);
 
     if (!profileResponse.ok) {
-      console.error('Profile response error:', await profileResponse.text());
+      console.error("Profile response error:", await profileResponse.text());
       return NextResponse.json(
         { error: "Failed to retrieve profile data" },
         { status: 500 }
@@ -83,13 +103,16 @@ export async function GET(req: NextRequest) {
       const linkedinUserId = profileData.id;
       const existingUser = await db.user.findUnique({
         where: { id: session?.user?.id },
-      })
+      });
 
       const updatedAuthenticatedSocials = {
         ...((existingUser?.authenticatedSocials as object) || {}),
         linkedin: {
           linkedinId: linkedinUserId,
-          linkedinUsername: profileData.localizedFirstName + " " + profileData.localizedLastName,
+          linkedinUsername:
+            profileData.localizedFirstName +
+            " " +
+            profileData.localizedLastName,
         },
       };
 

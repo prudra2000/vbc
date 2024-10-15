@@ -74,6 +74,9 @@ const SocialLinks = ({
   selectedInputs,
   type = "primary",
 }: SocialLinksProps) => {
+  const links = {
+    
+  }
   const renderSocialLink = (
     platform: keyof typeof socialIcons,
     url: string | undefined

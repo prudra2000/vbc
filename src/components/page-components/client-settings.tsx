@@ -9,6 +9,25 @@ import Avatar from "../avatar";
 import { GridLoader } from "react-spinners";
 import UploadProfilePicModal from "../settings/uploadProfilePicModal";
 import { encode as base64encode } from "js-base64";
+import { Link } from "lucide-react";
+import {
+  faLinkedin,
+  faGithub,
+  faTwitter,
+  faInstagram,
+  faFacebook,
+  faTiktok,
+  faYoutube,
+  faTwitch,
+  faDiscord,
+  faSnapchat,
+  faWhatsapp,
+  faTelegram,
+  faReddit,
+  faPinterest,
+} from "@fortawesome/free-brands-svg-icons";
+import SocialLinkCard from "../settings/socialLinkCard";
+import { Chip } from "../ui/chip";
 
 const ClientSettings = () => {
   const { data: session, status } = useSession();
@@ -30,12 +49,18 @@ const ClientSettings = () => {
   const linkedinClientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
   const linkedinRedirectUri =
     "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/linkedin/callback";
-  const linkedinScope = "r_liteprofile r_emailaddress";
+  const linkedinScope = "profile";
+  const generateLinkedInState = () => {
+    return Math.random().toString(36).substring(2, 15);
+  };
 
-  const handleLinkAccount = () => {
+  const handleLinkAccount = async () => {
+    const codeVerifier = generateCodeVerifier();
+    const codeChallenge = await generateCodeChallenge(codeVerifier);
+    const state = generateState(codeVerifier);
     const authorizationUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${linkedinClientId}&redirect_uri=${encodeURIComponent(
       linkedinRedirectUri
-    )}&scope=${encodeURIComponent(linkedinScope)}`;
+    )}&state=${state}&scope=${encodeURIComponent(linkedinScope)}`;
     window.location.href = authorizationUrl;
   };
   const githubClientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
@@ -184,55 +209,61 @@ const ClientSettings = () => {
           <hr />
           <h1 className="text-xl font-bold">Socials:</h1>
           {session?.user?.authenticatedSocials?.linkedin?.linkedinId ? (
-            <div className="flex flex-row justify-between items-center">
-              <p>LinkedIn: Connected - {session?.user?.authenticatedSocials?.linkedin?.linkedinId}</p>
-              <Button variant="outline" onClick={() => handleUnlink("linkedin")}>
-                Unlink
-              </Button>
-            </div>
+            <SocialLinkCard
+              type="LinkedIn"
+              isLinked={true}
+              icon="linkedin"
+              username={
+                session?.user?.authenticatedSocials?.linkedin?.linkedinUsername
+              }
+              unlink={() => handleUnlink("linkedin")}
+              link={() => handleLinkAccount()}
+            />
           ) : (
-            <div className="flex flex-row justify-between items-center">
-              <p>
-                <strong>LinkedIn:</strong>
-              </p>
-              <Button variant="outline" onClick={handleLinkAccount}>
-                Link
-              </Button>
-            </div>
+            <SocialLinkCard
+              isLinked={false}
+              icon="linkedin"
+              unlink={() => handleUnlink("linkedin")}
+              link={() => handleLinkAccount()}
+            />
           )}
           {session?.user?.authenticatedSocials?.github?.githubId ? (
-            <div className="flex flex-row justify-between items-center">
-              <p>GitHub: Connected - {session?.user?.authenticatedSocials?.github?.githubUsername}</p>
-              <Button variant="outline" onClick={() => handleUnlink("github")}>
-                Unlink
-              </Button>
-            </div>
+            <SocialLinkCard
+              type="GitHub"
+              isLinked={true}
+              icon="github"
+              username={
+                session?.user?.authenticatedSocials?.github?.githubUsername
+              }
+              unlink={() => handleUnlink("github")}
+              link={() => handleGitHubLink()}
+            />
           ) : (
-            <div className="flex flex-row justify-between items-center">
-              <p>
-                <strong>GitHub:</strong>
-              </p>
-              <Button variant="outline" onClick={handleGitHubLink}>
-                Link
-              </Button>
-            </div>
+            <SocialLinkCard
+              isLinked={false}
+              icon="github"
+              unlink={() => handleUnlink("github")}
+              link={() => handleGitHubLink()}
+            />
           )}
           {session?.user?.authenticatedSocials?.twitter?.twitterId ? (
-            <div className="flex flex-row justify-between items-center">
-              <p>Twitter: Connected - {session?.user?.authenticatedSocials?.twitter?.twitterUsername}</p>
-              <Button variant="outline" onClick={() => handleUnlink("twitter")}>
-                Unlink
-              </Button>
-            </div>
+            <SocialLinkCard
+              type="Twiiter"
+              isLinked={true}
+              icon="twitter"
+              username={
+                session?.user?.authenticatedSocials?.twitter?.twitterUsername
+              }
+              unlink={() => handleUnlink("twitter")}
+              link={() => handleTwitterLink()}
+            />
           ) : (
-            <div className="flex flex-row justify-between items-center">
-              <p>
-                <strong>Twitter:</strong>
-              </p>
-              <Button variant="outline" onClick={handleTwitterLink}>
-                Link
-              </Button>
-            </div>
+            <SocialLinkCard
+              isLinked={false}
+              icon="twitter"
+              unlink={() => handleUnlink("twitter")}
+              link={() => handleTwitterLink()}
+            />
           )}
         </div>
       </div>

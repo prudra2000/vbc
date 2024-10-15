@@ -240,20 +240,20 @@ const EditorPage = () => {
       website: formValues.website || "",
       style: formValues.image || "",
       socialMedia: {
-        linkedin: formValues.urls.linkedin || "",
-        github: formValues.urls.github || "",
-        twitter: formValues.urls.twitter || "",
-        instagram: formValues.urls.instagram || "",
-        facebook: formValues.urls.facebook || "",
-        tiktok: formValues.urls.tiktok || "",
-        youtube: formValues.urls.youtube || "",
-        twitch: formValues.urls.twitch || "",
-        discord: formValues.urls.discord || "",
-        snapchat: formValues.urls.snapchat || "",
-        whatsapp: formValues.urls.whatsapp || "",
-        telegram: formValues.urls.telegram || "",
-        reddit: formValues.urls.reddit || "",
-        pinterest: formValues.urls.pinterest || "",
+        linkedin: formValues.socialMedia.linkedin || "",
+        github: formValues.socialMedia.github || "",
+        twitter: formValues.socialMedia.twitter || "",
+        instagram: formValues.socialMedia.instagram || "",
+        facebook: formValues.socialMedia.facebook || "",
+        tiktok: formValues.socialMedia.tiktok || "",
+        youtube: formValues.socialMedia.youtube || "",
+        twitch: formValues.socialMedia.twitch || "",
+        discord: formValues.socialMedia.discord || "",
+        snapchat: formValues.socialMedia.snapchat || "",
+        whatsapp: formValues.socialMedia.whatsapp || "",
+        telegram: formValues.socialMedia.telegram || "",
+        reddit: formValues.socialMedia.reddit || "",
+        pinterest: formValues.socialMedia.pinterest || "",
       },
     };
     console.log("values", formValues);
@@ -280,7 +280,6 @@ const EditorPage = () => {
     ); // Replace with your spinner component
 
   return (
-<<<<<<< HEAD
     <div className="h-full pt-8 px-10 bg-gray-100">
       <EditorHeader
         headerTitle={"Editor:"}
@@ -295,14 +294,6 @@ const EditorPage = () => {
             formValues={formValues}
             selectedInputs={selectedInputs}
           />
-=======
-    <div className="h-full pt-8 px-10 bg-white">
-      <EditorHeader headerTitle={"Editor:"} cardTitle={card?.cardTitle || ""} cardID={card?.id || ""} icon={<PencilRuler className="text-white"/>} />
-      <div className="flex flex-col md:flex-row w-full justify-center items-center gap-x-5  bg-neutral-100">
-        <div className="w-full h-full shadow-md rounded-lg overflow-hidden">
-         <EditorPreview formValues={formValues} selectedInputs={selectedInputs} /> 
-          
->>>>>>> dev
         </div>
         <div className="w-full sm:w-1/2 sm:border-l-2 sm:border-neutral-200 bg-white">
           <EditorForm

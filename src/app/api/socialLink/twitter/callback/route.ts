@@ -85,7 +85,6 @@ export async function GET(req: NextRequest) {
       },
     });
 
-
     if (!profileResponse.ok) {
       const errorData = await profileResponse.json();
       console.error('Error fetching profile:', errorData);

@@ -13,7 +13,24 @@ import {
 import { useForm } from "react-hook-form";
 import { EditorSchema } from "@/schemas";
 import SocialInputs from "../ui/SocialInputs";
-import SocialSelect from "../ui/SocialSelect";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faLinkedin,
+  faGithub,
+  faTwitter,
+  faInstagram,
+  faFacebook,
+  faTiktok,
+  faYoutube,
+  faTwitch,
+  faDiscord,
+  faSnapchat,
+  faWhatsapp,
+  faTelegram,
+  faReddit,
+  faPinterest,
+} from "@fortawesome/free-brands-svg-icons";
+import Link from "next/link";
 import {
   Select,
   SelectTrigger,
@@ -23,6 +40,10 @@ import {
 } from "../../components/ui/select";
 import LocationInput from "./LocationInput";
 import { Switch } from "../ui/switch";
+import { useSession } from "next-auth/react";
+import { Button } from "../ui/button";
+import { CirclePlus } from "lucide-react";
+import { Chip } from "../ui/chip";
 interface EditorForm {
   isOpen?: boolean;
   onClose?: () => void;
@@ -42,6 +63,7 @@ const EditorForm: React.FC<EditorForm> = ({
   children,
   onSelectChange = () => {},
 }) => {
+  const { data: session } = useSession();
   if (!isOpen) return null;
 
   const form = useForm<z.infer<typeof EditorSchema>>({
@@ -127,6 +149,15 @@ const EditorForm: React.FC<EditorForm> = ({
     setSelectedInputs(selected);
     setUrls(formValues.urls);
   }, [selected, formValues.urls]);
+
+  const isNotLinked = (social: string) => {
+    return !formValues.socialMedia[social];
+  };
+
+  const isEmpty =
+    session?.user?.authenticatedSocials?.linkedin?.linkedinId === undefined &&
+    session?.user?.authenticatedSocials?.github?.githubId === undefined &&
+    session?.user?.authenticatedSocials?.twitter?.twitterId === undefined;
 
   return (
     <div className="flex flex-col h-max   text-neutral-950 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
@@ -283,12 +314,12 @@ const EditorForm: React.FC<EditorForm> = ({
                             field.value
                               ? field.value.split(" ").slice(1).join(" ")
                               : ""
-                          } 
+                          }
                           onChange={(e) => {
                             const dialCode = field.value
                               ? field.value.split(" ")[0]
                               : ""; // Get the current dial code
-                            field.onChange(`${dialCode} ${e.target.value}`); 
+                            field.onChange(`${dialCode} ${e.target.value}`);
                           }}
                           placeholder="555-555-5555"
                           disabled={!field.value}
@@ -399,16 +430,193 @@ const EditorForm: React.FC<EditorForm> = ({
                   </FormItem>
                 )}
               ></FormField>
-              <SocialSelect
-                selectedInputs={selectedInputs}
-                handleSelectChange={handleSelectChange}
-              />
-              <SocialInputs
-                selectedInputs={selectedInputs}
-                urls={urls}
-                setUrls={setUrls}
-                removeInput={removeInput}
-              />
+              <FormField
+                control={form.control}
+                name="socialMedia"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>
+                      <div className="flex items-center justify-between">
+                        <p>Social Media:</p>
+                        <Button variant="outline" className="gap-2">
+                          Link Accounts
+                          <CirclePlus className="w-5 h-5" />
+                        </Button>
+                      </div>
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex flex-col gap-2">
+                        {isEmpty && (
+                          <div className="flex flex-col w-full gap-1">
+                            <div className="flex items-center justify-center gap-10 p-5">
+                              <FontAwesomeIcon
+                                icon={faLinkedin}
+                                className="w-6 h-6 text-neutral-500"
+                              />
+                              <FontAwesomeIcon
+                                icon={faGithub}
+                                className="w-6 h-6 text-neutral-500"
+                              />
+                              <FontAwesomeIcon
+                                icon={faTwitter}
+                                className="w-6 h-6 text-neutral-500"
+                              />
+                            </div>
+                            <p>No Accounts Linked</p>
+                            <Button variant="outline" className="gap-2 w-full">
+                              Link Accounts
+                              <CirclePlus className="w-5 h-5" />
+                            </Button>
+                          </div>
+                        )}
+                        {session?.user?.authenticatedSocials?.github
+                          ?.githubId !== undefined && (
+                          <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
+                            <div className="flex items-center justify-center gap-2">
+                              <Link
+                                href={`https://github.com/${session?.user?.authenticatedSocials?.github?.githubUsername || ""}`}
+                                target="_blank"
+                              >
+                                <Button variant="link" className="p-0 gap-2">
+                                  <FontAwesomeIcon
+                                    icon={faGithub}
+                                    className="w-6 h-6"
+                                  />
+                                  <p>
+                                    {
+                                      session?.user?.authenticatedSocials
+                                        ?.github?.githubUsername
+                                    }
+                                  </p>
+                                </Button>
+                              </Link>
+                            </div>
+                            <div className="flex items-center">
+                              <FormField
+                                control={form.control}
+                                name="socialMedia.github"
+                                render={({ field }) => (
+                                  <FormItem className="">
+                                    <FormControl>
+                                      <Switch
+                                        checked={!!field.value}
+                                        onCheckedChange={(checked) => {
+                                          field.onChange(
+                                            checked
+                                              ? session?.user
+                                                  ?.authenticatedSocials?.github
+                                                  ?.githubUsername
+                                              : ""
+                                          );
+                                        }}
+                                      />
+                                    </FormControl>
+                                  </FormItem>
+                                )}
+                              ></FormField>
+                            </div>
+                          </div>
+                        )}
+                        {session?.user?.authenticatedSocials?.linkedin
+                          ?.linkedinId !== undefined && (
+                          <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
+                            <div className="flex items-center justify-center gap-2">
+                              <Link
+                                href={`https://linkedin.com/in/${session?.user?.authenticatedSocials?.linkedin?.linkedinUsername || ""}`}
+                                target="_blank"
+                              >
+                                <Button variant="link" className="p-0 gap-2">
+                                  <FontAwesomeIcon
+                                    icon={faLinkedin}
+                                    className="w-6 h-6"
+                                  />
+                                  <div className="flex items-center gap-2">
+                                    {
+                                      session?.user?.authenticatedSocials
+                                        ?.linkedin?.linkedinUsername
+                                    }
+                                    test
+                                  </div>
+                                </Button>
+                              </Link>
+                            </div>
+                            <div className="flex items-center">
+                              <FormField
+                                control={form.control}
+                                name="socialMedia.linkedin"
+                                render={({ field }) => (
+                                  <FormItem className="">
+                                    <FormControl>
+                                      <Switch
+                                        checked={!!field.value}
+                                        onCheckedChange={(checked) => {
+                                          field.onChange(
+                                            checked
+                                              ? session?.user
+                                                  ?.authenticatedSocials
+                                                  ?.linkedin?.linkedinUsername
+                                              : ""
+                                          );
+                                        }}
+                                      />
+                                    </FormControl>
+                                  </FormItem>
+                                )}
+                              ></FormField>
+                            </div>
+                          </div>
+                        )}
+                        {session?.user?.authenticatedSocials?.twitter
+                          ?.twitterId !== undefined && (
+                          <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
+                            <div className="flex items-center justify-center gap-2">
+                              <Link
+                                href={`https://twitter.com/${session?.user?.authenticatedSocials?.twitter?.twitterUsername || ""}`}
+                                target="_blank"
+                              >
+                                <Button variant="link" className="p-0 gap-2">
+                                  <FontAwesomeIcon
+                                    icon={faTwitter}
+                                    className="w-6 h-6"
+                                  />
+                                  {
+                                    session?.user?.authenticatedSocials?.twitter
+                                      ?.twitterUsername
+                                  }
+                                </Button>
+                              </Link>
+                            </div>
+                            <div className="flex items-center">
+                              <FormField
+                                control={form.control}
+                                name="socialMedia.twitter"
+                                render={({ field }) => (
+                                  <FormItem className="">
+                                    <FormControl>
+                                      <Switch
+                                        checked={!!field.value}
+                                        onCheckedChange={(checked) => {
+                                          field.onChange(
+                                            checked
+                                              ? session?.user
+                                                  ?.authenticatedSocials
+                                                  ?.twitter?.twitterUsername
+                                              : ""
+                                          );
+                                        }}
+                                      />
+                                    </FormControl>
+                                  </FormItem>
+                                )}
+                              ></FormField>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </FormControl>
+                  </FormItem>
+                )}
+              ></FormField>
               {children}
             </form>
           </Form>

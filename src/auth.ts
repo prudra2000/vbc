@@ -53,8 +53,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.id = token.sub
         const user = await getUserById(token.sub);
         session.user.authenticatedSocials = user?.authenticatedSocials as {
-          linkedin?: { linkedinId: string };
+          linkedin?: { linkedinId: string; linkedinUsername: string };
           github?: { githubId: string; githubUsername: string };
+          twitter?: { twitterId: string; twitterUsername: string };
         } | undefined;
       }
       return session;

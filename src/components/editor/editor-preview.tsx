@@ -42,20 +42,20 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
 }) => {
   const showUsername = true;
   const urls = {
-    linkedin: formValues.socialMedia.linkedin,
-    github: formValues.socialMedia.github,
-    twitter: formValues.socialMedia.twitter,
-    instagram: formValues.socialMedia.instagram,
-    facebook: formValues.socialMedia.facebook,
-    tiktok: formValues.socialMedia.tiktok,
-    youtube: formValues.socialMedia.youtube,
-    twitch: formValues.socialMedia.twitch,
-    discord: formValues.socialMedia.discord,
-    snapchat: formValues.socialMedia.snapchat,
-    whatsapp: formValues.socialMedia.whatsapp,
-    telegram: formValues.socialMedia.telegram,
-    reddit: formValues.socialMedia.reddit,
-    pinterest: formValues.socialMedia.pinterest,
+    linkedin: `https://www.linkedin.com/in/${formValues.socialMedia.linkedin}`,
+    github: `https://www.github.com/${formValues.socialMedia.github}`,
+    twitter: `https://x.com/${formValues.socialMedia.twitter}`,
+    instagram: `https://www.instagram.com/${formValues.socialMedia.instagram}`,
+    facebook: `https://www.facebook.com/${formValues.socialMedia.facebook}`,
+    tiktok: `https://www.tiktok.com/@${formValues.socialMedia.tiktok}`,
+    youtube: `https://www.youtube.com/@${formValues.socialMedia.youtube}`,
+    twitch: `https://www.twitch.tv/${formValues.socialMedia.twitch}`,
+    discord: `https://discord.gg/${formValues.socialMedia.discord}`,
+    snapchat: `https://www.snapchat.com/add/${formValues.socialMedia.snapchat}`,
+    whatsapp: `https://api.whatsapp.com/send?phone=${formValues.socialMedia.whatsapp}`,
+    telegram: `https://t.me/${formValues.socialMedia.telegram}`,
+    reddit: `https://www.reddit.com/user/${formValues.socialMedia.reddit}`,
+    pinterest: `https://www.pinterest.com/${formValues.socialMedia.pinterest}`,
   };
   return (
     <div className="">

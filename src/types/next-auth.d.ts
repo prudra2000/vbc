@@ -10,6 +10,7 @@ declare module "next-auth" {
     authenticatedSocials?: {
       linkedin?: {
         linkedinId: string;
+        linkedinUsername: string;
       };
       github?: {
         githubId: string;
@@ -18,10 +19,6 @@ declare module "next-auth" {
       twitter?: {
         twitterId: string;
         twitterUsername: string;
-      };
-      linkedin?: {
-        linkedinId: string;
-        linkedinUsername: string;
       };
     };
   }
