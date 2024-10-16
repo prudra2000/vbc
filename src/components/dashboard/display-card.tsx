@@ -7,7 +7,6 @@ interface DisplayCardProps {
   dateUpdated?: string;
   cardID: string;
   cardTitle: string;
-  cardDescription: string;
   children: React.ReactNode;
   formValues?: any;
 }
@@ -16,7 +15,6 @@ const DisplayCard: React.FC<DisplayCardProps> = ({
   dateUpdated,
   cardID,
   cardTitle,
-  cardDescription,
   children,
   formValues,
 }) => {

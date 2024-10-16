@@ -12,7 +12,6 @@ import {
 } from "../../components/ui/form";
 import { useForm } from "react-hook-form";
 import { EditorSchema } from "@/schemas";
-import SocialInputs from "../ui/SocialInputs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLinkedin,
@@ -38,12 +37,11 @@ import {
   SelectItem,
   SelectValue,
 } from "../../components/ui/select";
-import LocationInput from "./LocationInput";
 import { Switch } from "../ui/switch";
 import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { CirclePlus } from "lucide-react";
-import { Chip } from "../ui/chip";
+
 interface EditorForm {
   isOpen?: boolean;
   onClose?: () => void;
@@ -160,7 +158,7 @@ const EditorForm: React.FC<EditorForm> = ({
     session?.user?.authenticatedSocials?.twitter?.twitterId === undefined;
 
   return (
-    <div className="flex flex-col h-max   text-neutral-950 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
+    <div className="flex flex-col h-max   text-neutral-950 dark:border-neutral-800  dark:text-neutral-50">
       <div className="flex flex-col gap-2 p-4">
         <section title="form">
           <Form {...form}>
@@ -392,7 +390,15 @@ const EditorForm: React.FC<EditorForm> = ({
                   <FormItem className="">
                     <FormLabel>Image:</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Image" />
+                      <div className="flex justify-center items-center gap-2">
+                        <div className="flex w-full justify-center items-center gap-2 border border-neutral-200 rounded-md p-2">
+                          <img
+                            src={field.value}
+                            alt="Image"
+                            className="rounded-full border-2 border-neutral-300 shadow-md "
+                          />
+                        </div>
+                      </div>
                     </FormControl>
                   </FormItem>
                 )}
@@ -474,7 +480,10 @@ const EditorForm: React.FC<EditorForm> = ({
                           <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
                             <div className="flex items-center justify-center gap-2">
                               <Link
-                                href={`https://github.com/${session?.user?.authenticatedSocials?.github?.githubUsername || ""}`}
+                                href={`https://github.com/${
+                                  session?.user?.authenticatedSocials?.github
+                                    ?.githubUsername || ""
+                                }`}
                                 target="_blank"
                               >
                                 <Button variant="link" className="p-0 gap-2">
@@ -522,7 +531,10 @@ const EditorForm: React.FC<EditorForm> = ({
                           <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
                             <div className="flex items-center justify-center gap-2">
                               <Link
-                                href={`https://linkedin.com/in/${session?.user?.authenticatedSocials?.linkedin?.linkedinUsername || ""}`}
+                                href={`https://linkedin.com/in/${
+                                  session?.user?.authenticatedSocials?.linkedin
+                                    ?.linkedinUsername || ""
+                                }`}
                                 target="_blank"
                               >
                                 <Button variant="link" className="p-0 gap-2">
@@ -571,7 +583,10 @@ const EditorForm: React.FC<EditorForm> = ({
                           <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
                             <div className="flex items-center justify-center gap-2">
                               <Link
-                                href={`https://twitter.com/${session?.user?.authenticatedSocials?.twitter?.twitterUsername || ""}`}
+                                href={`https://twitter.com/${
+                                  session?.user?.authenticatedSocials?.twitter
+                                    ?.twitterUsername || ""
+                                }`}
                                 target="_blank"
                               >
                                 <Button variant="link" className="p-0 gap-2">

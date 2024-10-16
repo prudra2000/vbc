@@ -13,7 +13,7 @@ export async function deleteCard(cardId: string) {
       throw new Error("Card not found or does not belong to the user.");
     }
   
-    const card = await db.personalCard.delete({
+    const card = await db.digiMeCard.delete({
       where: { id: cardId, userId: session?.user?.id },
     });
     return card; 

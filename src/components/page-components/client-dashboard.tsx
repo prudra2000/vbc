@@ -3,7 +3,7 @@ import { useEffect, useState, RefObject } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { addCard } from "@/actions/add-card";
-import { PersonalCard } from "@prisma/client";
+import { DigiMeCard, PersonalCard } from "@prisma/client";
 import { getCards } from "@/actions/get-user-cards";
 import CardModal from "../editor/card-modal";
 import {
@@ -36,7 +36,7 @@ import EmbedModal from "../editor/embedModal";
 import PublishCardModal from "../editor/publishCard";
 const ClientDashboard = () => {
   const { data: session, status } = useSession();
-  const [cards, setCards] = useState<PersonalCard[]>([]);
+  const [cards, setCards] = useState<DigiMeCard[]>([]);
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,7 +65,18 @@ const ClientDashboard = () => {
       userId: session?.user?.id || "",
       cardTitle: data.cardTitle || "",
       cardStyle: data.cardStyle || "",
-      name: data.name || "Untitled Card",
+      isPublished: false,
+      cardData: data.cardData || {
+        name: data.name || "",
+        image: data.image || "",
+        tagline: data.tagline || "",
+        company: data.company || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        location: data.location || "",
+        website: data.website || "",
+        socialMedia: data.socialMedia || {},
+      },
     };
     await addCard(starterValues);
   };
@@ -107,8 +118,7 @@ const ClientDashboard = () => {
                       <DisplayCard
                         cardID={card.id}
                         cardTitle={card.cardTitle}
-                        cardDescription={card.name}
-                        formValues={card}
+                        formValues={card.cardData}
                         dateUpdated={card.updatedAt.toLocaleDateString(
                           "en-US",
                           {

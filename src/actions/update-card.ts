@@ -40,7 +40,7 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
   }
 
   try {
-    await db.personalCard.update({
+    await db.digiMeCard.update({
       where: {
         id: cardID,
         userId: session?.user?.id,
@@ -48,15 +48,17 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
       data: {
         cardTitle: cardTitle || card.cardTitle,
         cardStyle: cardStyle || card.cardStyle,
-        name: name || card.name,
-        image: image || card.image,
-        tagline: tagline || card.tagline,
-        company: company || card.company,
-        email: email || card.email,
-        phone: phone || card.phone,
-        location: location || card.location,
-        website: website   || card.website,
-        socialMedia: socialMedia || card.socialMedia,
+        cardData: {
+          name: name || card.name,
+          image: image || card.image,
+          tagline: tagline || card.tagline,
+          company: company || card.company,
+          email: email || card.email,
+          phone: phone || card.phone,
+          location: location || card.location,
+          website: website || card.website,
+          socialMedia: socialMedia || card.socialMedia,
+        },
     }});
 
     return {

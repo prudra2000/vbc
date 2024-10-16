@@ -105,7 +105,7 @@ const Navbar = ({
 
   return (
     <div className="relative z-20">
-      <div className="flex flex-row px-5 md:px-10 py-2 justify-between items-center bg-white backdrop-blur-md border-b border-1 border-blue-400 text-white shadow-lg">
+      <div className="flex flex-row px-3 py-2 justify-between items-center bg-white backdrop-blur-md border-b border-1 border-blue-400 text-white">
         {logo}
         <div
           className={`${
@@ -116,7 +116,7 @@ const Navbar = ({
           <Link href="/dashboard">
             <Button variant="link" size="sm" className="hover:bg-slate-100">
               <LayoutDashboard className="w-4 h-4 stroke-blue-800" />
-              <span className="ml-1 text-accent-primary rounded-md px-1">
+              <span className="ml-1 text-accent-primary rounded-md px-1 text-sm">
                 Darshboard
               </span>
             </Button>

@@ -263,7 +263,7 @@ const EditorPage = () => {
         const data = await updateCard(values, card?.id || "");
         setSuccess("Card Updated");
         if (data.error) {
-          throw new Error(data.error); 
+          throw new Error(data.error);
         }
       } catch (error) {
         console.error("Error updating card:", error); // Log the error
@@ -280,22 +280,24 @@ const EditorPage = () => {
     ); // Replace with your spinner component
 
   return (
-    <div className="h-full pt-8 px-10 bg-gray-100">
+    <div className="h-full  bg-gray-100">
       <EditorHeader
         headerTitle={"Editor:"}
         cardTitle={card?.cardTitle || ""}
         cardID={card?.id || ""}
-        icon={<PencilRuler className="text-white" />}
+        icon={<PencilRuler className="text-black w-5 h-5" />}
         isPublished={card?.isPublished || false}
       />
-      <div className="flex flex-col md:flex-row w-full justify-center items-center pt-5 gap-x-5">
-        <div className="w-full h-1/2 border-2 border-gray-300 rounded-[1rem] overflow-hidden">
-          <EditorPreview
-            formValues={formValues}
-            selectedInputs={selectedInputs}
-          />
+      <div className="flex flex-col md:flex-row w-full justify-center items-center">
+        <div className="w-full px-5 py-5 sm:py-0">
+          <div className="h-1/2 rounded-[1rem] overflow-hidden">
+            <EditorPreview
+              formValues={formValues}
+              selectedInputs={selectedInputs}
+            />
+          </div>
         </div>
-        <div className="w-full sm:w-1/2 sm:border-l-2 sm:border-neutral-200 bg-white">
+        <div className="w-full sm:w-1/2 border-t-2 sm:border-t-0 sm:border-l-2 sm:border-neutral-200 bg-white">
           <EditorForm
             formValues={formValues}
             onFormChange={handleFormChange}

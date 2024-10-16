@@ -49,7 +49,7 @@ const ClientSettings = () => {
   const linkedinClientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
   const linkedinRedirectUri =
     "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/linkedin/callback";
-  const linkedinScope = "profile";
+  const linkedinScope = "openid profile email";
   const generateLinkedInState = () => {
     return Math.random().toString(36).substring(2, 15);
   };

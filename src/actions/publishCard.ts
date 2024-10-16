@@ -15,7 +15,7 @@ export const publishCard = async (userId:string, cardID:string) => {
   }
 
   try {
-    await db.personalCard.update({
+    await db.digiMeCard.update({
       where: {
         id: cardID,
         userId: userId,

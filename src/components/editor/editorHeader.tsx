@@ -58,22 +58,22 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
           onClose={() => setIsShareModalOpen(false)}
         />
       )}
-      <div className="flex flex-row justify-between items-center bg-gradient-to-r from-blue-500 to-purple-500 py-10 px-5 rounded-md shadow-md">
-        <div className="flex items-center gap-2 text-white justify-center">
+      <div className="flex flex-row justify-between items-center bg-white py-1 px-5 border-b-2 border-neutral-200">
+        <div className="flex items-center gap-2 justify-center text-black">
           <div>{icon}</div>
           <div className="flex flex-row justify-center items-center">
-            <h1 className="text-md sm:text-2xl font-semibold">{headerTitle}</h1>
+            <h1 className="text-sm font-[600]">{headerTitle}</h1>
 
             <div
-              className="relative group bg-white/10 hover:bg-white/20 rounded-md px-2 ml-1 py-1"
+              className="relative group bg-neutral-100 hover:bg-neutral-200 transition-colors rounded-md px-2 ml-1 py-1"
               onClick={() => setIsModalOpen(true)}
             >
-              <h1 className="text-md sm:text-2xl font-semibold text-white underline decoration-2 underline-offset-[3px] ">
+              <h1 className="text-sm font-[600] text-black underline decoration underline-offset-[2px] ">
                 {cardTitle}
               </h1>
               <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-md p-1">
                 {/* Replace with your edit icon component */}
-                <Pencil className=" w-4 h-4 text-blue-500" />
+                <Pencil className=" w-3 h-3 text-blue-500" />
               </div>
             </div>
           </div>
@@ -92,7 +92,9 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
               onClick={() => setIsPublishModalOpen(true)}
             >
               <Send className="w-4 h-4 text-destructive" />
-              <p className="text-sm hidden md:block">Unpublish</p>
+              <p className="text-sm hidden md:block font-[600]">
+                Unpublish
+              </p>
             </Button>
           )}
           {isPublished && (

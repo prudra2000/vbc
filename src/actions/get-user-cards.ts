@@ -10,7 +10,7 @@ export async function getCards() {
     if (!session?.user?.id) {
       return { error: "Unauthorized" };
     }
-    const cards = await db.personalCard.findMany({
+    const cards = await db.digiMeCard.findMany({
       where: {
         userId: session.user.id,
       },

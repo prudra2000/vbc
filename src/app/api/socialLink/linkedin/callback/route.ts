@@ -69,6 +69,7 @@ export async function GET(req: NextRequest) {
     console.log("tokenResponse", tokenResponse);
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
+
     console.log("accessToken", accessToken);
     if (!accessToken) {
       return NextResponse.json(
@@ -77,11 +78,14 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const profileResponse = await fetch("https://api.linkedin.com/v2/userinfo", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const profileResponse = await fetch(
+      "https://api.linkedin.com/v2/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     console.log("profileResponse", profileResponse);
 
     if (!profileResponse.ok) {
@@ -94,13 +98,15 @@ export async function GET(req: NextRequest) {
 
     const profileData = await profileResponse.json();
 
+    console.log("profileData", profileData);
+
     if (!profileData) {
       return NextResponse.json(
         { error: "Failed to retrieve profile data" },
         { status: 500 }
       );
     } else {
-      const linkedinUserId = profileData.id;
+      const linkedinUserId = profileData.sub;
       const existingUser = await db.user.findUnique({
         where: { id: session?.user?.id },
       });
@@ -109,10 +115,7 @@ export async function GET(req: NextRequest) {
         ...((existingUser?.authenticatedSocials as object) || {}),
         linkedin: {
           linkedinId: linkedinUserId,
-          linkedinUsername:
-            profileData.localizedFirstName +
-            " " +
-            profileData.localizedLastName,
+          linkedinUsername: profileData.email,
         },
       };
 

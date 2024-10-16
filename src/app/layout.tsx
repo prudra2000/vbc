@@ -17,7 +17,7 @@ const geistMono = localFont({
 
 const poppins = Poppins({
   subsets: ['latin'], // Specify the subsets you need
-  weight: ['400', '700'], // Specify the weights you want to use
+  weight: ['400', '500', '600', '700'], // Specify the weights you want to use
 });
 
 
@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.className} antialiased`}
       >
         <ThemeProvider
           attribute="class"
