@@ -28,17 +28,7 @@ export const addCard = async (values: z.infer<typeof DigimedCardSchema>) => {
         cardTitle: cardTitle || "",
         cardStyle: cardStyle || "",
         isPublished: isPublished ?? false,
-        cardData: {
-          name: cardData.name || "",
-          image: cardData.image || "",
-          tagline: cardData.tagline || "",
-          company: cardData.company || "",
-          email: cardData.email || "",
-          phone: cardData.phone || "",
-          location: cardData.location || "",
-          website: cardData.website || "",
-          socialMedia: cardData.socialMedia || {},
-        },
+        cardData: cardData,
       },
     });
 

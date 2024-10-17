@@ -14,7 +14,7 @@ import SocialLinks from "../ui/SocialLinks";
 import { Separator } from "@/components/ui/separator";
 
 interface CardProps {
-  cardValues?: Record<string, string>;
+  cardValues?: Record<string, any>;
   urls?: Record<string, string>;
   showUsername: boolean;
   selectedInputs?: string[];
@@ -40,24 +40,24 @@ export default function BasicDarkCard({
         <CardHeader className="p-6 pb-0">
           <div className="flex flex-col items-center text-center">
             <Avatar
-              src={cardValues.image}
-              alt={cardValues.name}
+              src={cardValues.cardData.image}
+              alt={cardValues.cardData.name}
               variant="secondary"
               size="xxxxl"
               className="outline outline-1 outline-white/10"
             />
             <h2 className="mt-4 text-2xl font-bold flex items-center text-white">
-              {cardValues.name}
+              {cardValues.cardData.name}
             </h2>
             <div className="flex flex-col items-center ">
               {cardValues.tagline && (
                 <p className="text-sm text-neutral-400">
-                  {cardValues.tagline}
+                  {cardValues.cardData.tagline}
                 </p>
               )}
               {cardValues.company && (
                 <p className="text-sm text-neutral-400">
-                  {cardValues.company}
+                  {cardValues.cardData.company}
                 </p>
               )}
             </div>
@@ -68,7 +68,7 @@ export default function BasicDarkCard({
           <div className="flex flex-col space-y-4">
             {cardValues.phone && (
               <a
-                href={`tel:${cardValues.phone}`}
+                href={`tel:${cardValues.cardData.phone}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="break-words w-full justify-start"
@@ -83,7 +83,7 @@ export default function BasicDarkCard({
             )}
             {cardValues.email && (
               <a
-                href={`mailto:${cardValues.email}`}
+                href={`mailto:${cardValues.cardData.email}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="break-words w-full justify-start"
@@ -91,14 +91,14 @@ export default function BasicDarkCard({
                 <Button variant="outline" className="w-full justify-start border-neutral-700 text-white hover:bg-neutral-700 hover:text-white">
                   <Mail className="mr-2 h-4 w-4" />
                   <div className="flex flex-col items-start">
-                    <span className="text-xs">{cardValues.email}</span>
+                    <span className="text-xs">{cardValues.cardData.email}</span>
                   </div>
                 </Button>
               </a>
             )}
             {cardValues.website && (
               <a
-                href={cardValues.website}
+                href={cardValues.cardData.website}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="break-words w-full justify-start"
@@ -106,14 +106,14 @@ export default function BasicDarkCard({
                 <Button variant="outline" className="w-full justify-start border-neutral-700 text-white hover:bg-neutral-700 hover:text-white">
                   <Link className="mr-2 h-4 w-4" />
                   <div className="flex flex-col items-start">
-                    <span className="text-xs">{cardValues.website}</span>
+                    <span className="text-xs">{cardValues.cardData.website}</span>
                   </div>
                 </Button>
               </a>
             )}
             {cardValues.location && (
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${cardValues.location}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${cardValues.cardData.location}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="break-words w-full justify-start"
@@ -121,16 +121,16 @@ export default function BasicDarkCard({
                 <Button variant="outline" className="w-full justify-start border-neutral-700 text-white hover:bg-neutral-700 hover:text-white">
                   <MapPin className="mr-2 h-4 w-4" />
                   <div className="flex flex-col items-start">
-                    <span className="text-xs">{cardValues.location}</span>
+                    <span className="text-xs">{cardValues.cardData.location}</span>
                   </div>
                 </Button>
               </a>
             )}
-            {cardValues.name !== "" && (
+            {cardValues.cardData.name !== "" && (
             <a
-            href={`data:text/vcard;charset=utf-8,BEGIN:VCARD%0AVERSION:3.0%0AN:;${encodeURIComponent(cardValues.name)};;;%0AFN:${encodeURIComponent(cardValues.name)}%0AORG:${encodeURIComponent(cardValues.company)}%0ATEL;TYPE=WORK,VOICE:${encodeURIComponent(cardValues.phone)}%0AEMAIL:${encodeURIComponent(cardValues.email)}%0AURL:${encodeURIComponent(cardValues.website)}%0AIMAGE;VALUE=URI:${encodeURIComponent(cardValues.image)}%0A%0AEND:VCARD`}
+            href={`data:text/vcard;charset=utf-8,BEGIN:VCARD%0AVERSION:3.0%0AN:;${encodeURIComponent(cardValues.cardData.name)};;;%0AFN:${encodeURIComponent(cardValues.cardData.name)}%0AORG:${encodeURIComponent(cardValues.cardData.company)}%0ATEL;TYPE=WORK,VOICE:${encodeURIComponent(cardValues.cardData.phone)}%0AEMAIL:${encodeURIComponent(cardValues.cardData.email)}%0AURL:${encodeURIComponent(cardValues.cardData.website)}%0AIMAGE;VALUE=URI:${encodeURIComponent(cardValues.cardData.image)}%0A%0AEND:VCARD`}
             // Ensure cardValues.image contains a valid URL
-            download={`${cardValues.name}.vcf`}
+            download={`${cardValues.cardData.name}.vcf`}
             className="break-words w-full justify-start"
             >
               <Button className="w-full justify-start bg-white text-black">

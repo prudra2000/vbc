@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 export async function deleteCard(cardId: string) {
     const session = await auth();
   
-    const existingCard = await db.personalCard.findUnique({
+    const existingCard = await db.digiMeCard.findUnique({
       where: { id: cardId, userId: session?.user?.id },
     });
   

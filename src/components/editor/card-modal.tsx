@@ -49,11 +49,24 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
     setSuccess("");
     const starterValues = {
       userId: session?.user?.id || "",
-      cardTitle: data.cardTitle,
-      cardStyle: data.cardStyle,
+      cardTitle: data.cardTitle || "",
+      cardStyle: data.cardStyle || "",
+      isPublished: false,
+      cardData: {
+        name: data.name || "",
+        image: data.image || "",
+        tagline: data.tagline || "",
+        company: data.company || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        location: data.location || "",
+        website: data.website || "",
+        socialMedia: data.socialMedia || {},
+      },
     };
     startTransition(async () => {
       const newCard = await addCard(starterValues);
+      console.log(newCard);
       setNewCard(newCard);
       setError(newCard?.error || "");
       setSuccess(newCard?.success || "");

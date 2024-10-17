@@ -2,13 +2,15 @@
 
 import * as z from "zod";
 import { db } from "@/lib/db";
-import { UpdateCardSchema } from "@/schemas/index";
+import { DigimedCardSchema, UpdateCardSchema } from "@/schemas/index";
 import { getPersonalCardByUserID } from "@/data/card";
 import { auth } from "@/auth";
 
-export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardID:string) => {
 
-  const validatedFields = UpdateCardSchema.safeParse(values);
+
+export const updateCard = async (values: z.infer<typeof DigimedCardSchema>, cardID:string) => {
+
+  const validatedFields = DigimedCardSchema.safeParse(values);
   if (!validatedFields.success) {
     console.error("Validation failed:", validatedFields.error);
     return {
@@ -19,16 +21,9 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
   const {
     cardTitle,
     cardStyle,
-    name,
-    image,
-    tagline,
-    company,
-    email,
-    phone,
-    location,
-    website,
+    cardData,
   } = validatedFields.data;
-  const socialMedia = validatedFields.data.socialMedia || {};
+
 
   const session = await auth();
 
@@ -38,6 +33,29 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
       error: "Card not found",
     };
   }
+
+  type CardData = {
+    name: string;
+    image: string;
+    tagline: string;
+    company: string;
+    email: string;
+    phone: string;
+    location: string;
+    website: string;
+    socialMedia: {
+      linkedin: string;
+      github: string;
+      twitter: string;
+      instagram: string;
+      facebook: string;
+      tiktok: string;
+      youtube: string;
+      twitch: string;
+      discord: string;
+    };
+  };
+
 
   try {
     await db.digiMeCard.update({
@@ -49,15 +67,15 @@ export const updateCard = async (values: z.infer<typeof UpdateCardSchema>, cardI
         cardTitle: cardTitle || card.cardTitle,
         cardStyle: cardStyle || card.cardStyle,
         cardData: {
-          name: name || card.name,
-          image: image || card.image,
-          tagline: tagline || card.tagline,
-          company: company || card.company,
-          email: email || card.email,
-          phone: phone || card.phone,
-          location: location || card.location,
-          website: website || card.website,
-          socialMedia: socialMedia || card.socialMedia,
+          name: cardData.name || (card.cardData as CardData)?.name,
+          image: cardData.image || (card.cardData as CardData)?.image,
+          tagline: cardData.tagline || (card.cardData as CardData)?.tagline,
+          company: cardData.company || (card.cardData as CardData)?.company,
+          email: cardData.email || (card.cardData as CardData)?.email,
+          phone: cardData.phone || (card.cardData as CardData)?.phone,
+          location: cardData.location || (card.cardData as CardData)?.location,
+          website: cardData.website || (card.cardData as CardData)?.website,
+          socialMedia: cardData.socialMedia || (card.cardData as CardData)?.socialMedia,
         },
     }});
 

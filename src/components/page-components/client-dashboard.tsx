@@ -66,7 +66,7 @@ const ClientDashboard = () => {
       cardTitle: data.cardTitle || "",
       cardStyle: data.cardStyle || "",
       isPublished: false,
-      cardData: data.cardData || {
+      cardData: {
         name: data.name || "",
         image: data.image || "",
         tagline: data.tagline || "",

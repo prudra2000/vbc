@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "../../components/ui/form";
 import { useForm } from "react-hook-form";
-import { EditorSchema } from "@/schemas";
+import { DigimedCardSchema } from "@/schemas";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLinkedin,
@@ -64,8 +64,8 @@ const EditorForm: React.FC<EditorForm> = ({
   const { data: session } = useSession();
   if (!isOpen) return null;
 
-  const form = useForm<z.infer<typeof EditorSchema>>({
-    resolver: zodResolver(EditorSchema),
+  const form = useForm<z.infer<typeof DigimedCardSchema>>({
+    resolver: zodResolver(DigimedCardSchema),
     defaultValues: formValues,
   });
 
@@ -124,33 +124,12 @@ const EditorForm: React.FC<EditorForm> = ({
     fetchCountryCodes();
   }, []);
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedInputs((prev) => {
-      const newSelectedInputs = prev.includes(value)
-        ? prev.filter((item) => item !== value)
-        : [...prev, value];
-      onSelectChange(newSelectedInputs);
-      return newSelectedInputs;
-    });
-  };
-
-  const removeInput = (social: string) => {
-    setSelectedInputs((prev) => prev.filter((input) => input !== social));
-    setUrls((prev) => {
-      const newUrls = { ...prev };
-      delete newUrls[social];
-      return newUrls;
-    });
-  };
   useEffect(() => {
     setSelectedInputs(selected);
     setUrls(formValues.urls);
   }, [selected, formValues.urls]);
 
-  const isNotLinked = (social: string) => {
-    return !formValues.socialMedia[social];
-  };
+
 
   const isEmpty =
     session?.user?.authenticatedSocials?.linkedin?.linkedinId === undefined &&
@@ -168,7 +147,7 @@ const EditorForm: React.FC<EditorForm> = ({
             >
               <FormField
                 control={form.control}
-                name="name"
+                name="cardData.name"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Name:</FormLabel>
@@ -180,7 +159,7 @@ const EditorForm: React.FC<EditorForm> = ({
               ></FormField>
               <FormField
                 control={form.control}
-                name="tagline"
+                name="cardData.tagline"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Tagline:</FormLabel>
@@ -204,7 +183,7 @@ const EditorForm: React.FC<EditorForm> = ({
               ></FormField>
               <FormField
                 control={form.control}
-                name="company"
+                name="cardData.company"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Company:</FormLabel>
@@ -235,7 +214,7 @@ const EditorForm: React.FC<EditorForm> = ({
               ></FormField>
               <FormField
                 control={form.control}
-                name="email"
+                name="cardData.email"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Email:</FormLabel>
@@ -259,7 +238,7 @@ const EditorForm: React.FC<EditorForm> = ({
               ></FormField>
               <FormField
                 control={form.control}
-                name="phone"
+                name="cardData.phone"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Country Code:</FormLabel>
@@ -336,7 +315,7 @@ const EditorForm: React.FC<EditorForm> = ({
               ></FormField>
               <FormField
                 control={form.control}
-                name="location"
+                name="cardData.location"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Location:</FormLabel>
@@ -361,7 +340,7 @@ const EditorForm: React.FC<EditorForm> = ({
               ></FormField>
               <FormField
                 control={form.control}
-                name="website"
+                name="cardData.website"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Website:</FormLabel>
@@ -385,7 +364,7 @@ const EditorForm: React.FC<EditorForm> = ({
               ></FormField>
               <FormField
                 control={form.control}
-                name="image"
+                name="cardData.image"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Image:</FormLabel>
@@ -438,7 +417,7 @@ const EditorForm: React.FC<EditorForm> = ({
               ></FormField>
               <FormField
                 control={form.control}
-                name="socialMedia"
+                name="cardData.socialMedia"
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>
@@ -503,7 +482,7 @@ const EditorForm: React.FC<EditorForm> = ({
                             <div className="flex items-center">
                               <FormField
                                 control={form.control}
-                                name="socialMedia.github"
+                                name="cardData.socialMedia.github"
                                 render={({ field }) => (
                                   <FormItem className="">
                                     <FormControl>
@@ -555,7 +534,7 @@ const EditorForm: React.FC<EditorForm> = ({
                             <div className="flex items-center">
                               <FormField
                                 control={form.control}
-                                name="socialMedia.linkedin"
+                                name="cardData.socialMedia.linkedin"
                                 render={({ field }) => (
                                   <FormItem className="">
                                     <FormControl>
@@ -604,7 +583,7 @@ const EditorForm: React.FC<EditorForm> = ({
                             <div className="flex items-center">
                               <FormField
                                 control={form.control}
-                                name="socialMedia.twitter"
+                                name="cardData.socialMedia.twitter"
                                 render={({ field }) => (
                                   <FormItem className="">
                                     <FormControl>

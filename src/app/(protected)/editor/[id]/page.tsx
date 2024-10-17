@@ -4,7 +4,7 @@ import EditorForm from "../../../../components/editor/editor-card";
 import { Card as PCard } from "@prisma/client";
 import { useParams } from "next/navigation";
 import * as z from "zod";
-import { UpdateCardSchema } from "@/schemas";
+import { DigimedCardSchema } from "@/schemas";
 import { useSession } from "next-auth/react";
 import { updateCard } from "@/actions/update-card";
 import { Button } from "../../../../components/ui/button";
@@ -19,14 +19,27 @@ type FormValues = {
   userId: string;
   cardTitle: string;
   cardStyle: string;
-  name: string;
-  image: string;
-  tagline: string;
-  company: string;
-  email: string;
-  phone: string;
-  location: string;
-  website: string;
+  cardData: {
+    name: string;
+    image: string;
+    tagline: string;
+    company: string;
+    email: string;
+    phone: string;
+    location: string;
+    website: string;
+    socialMedia: {
+      linkedin: string;
+      github: string;
+      twitter: string;
+      instagram: string;
+      facebook: string;
+      tiktok: string;
+      youtube: string;
+      twitch: string;
+      discord: string;
+    };
+  };
   urls: {
     linkedin: string;
     github: string;
@@ -37,27 +50,6 @@ type FormValues = {
     youtube: string;
     twitch: string;
     discord: string;
-    snapchat: string;
-    whatsapp: string;
-    telegram: string;
-    reddit: string;
-    pinterest: string;
-  };
-  socialMedia: {
-    linkedin: string;
-    github: string;
-    twitter: string;
-    instagram: string;
-    facebook: string;
-    tiktok: string;
-    youtube: string;
-    twitch: string;
-    discord: string;
-    snapchat: string;
-    whatsapp: string;
-    telegram: string;
-    reddit: string;
-    pinterest: string;
   };
 };
 
@@ -75,14 +67,27 @@ const EditorPage = () => {
     userId: "",
     cardTitle: "",
     cardStyle: "",
-    name: "",
-    image: "",
-    tagline: "",
-    company: "",
-    email: "",
-    phone: "",
-    location: "",
-    website: "",
+    cardData: {
+      name: "",
+      image: "",
+      tagline: "",
+      company: "",
+      email: "",
+      phone: "",
+      location: "",
+      website: "",
+      socialMedia: {
+        linkedin: "",
+        github: "",
+        twitter: "",
+        instagram: "",
+        facebook: "",
+        tiktok: "",
+        youtube: "",
+        twitch: "",
+        discord: "",
+      },
+    },
     urls: {
       linkedin: "",
       github: "",
@@ -93,27 +98,6 @@ const EditorPage = () => {
       youtube: "",
       twitch: "",
       discord: "",
-      snapchat: "",
-      whatsapp: "",
-      telegram: "",
-      reddit: "",
-      pinterest: "",
-    },
-    socialMedia: {
-      linkedin: "",
-      github: "",
-      twitter: "",
-      instagram: "",
-      facebook: "",
-      tiktok: "",
-      youtube: "",
-      twitch: "",
-      discord: "",
-      snapchat: "",
-      whatsapp: "",
-      telegram: "",
-      reddit: "",
-      pinterest: "",
     },
   });
 
@@ -128,51 +112,43 @@ const EditorPage = () => {
         try {
           const response = await fetch(`/api/editor/${id}`);
           if (response.ok) {
-            const { card: cardData } = await response.json();
-            setCard(cardData);
+            const { card: digiMeCard } = await response.json();
+            setCard(digiMeCard);
             setFormValues({
-              userId: cardData.userId || "",
-              cardTitle: cardData.cardTitle || "",
-              cardStyle: cardData.cardStyle || "",
-              name: cardData.name || "",
-              image: cardData.image || "",
-              tagline: cardData.tagline || "",
-              company: cardData.company || "",
-              email: cardData.email || "",
-              phone: cardData.phone || "",
-              location: cardData.location || "",
-              website: cardData.website || "",
-              urls: {
-                linkedin: cardData.socialMedia.linkedin || "",
-                github: cardData.socialMedia.github || "",
-                twitter: cardData.socialMedia.twitter || "",
-                instagram: cardData.socialMedia.instagram || "",
-                facebook: cardData.socialMedia.facebook || "",
-                tiktok: cardData.socialMedia.tiktok || "",
-                youtube: cardData.socialMedia.youtube || "",
-                twitch: cardData.socialMedia.twitch || "",
-                discord: cardData.socialMedia.discord || "",
-                snapchat: cardData.socialMedia.snapchat || "",
-                whatsapp: cardData.socialMedia.whatsapp || "",
-                telegram: cardData.socialMedia.telegram || "",
-                reddit: cardData.socialMedia.reddit || "",
-                pinterest: cardData.socialMedia.pinterest || "",
+              userId: digiMeCard.userId || "",
+              cardTitle: digiMeCard.cardTitle || "",
+              cardStyle: digiMeCard.cardStyle || "",
+              cardData: {
+                name: digiMeCard.cardData.name || "",
+                image: digiMeCard.cardData.image || "",
+                tagline: digiMeCard.cardData.tagline || "",
+                company: digiMeCard.cardData.company || "",
+                email: digiMeCard.cardData.email || "",
+                phone: digiMeCard.cardData.phone || "",
+                location: digiMeCard.cardData.location || "",
+                website: digiMeCard.cardData.website || "",
+                socialMedia: {
+                  linkedin: digiMeCard.cardData.socialMedia.linkedin || "",
+                  github: digiMeCard.cardData.socialMedia.github || "",
+                  twitter: digiMeCard.cardData.socialMedia.twitter || "",
+                  instagram: digiMeCard.cardData.socialMedia.instagram || "",
+                  facebook: digiMeCard.cardData.socialMedia.facebook || "",
+                  tiktok: digiMeCard.cardData.socialMedia.tiktok || "",
+                  youtube: digiMeCard.cardData.socialMedia.youtube || "",
+                  twitch: digiMeCard.cardData.socialMedia.twitch || "",
+                  discord: digiMeCard.cardData.socialMedia.discord || "",
+                },
               },
-              socialMedia: {
-                linkedin: cardData.socialMedia.linkedin || "",
-                github: cardData.socialMedia.github || "",
-                twitter: cardData.socialMedia.twitter || "",
-                instagram: cardData.socialMedia.instagram || "",
-                facebook: cardData.socialMedia.facebook || "",
-                tiktok: cardData.socialMedia.tiktok || "",
-                youtube: cardData.socialMedia.youtube || "",
-                twitch: cardData.socialMedia.twitch || "",
-                discord: cardData.socialMedia.discord || "",
-                snapchat: cardData.socialMedia.snapchat || "",
-                whatsapp: cardData.socialMedia.whatsapp || "",
-                telegram: cardData.socialMedia.telegram || "",
-                reddit: cardData.socialMedia.reddit || "",
-                pinterest: cardData.socialMedia.pinterest || "",
+              urls: {
+                linkedin: digiMeCard.cardData.socialMedia.linkedin || "",
+                github: digiMeCard.cardData.socialMedia.github || "",
+                twitter: digiMeCard.cardData.socialMedia.twitter || "",
+                instagram: digiMeCard.cardData.socialMedia.instagram || "",
+                facebook: digiMeCard.cardData.socialMedia.facebook || "",
+                tiktok: digiMeCard.cardData.socialMedia.tiktok || "",
+                youtube: digiMeCard.cardData.socialMedia.youtube || "",
+                twitch: digiMeCard.cardData.socialMedia.twitch || "",
+                discord: digiMeCard.cardData.socialMedia.discord || "",
               },
             });
             const keysToRetain = [
@@ -185,13 +161,8 @@ const EditorPage = () => {
               "youtube",
               "twitch",
               "discord",
-              "snapchat",
-              "whatsapp",
-              "telegram",
-              "reddit",
-              "pinterest",
             ];
-            const filteredData = Object.entries(cardData.socialMedia)
+            const filteredData = Object.entries(digiMeCard.cardData.socialMedia)
               .filter(([key, value]) => keysToRetain.includes(key) && value)
               .map(([key]) => key);
             setnonEmptyCardData(filteredData);
@@ -221,7 +192,7 @@ const EditorPage = () => {
   }, [success]);
 
   const handleUpdateData = async (
-    formValues1: z.infer<typeof UpdateCardSchema>,
+    formValues1: z.infer<typeof DigimedCardSchema>,
     cardID: string,
     e: React.SyntheticEvent
   ) => {
@@ -230,33 +201,28 @@ const EditorPage = () => {
       userId: session?.user?.id || "",
       cardTitle: formValues.cardTitle || "",
       cardStyle: formValues.cardStyle || "",
-      name: formValues.name || "",
-      image: formValues.image || "",
-      tagline: formValues.tagline || "",
-      company: formValues.company || "",
-      email: formValues.email || "",
-      phone: formValues.phone || "",
-      location: formValues.location || "",
-      website: formValues.website || "",
-      style: formValues.image || "",
-      socialMedia: {
-        linkedin: formValues.socialMedia.linkedin || "",
-        github: formValues.socialMedia.github || "",
-        twitter: formValues.socialMedia.twitter || "",
-        instagram: formValues.socialMedia.instagram || "",
-        facebook: formValues.socialMedia.facebook || "",
-        tiktok: formValues.socialMedia.tiktok || "",
-        youtube: formValues.socialMedia.youtube || "",
-        twitch: formValues.socialMedia.twitch || "",
-        discord: formValues.socialMedia.discord || "",
-        snapchat: formValues.socialMedia.snapchat || "",
-        whatsapp: formValues.socialMedia.whatsapp || "",
-        telegram: formValues.socialMedia.telegram || "",
-        reddit: formValues.socialMedia.reddit || "",
-        pinterest: formValues.socialMedia.pinterest || "",
+      cardData: {
+        name: formValues.cardData.name || "",
+        image: formValues.cardData.image || "",
+        tagline: formValues.cardData.tagline || "",
+        company: formValues.cardData.company || "",
+        email: formValues.cardData.email || "",
+        phone: formValues.cardData.phone || "",
+        location: formValues.cardData.location || "",
+        website: formValues.cardData.website || "",
+        socialMedia: {
+          linkedin: formValues.cardData.socialMedia.linkedin || "",
+          github: formValues.cardData.socialMedia.github || "",
+          twitter: formValues.cardData.socialMedia.twitter || "",
+          instagram: formValues.cardData.socialMedia.instagram || "",
+          facebook: formValues.cardData.socialMedia.facebook || "",
+          tiktok: formValues.cardData.socialMedia.tiktok || "",
+          youtube: formValues.cardData.socialMedia.youtube || "",
+          twitch: formValues.cardData.socialMedia.twitch || "",
+          discord: formValues.cardData.socialMedia.discord || "",
+        },
       },
     };
-    console.log("values", formValues);
 
     startTransition(async () => {
       try {
