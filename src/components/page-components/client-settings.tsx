@@ -3,31 +3,10 @@
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Avatar from "../avatar";
 import { GridLoader } from "react-spinners";
 import UploadProfilePicModal from "../settings/uploadProfilePicModal";
-import { encode as base64encode } from "js-base64";
-import { Link } from "lucide-react";
-import {
-  faLinkedin,
-  faGithub,
-  faTwitter,
-  faInstagram,
-  faFacebook,
-  faTiktok,
-  faYoutube,
-  faTwitch,
-  faDiscord,
-  faSnapchat,
-  faWhatsapp,
-  faTelegram,
-  faReddit,
-  faPinterest,
-} from "@fortawesome/free-brands-svg-icons";
 import SocialLinkCard from "../settings/socialLinkCard";
-import { Chip } from "../ui/chip";
 
 const ClientSettings = () => {
   const { data: session, status } = useSession();
@@ -49,12 +28,12 @@ const ClientSettings = () => {
   const linkedinClientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
   const linkedinRedirectUri =
     "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/linkedin/callback";
-  const linkedinScope = "openid profile email";
+  const linkedinScope = "r_basicprofile";
   const generateLinkedInState = () => {
     return Math.random().toString(36).substring(2, 15);
   };
 
-  const handleLinkAccount = async () => {
+  const handleLinkedInLink = async () => {
     const codeVerifier = generateCodeVerifier();
     const codeChallenge = await generateCodeChallenge(codeVerifier);
     const state = generateState(codeVerifier);
@@ -255,14 +234,14 @@ const ClientSettings = () => {
                     ?.linkedinUsername
                 }
                 unlink={() => handleUnlink("linkedin")}
-                link={() => handleLinkAccount()}
+                link={() => handleLinkedInLink()}
               />
             ) : (
               <SocialLinkCard
                 isLinked={false}
                 icon="linkedin"
                 unlink={() => handleUnlink("linkedin")}
-                link={() => handleLinkAccount()}
+                link={() => handleLinkedInLink()}
               />
             )}
             {session?.user?.authenticatedSocials?.github?.githubId ? (

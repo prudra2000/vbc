@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
     }
 
     const profileResponse = await fetch(
-      "https://api.linkedin.com/v2/userinfo",
+      "https://api.linkedin.com/v2/me",
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -106,7 +106,7 @@ export async function GET(req: NextRequest) {
         { status: 500 }
       );
     } else {
-      const linkedinUserId = profileData.sub;
+      const linkedinUserId = profileData.id;
       const existingUser = await db.user.findUnique({
         where: { id: session?.user?.id },
       });
@@ -115,7 +115,7 @@ export async function GET(req: NextRequest) {
         ...((existingUser?.authenticatedSocials as object) || {}),
         linkedin: {
           linkedinId: linkedinUserId,
-          linkedinUsername: profileData.email,
+          linkedinUsername: profileData.vanityName,
         },
       };
 

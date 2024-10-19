@@ -423,10 +423,12 @@ const EditorForm: React.FC<EditorForm> = ({
                     <FormLabel>
                       <div className="flex items-center justify-between">
                         <p>Social Media:</p>
-                        <Button variant="outline" className="gap-2">
-                          Link Accounts
-                          <CirclePlus className="w-5 h-5" />
-                        </Button>
+                        <Link href="/settings">
+                          <Button variant="outline" className="gap-2">
+                            Link Accounts
+                            <CirclePlus className="w-5 h-5" />
+                          </Button>
+                        </Link>
                       </div>
                     </FormLabel>
                     <FormControl>
