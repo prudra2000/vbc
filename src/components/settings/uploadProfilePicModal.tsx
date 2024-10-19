@@ -50,6 +50,9 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
     const starterValues = {
       userId: session?.user?.id || "",
       cardTitle: data.cardTitle,
+      cardData: {
+        image: data.image,
+      },
     };
     startTransition(async () => {
       const result = await updateCard(starterValues, cardID);
@@ -152,7 +155,7 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
                       variant="outline"
                       type="button"
                       onClick={handleDeleteImage}
-                      className="mt-2 text-destructive text-xs py-1 px-3 flex items-center gap-2 border border-destructive"
+                      className="mt-2 text-destructive text-xs py-1 px-3 flex items-center gap-2 border border-destructive hover:text-destructive"
                     >
                       <Trash className="w-4 h-4" />
                       <p className="hidden md:block">Delete Image</p>

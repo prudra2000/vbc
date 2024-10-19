@@ -9,13 +9,14 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Invalid card ID" }, { status: 400 });
   }
   try {
-    const personalCard = await db.personalCard.findUnique({
+    const digiMeCard = await db.digiMeCard.findUnique({
       where: { id: cardId, isPublished: true },
     });
-    if (!personalCard?.isPublished) {
+    if (!digiMeCard?.isPublished) {
       return NextResponse.json({ error: "Card is not published" }, { status: 403 });
     }
-    return NextResponse.json({ card: personalCard }, { status: 200 });
+    console.log("digiMeCard", digiMeCard);
+    return NextResponse.json({ card: digiMeCard }, { status: 200 });
   } catch (error) {
     console.error("Error fetching card:", error);
     return NextResponse.json(

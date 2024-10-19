@@ -23,7 +23,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { updateCard } from "@/actions/update-card";
+import { editCardName } from "@/actions/edit-name";
 
 interface EditCardNameModalProps {
   isOpen: boolean;
@@ -39,21 +39,18 @@ const EditCardNameModal: React.FC<EditCardNameModalProps> = ({
   cardID,
 }) => {
   const { data: session } = useSession();
-  const [CardCreated, setCardCreated] = useState(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const form = useForm();
-  const [newCard, setNewCard] = useState<any>(null); // Add state for newCard
 
-  const handleAddCard = async (data: any) => {
+  const handleUpdateCard = async (data: any) => {
     setError("");
     setSuccess("");
     const starterValues = {
-      userId: session?.user?.id || "",
       cardTitle: data.cardTitle,
     };
     startTransition(async () => {
-      const result = await updateCard(starterValues, cardID);
+      const result = await editCardName(cardID, starterValues);
       if (result.error) {
         setError(result.error);
       } else {
@@ -85,7 +82,7 @@ const EditCardNameModal: React.FC<EditCardNameModalProps> = ({
                 const data = {
                   cardTitle: formData.get("cardTitle") as string,
                 };
-                await handleAddCard(data); // Call handleAddCard with the form data
+                await handleUpdateCard(data); // Call handleAddCard with the form data
               }}
               className="space-y-4"
             >

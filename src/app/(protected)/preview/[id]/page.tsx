@@ -18,24 +18,26 @@ type FormValues = {
   userId: string;
   cardTitle: string;
   cardStyle: string;
-  name: string;
-  image: string;
-  tagline: string;
-  company: string;
-  email: string;
-  phone: string;
-  location: string;
-  website: string;
-  socialMedia: {
-    linkedin: string;
-    github: string;
-    twitter: string;
-    instagram: string;
-    facebook: string;
-    tiktok: string;
-    youtube: string;
-    twitch: string;
-    discord: string;
+  cardData: {
+    name: string;
+    image: string;
+    tagline: string;
+    company: string;
+    email: string;
+    phone: string;
+    location: string;
+    website: string;
+    socialMedia: {
+      linkedin: string;
+      github: string;
+      twitter: string;
+      instagram: string;
+      facebook: string;
+      tiktok: string;
+      youtube: string;
+      twitch: string;
+      discord: string;
+    };
   };
 };
 
@@ -61,24 +63,26 @@ const PreviewPage = () => {
     userId: "",
     cardTitle: "",
     cardStyle: "",
-    name: "",
-    image: "",
-    tagline: "",
-    company: "",
-    email: "",
-    phone: "",
-    location: "",
-    website: "",
-    socialMedia: {
-      linkedin: "",
-      github: "",
-      twitter: "",
-      instagram: "",
-      facebook: "",
-      tiktok: "",
-      youtube: "",
-      twitch: "",
-      discord: "",
+    cardData: {
+      name: "",
+      image: "",
+      tagline: "",
+      company: "",
+      email: "",
+      phone: "",
+      location: "",
+      website: "",
+      socialMedia: {
+        linkedin: "",
+        github: "",
+        twitter: "",
+        instagram: "",
+        facebook: "",
+        tiktok: "",
+        youtube: "",
+        twitch: "",
+        discord: "",
+      },
     },
   });
 
@@ -92,40 +96,60 @@ const PreviewPage = () => {
             const { card: digiMeCard } = await response.json();
             setCard(digiMeCard);
             if (digiMeCard) {
-                setDigiMeCard({
+              setDigiMeCard({
                 userId: digiMeCard.userId || "",
                 cardTitle: digiMeCard.cardTitle || "",
                 cardStyle: digiMeCard.cardStyle || "",
-                name: digiMeCard.cardData.name || "",
-                image: digiMeCard.cardData.image || "",
-                tagline: digiMeCard.cardData.tagline || "",
-                company: digiMeCard.cardData.company || "",
-                email: digiMeCard.cardData.email || "",
-                phone: digiMeCard.cardData.phone || "",
-                location: digiMeCard.cardData.location || "",
-                website: digiMeCard.cardData.website || "",
-                socialMedia: {
-                  linkedin: digiMeCard.cardData.socialMedia.linkedin || "",
-                  github: digiMeCard.cardData.socialMedia.github || "",
-                  twitter: digiMeCard.cardData.socialMedia.twitter || "",
-                  instagram: digiMeCard.cardData.socialMedia.instagram || "",
-                  facebook: digiMeCard.cardData.socialMedia.facebook || "",
-                  tiktok: digiMeCard.cardData.socialMedia.tiktok || "",
-                  youtube: digiMeCard.cardData.socialMedia.youtube || "",
-                  twitch: digiMeCard.cardData.socialMedia.twitch || "",
-                  discord: digiMeCard.cardData.socialMedia.discord || "",
+                cardData: {
+                  name: digiMeCard.cardData.name || "",
+                  image: digiMeCard.cardData.image || "",
+                  tagline: digiMeCard.cardData.tagline || "",
+                  company: digiMeCard.cardData.company || "",
+                  email: digiMeCard.cardData.email || "",
+                  phone: digiMeCard.cardData.phone || "",
+                  location: digiMeCard.cardData.location || "",
+                  website: digiMeCard.cardData.website || "",
+                  socialMedia: {
+                    linkedin: digiMeCard.cardData.socialMedia.linkedin || "",
+                    github: digiMeCard.cardData.socialMedia.github || "",
+                    twitter: digiMeCard.cardData.socialMedia.twitter || "",
+                    instagram: digiMeCard.cardData.socialMedia.instagram || "",
+                    facebook: digiMeCard.cardData.socialMedia.facebook || "",
+                    tiktok: digiMeCard.cardData.socialMedia.tiktok || "",
+                    youtube: digiMeCard.cardData.socialMedia.youtube || "",
+                    twitch: digiMeCard.cardData.socialMedia.twitch || "",
+                    discord: digiMeCard.cardData.socialMedia.discord || "",
+                  },
                 },
               });
               setUrls({
-                linkedin: `https://www.linkedin.com/in/${digiMeCard.cardData.socialMedia.linkedin}` || "",
-                github: `https://www.github.com/${digiMeCard.cardData.socialMedia.github}` || "",
-                twitter: `https://x.com/${digiMeCard.cardData.socialMedia.twitter}` || "",
-                instagram: `https://www.instagram.com/${digiMeCard.cardData.socialMedia.instagram}` || "",
-                facebook: `https://www.facebook.com/${digiMeCard.cardData.socialMedia.facebook}` || "",
-                tiktok: `https://www.tiktok.com/@${digiMeCard.cardData.socialMedia.tiktok}` || "",
-                youtube: `https://www.youtube.com/@${digiMeCard.cardData.socialMedia.youtube}` || "",
-                twitch: `https://www.twitch.tv/${digiMeCard.cardData.socialMedia.twitch}` || "",
-                discord: `https://discord.gg/${digiMeCard.cardData.socialMedia.discord}` || "" ,
+                linkedin:
+                  `https://www.linkedin.com/in/${digiMeCard.cardData.socialMedia.linkedin}` ||
+                  "",
+                github:
+                  `https://www.github.com/${digiMeCard.cardData.socialMedia.github}` ||
+                  "",
+                twitter:
+                  `https://x.com/${digiMeCard.cardData.socialMedia.twitter}` ||
+                  "",
+                instagram:
+                  `https://www.instagram.com/${digiMeCard.cardData.socialMedia.instagram}` ||
+                  "",
+                facebook:
+                  `https://www.facebook.com/${digiMeCard.cardData.socialMedia.facebook}` ||
+                  "",
+                tiktok:
+                  `https://www.tiktok.com/@${digiMeCard.cardData.socialMedia.tiktok}` ||
+                  "",
+                youtube:
+                  `https://www.youtube.com/@${digiMeCard.cardData.socialMedia.youtube}` ||
+                  "",
+                twitch:
+                  `https://www.twitch.tv/${digiMeCard.cardData.socialMedia.twitch}` ||
+                  "",
+                discord:
+                  `https://discord.gg/${digiMeCard.cardData.socialMedia.discord}` ||
+                  "",
               });
               const keysToRetain = [
                 "linkedin",
@@ -138,7 +162,9 @@ const PreviewPage = () => {
                 "twitch",
                 "discord",
               ];
-              const filteredData = Object.entries(digiMeCard.cardData.socialMedia)
+              const filteredData = Object.entries(
+                digiMeCard.cardData.socialMedia
+              )
                 .filter(([key, value]) => keysToRetain.includes(key) && value)
                 .map(([key]) => key);
               setnonEmptyCardData(filteredData);
@@ -185,8 +211,8 @@ const PreviewPage = () => {
           <BasicCard
             cardValues={{
               ...digiMeCard,
-              socialMedia: JSON.stringify(digiMeCard.socialMedia),
-              urls: JSON.stringify(digiMeCard.socialMedia),
+              socialMedia: JSON.stringify(digiMeCard.cardData.socialMedia),
+              urls: JSON.stringify(digiMeCard.cardData.socialMedia),
             }}
             urls={urls}
             showUsername={true}
@@ -199,8 +225,8 @@ const PreviewPage = () => {
             <BasicDarkCard
               cardValues={{
                 ...digiMeCard,
-                socialMedia: JSON.stringify(digiMeCard.socialMedia),
-                urls: JSON.stringify(digiMeCard.socialMedia),
+                socialMedia: JSON.stringify(digiMeCard.cardData.socialMedia),
+                urls: JSON.stringify(digiMeCard.cardData.socialMedia),
               }}
               urls={urls}
               showUsername={true}
@@ -213,8 +239,8 @@ const PreviewPage = () => {
           <GlassLightCard
             cardValues={{
               ...digiMeCard,
-              socialMedia: JSON.stringify(digiMeCard.socialMedia),
-              urls: JSON.stringify(digiMeCard.socialMedia),
+              socialMedia: JSON.stringify(digiMeCard.cardData.socialMedia),
+              urls: JSON.stringify(digiMeCard.cardData.socialMedia),
             }}
             urls={urls}
             showUsername={true}

@@ -20,6 +20,10 @@ declare module "next-auth" {
         twitterId: string;
         twitterUsername: string;
       };
+      spotify?: {
+        spotifyId: string;
+        spotifyUsername: string;
+      };
     };
   }
 

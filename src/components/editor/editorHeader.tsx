@@ -58,7 +58,7 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
           onClose={() => setIsShareModalOpen(false)}
         />
       )}
-      <div className="flex flex-row justify-between items-center bg-white py-1 px-5 border-b-2 border-neutral-200">
+      <div className="flex flex-row justify-between items-center bg-white py-2 px-5 border-b-2 border-neutral-200">
         <div className="flex items-center gap-2 justify-center text-black">
           <div>{icon}</div>
           <div className="flex flex-row justify-center items-center">
@@ -80,9 +80,9 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
         </div>
         <div className="flex items-center gap-2">
           <Link href={`/preview/${cardID}`}>
-            <Button className="flex items-center gap-2 text-black" variant="header">
+            <Button className="flex items-center gap-2 text-black" variant="header" size="sm">
               <Eye className="w-4 h-4" />
-              <p className="text-sm hidden md:block">Preview</p>
+              <p className="text-xs hidden md:block">Preview</p>
             </Button>
           </Link>
           {isPublished && (
@@ -90,9 +90,10 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
               className="flex items-center gap-2 text-black"
               variant="header"
               onClick={() => setIsPublishModalOpen(true)}
+              size="sm"
             >
               <Send className="w-4 h-4 text-destructive" />
-              <p className="text-sm hidden md:block font-[600]">
+              <p className="text-xs hidden md:block">
                 Unpublish
               </p>
             </Button>
@@ -102,9 +103,10 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
               className="flex items-center gap-2  text-black"
               variant="header"
               onClick={() => setIsShareModalOpen(true)}
+              size="sm"
             >
               <Share2 className="w-4 h-4" />
-              <p className="text-sm hidden md:block">Share</p>
+              <p className="text-xs hidden md:block">Share</p>
             </Button>
           )}
           {!isPublished && (
@@ -112,9 +114,10 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
               className="flex items-center gap-2 text-black"
               variant="header"
               onClick={() => setIsPublishModalOpen(true)}
+              size="sm"
             >
               <Send className="w-4 h-4 text-green-500" />
-              <p className="text-sm hidden md:block">Publish</p>
+              <p className="text-xs hidden md:block">Publish</p>
             </Button>
           )}
         </div>

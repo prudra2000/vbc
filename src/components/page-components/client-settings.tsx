@@ -139,6 +139,31 @@ const ClientSettings = () => {
       // Optionally, display an error message to the user
     }
   };
+
+  const spotifyClientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
+  const spotifyRedirectUri =
+    "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/spotify/callback";
+  const spotifyScope = "user-read-private user-read-email";
+
+  const handleSpotifyLink = async () => {
+    try {
+      const codeVerifier = generateCodeVerifier();
+      const codeChallenge = await generateCodeChallenge(codeVerifier);
+      const state = generateState(codeVerifier);
+
+      const spotifyAuthorizationUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${spotifyClientId}&redirect_uri=${encodeURIComponent(
+        spotifyRedirectUri
+      )}&scope=${encodeURIComponent(
+        spotifyScope
+      )}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+
+      window.location.href = spotifyAuthorizationUrl;
+    } catch (error) {
+      console.error("Error during Spotify link process:", error);
+      // Optionally, display an error message to the user
+    }
+  };
+
   const handleUnlink = async (provider: string) => {
     try {
       const response = await fetch(`/api/socialUnlink/${provider}`, {
@@ -164,107 +189,143 @@ const ClientSettings = () => {
   };
 
   return (
-    <div className=" h-max pt-8 bg-gray-100">
-      <div className="flex flex-col gap-4 bg-white p-4 rounded-lg">
-        <h1 className="text-2xl font-bold text-black">Your Account:</h1>
-        <hr />
-        <div className=" flex flex-col gap-4 text-black">
-          <div className="flex flex-col justify-between items-center gap-2">
-            <Avatar
-              alt={session?.user?.name ?? ""}
-              src={session?.user?.image ?? ""}
-              size="large"
-              className="w-24 h-24"
-            />
-            <Button
-              variant="outline"
-              onClick={() => setIsUploadModalOpen(true)}
-            >
-              Upload Image
-            </Button>
-            <UploadProfilePicModal
-              isOpen={isUploadModalOpen}
-              onClose={() => setIsUploadModalOpen(false)}
-              onSubmit={async () => {
-                // Your submit logic here
-                return; // Ensure it returns a Promise
-              }}
-              cardID={""}
-            />
-          </div>
+    <div className=" pt-8 bg-gray-100">
+      <div className="flex flex-col gap-4 rounded-lg">
+        <div className="flex flex-col gap-4 bg-white p-4 rounded-lg shadow-md">
+          <h1 className="font-semibold text-black">Your Account:</h1>
           <hr />
-          <div className="flex flex-row justify-between items-center">
-            <p>
-              <strong>Name:</strong> {session?.user?.name}
-            </p>
-            <Button variant="outline">Edit</Button>
+          <div className=" flex flex-col gap-4 text-black">
+            <div className="flex flex-col justify-between items-center gap-2">
+              <Avatar
+                alt={session?.user?.name ?? ""}
+                src={session?.user?.image ?? ""}
+                size="large"
+                className="w-24 h-24"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsUploadModalOpen(true)}
+              >
+                Upload Image
+              </Button>
+              <UploadProfilePicModal
+                isOpen={isUploadModalOpen}
+                onClose={() => setIsUploadModalOpen(false)}
+                onSubmit={async () => {
+                  // Your submit logic here
+                  return; // Ensure it returns a Promise
+                }}
+                cardID={""}
+              />
+            </div>
+            <hr />
+            <div className="flex flex-row justify-between items-center text-sm">
+              <p>
+                <strong className="font-[600]">Name:</strong>{" "}
+                {session?.user?.name}
+              </p>
+              <Button variant="outline" size="sm">
+                Edit
+              </Button>
+            </div>
+            <hr />
+            <div className="flex flex-row justify-between items-center text-sm">
+              <p>
+                <strong className="font-[600]">Email:</strong>{" "}
+                {session?.user?.email}
+              </p>
+              <Button variant="outline" size="sm">
+                Edit
+              </Button>
+            </div>
+            <hr />
           </div>
-          <hr />
-          <div className="flex flex-row justify-between items-center">
-            <p>
-              <strong>Email:</strong> {session?.user?.email}
-            </p>
-            <Button variant="outline">Edit</Button>
+        </div>
+        <div className="flex flex-col gap-4 bg-white p-4 rounded-lg text-black shadow-md">
+          <div className="flex flex-col gap-4">
+            <h1 className="font-semibold">Socials:</h1>
+            {session?.user?.authenticatedSocials?.linkedin?.linkedinId ? (
+              <SocialLinkCard
+                type="LinkedIn"
+                isLinked={true}
+                icon="linkedin"
+                username={
+                  session?.user?.authenticatedSocials?.linkedin
+                    ?.linkedinUsername
+                }
+                unlink={() => handleUnlink("linkedin")}
+                link={() => handleLinkAccount()}
+              />
+            ) : (
+              <SocialLinkCard
+                isLinked={false}
+                icon="linkedin"
+                unlink={() => handleUnlink("linkedin")}
+                link={() => handleLinkAccount()}
+              />
+            )}
+            {session?.user?.authenticatedSocials?.github?.githubId ? (
+              <SocialLinkCard
+                type="GitHub"
+                isLinked={true}
+                icon="github"
+                username={
+                  session?.user?.authenticatedSocials?.github?.githubUsername
+                }
+                unlink={() => handleUnlink("github")}
+                link={() => handleGitHubLink()}
+              />
+            ) : (
+              <SocialLinkCard
+                isLinked={false}
+                icon="github"
+                unlink={() => handleUnlink("github")}
+                link={() => handleGitHubLink()}
+              />
+            )}
+            {session?.user?.authenticatedSocials?.twitter?.twitterId ? (
+              <SocialLinkCard
+                type="Twiiter"
+                isLinked={true}
+                icon="twitter"
+                username={
+                  session?.user?.authenticatedSocials?.twitter?.twitterUsername
+                }
+                unlink={() => handleUnlink("twitter")}
+                link={() => handleTwitterLink()}
+              />
+            ) : (
+              <SocialLinkCard
+                isLinked={false}
+                icon="twitter"
+                unlink={() => handleUnlink("twitter")}
+                link={() => handleTwitterLink()}
+              />
+            )}
+            {session?.user?.authenticatedSocials?.spotify?.spotifyId ? (
+              <SocialLinkCard
+                type="Spotify"
+                isLinked={true}
+                icon="spotify"
+                username={
+                  session?.user?.authenticatedSocials?.spotify?.spotifyUsername
+                }
+                unlink={() => handleUnlink("spotify")}
+                link={() => handleSpotifyLink()}
+                id={
+                  session?.user?.authenticatedSocials?.spotify?.spotifyId
+                }
+              />
+            ) : (
+              <SocialLinkCard
+                isLinked={false}
+                icon="spotify"
+                unlink={() => handleUnlink("spotify")}
+                link={() => handleSpotifyLink()}
+              />
+            )}
           </div>
-          <hr />
-          <h1 className="text-xl font-bold">Socials:</h1>
-          {session?.user?.authenticatedSocials?.linkedin?.linkedinId ? (
-            <SocialLinkCard
-              type="LinkedIn"
-              isLinked={true}
-              icon="linkedin"
-              username={
-                session?.user?.authenticatedSocials?.linkedin?.linkedinUsername
-              }
-              unlink={() => handleUnlink("linkedin")}
-              link={() => handleLinkAccount()}
-            />
-          ) : (
-            <SocialLinkCard
-              isLinked={false}
-              icon="linkedin"
-              unlink={() => handleUnlink("linkedin")}
-              link={() => handleLinkAccount()}
-            />
-          )}
-          {session?.user?.authenticatedSocials?.github?.githubId ? (
-            <SocialLinkCard
-              type="GitHub"
-              isLinked={true}
-              icon="github"
-              username={
-                session?.user?.authenticatedSocials?.github?.githubUsername
-              }
-              unlink={() => handleUnlink("github")}
-              link={() => handleGitHubLink()}
-            />
-          ) : (
-            <SocialLinkCard
-              isLinked={false}
-              icon="github"
-              unlink={() => handleUnlink("github")}
-              link={() => handleGitHubLink()}
-            />
-          )}
-          {session?.user?.authenticatedSocials?.twitter?.twitterId ? (
-            <SocialLinkCard
-              type="Twiiter"
-              isLinked={true}
-              icon="twitter"
-              username={
-                session?.user?.authenticatedSocials?.twitter?.twitterUsername
-              }
-              unlink={() => handleUnlink("twitter")}
-              link={() => handleTwitterLink()}
-            />
-          ) : (
-            <SocialLinkCard
-              isLinked={false}
-              icon="twitter"
-              unlink={() => handleUnlink("twitter")}
-              link={() => handleTwitterLink()}
-            />
-          )}
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ import {
   faTelegram,
   faReddit,
   faPinterest,
+  faSpotify,
 } from "@fortawesome/free-brands-svg-icons";
 import { Chip } from "../ui/chip";
 import { Button } from "../ui/button";
@@ -43,6 +44,7 @@ interface SocialLinkCardProps {
   unlink: () => void;
   link: () => void;
   type?: string;
+  id?: string;
 }
 
 const SocialLinkCard = ({
@@ -52,6 +54,7 @@ const SocialLinkCard = ({
   username,
   unlink,
   link,
+  id
 }: SocialLinkCardProps) => {
   const icons = {
     linkedin: faLinkedin,
@@ -68,22 +71,19 @@ const SocialLinkCard = ({
     telegram: faTelegram,
     reddit: faReddit,
     pinterest: faPinterest,
+    spotify: faSpotify,
   };
   const iconBackground = {
-    linkedin: "bg-linkedin",
+    linkedin: "bg-[#0A66C2]",
     github: "bg-[#24292e]",
     twitter: "bg-[#1DA1F2]",
-    instagram: "bg-instagram",
-    facebook: "bg-facebook",
-    tiktok: "bg-tiktok",
-    youtube: "bg-youtube",
-    twitch: "bg-twitch",
-    discord: "bg-discord",
-    snapchat: "bg-snapchat",
-    whatsapp: "bg-whatsapp",
-    telegram: "bg-telegram",
-    reddit: "bg-reddit",
-    pinterest: "bg-pinterest",
+    instagram: "bg-[#E1306C]",
+    facebook: "bg-[#4267B2]",
+    tiktok: "bg-[#000000]",
+    youtube: "bg-[#FF0000]",
+    twitch: "bg-[#6441A5]",
+    discord: "bg-[#7289DA]",
+    spotify: "bg-[#1DB954]",
   };
   const url = {
     LinkedIn: `https://www.linkedin.com/in/${username}`,
@@ -95,11 +95,7 @@ const SocialLinkCard = ({
     YouTube: `https://www.youtube.com/${username}`,
     Twitch: `https://www.twitch.com/${username}`,
     Discord: `https://www.discord.com/${username}`,
-    Snapchat: `https://www.snapchat.com/${username}`,
-    WhatsApp: `https://www.whatsapp.com/${username}`,
-    Telegram: `https://www.telegram.com/${username}`,
-    Reddit: `https://www.reddit.com/${username}`,
-    Pinterest: `https://www.pinterest.com/${username}`,
+    Spotify: `https://open.spotify.com/user/${id}`,
   };
 
   const profileUrl = url[type as keyof typeof url] || "#";
@@ -119,10 +115,10 @@ const SocialLinkCard = ({
             className={`w-10 h-10 ${isLinked ? "text-white" : "text-black"}`}
           />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 text-sm">
           <p>{username}</p>
 
-          <Badge variant={isLinked ? "success" : "secondary"}>
+          <Badge variant={isLinked ? "success" : "secondary"} className="w-min">
             {isLinked ? "Linked" : "Not Linked"}
           </Badge>
         </div>
