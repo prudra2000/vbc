@@ -27,10 +27,6 @@ export default function BasicCard({
   cardValues = {},
   showUsername = true,
   selectedInputs = [],
-  type,
-  className,
-  removeAvatar = false,
-  removeSocials = false,
 }: CardProps) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-neutral-200 px-6 sm:px-0">

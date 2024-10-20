@@ -14,6 +14,7 @@ export async function POST(req: NextRequest, { params }: { params: { provider: s
       where: { id: session.user.id },
       data: {
         authenticatedSocials: {
+          ...session.user.authenticatedSocials,
           [params.provider]: null,
         },
       },

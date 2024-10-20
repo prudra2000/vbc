@@ -2,9 +2,7 @@ import Avatar from "../avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
-  CheckCircle2,
   Link,
-  Linkedin,
   Mail,
   MapPin,
   Phone,
@@ -30,9 +28,6 @@ export default function BasicDarkCard({
   showUsername = true,
   selectedInputs = [],
   type,
-  className,
-  removeAvatar = false,
-  removeSocials = false,
 }: CardProps) {
   return (
     <div className="flex items-center justify-center min-h-screen  px-6 sm:px-0">

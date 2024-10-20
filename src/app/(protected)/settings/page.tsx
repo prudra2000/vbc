@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import Header from "@/components/header";
 import ClientSettings from "@/components/page-components/client-settings";
 import { Settings } from "lucide-react";

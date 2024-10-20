@@ -10,7 +10,6 @@ import SocialLinkCard from "../settings/socialLinkCard";
 
 const ClientSettings = () => {
   const { data: session, status } = useSession();
-  console.log(session);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   if (status === "loading") {
     return (
@@ -99,10 +98,6 @@ const ClientSettings = () => {
       const codeVerifier = generateCodeVerifier();
       const codeChallenge = await generateCodeChallenge(codeVerifier);
       const state = generateState(codeVerifier);
-
-      console.log("codeVerifier", codeVerifier);
-      console.log("codeChallenge", codeChallenge);
-      console.log("state", state);
 
       sessionStorage.setItem(`pkce_code_verifier_${state}`, codeVerifier);
 

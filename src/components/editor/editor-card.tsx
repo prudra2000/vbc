@@ -17,17 +17,6 @@ import {
   faLinkedin,
   faGithub,
   faTwitter,
-  faInstagram,
-  faFacebook,
-  faTiktok,
-  faYoutube,
-  faTwitch,
-  faDiscord,
-  faSnapchat,
-  faWhatsapp,
-  faTelegram,
-  faReddit,
-  faPinterest,
 } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
 import {
@@ -54,12 +43,10 @@ interface EditorForm {
 
 const EditorForm: React.FC<EditorForm> = ({
   isOpen = true,
-  onClose,
   formValues,
   onFormChange,
   selected,
   children,
-  onSelectChange = () => {},
 }) => {
   const { data: session } = useSession();
   if (!isOpen) return null;
@@ -79,7 +66,6 @@ const EditorForm: React.FC<EditorForm> = ({
 
   const handleFormChange = (values: any) => {
     onFormChange({ ...values, urls });
-    console.log("values", values);
   };
 
   const [selectedInputs, setSelectedInputs] = useState<string[]>(selected);
@@ -528,7 +514,6 @@ const EditorForm: React.FC<EditorForm> = ({
                                       session?.user?.authenticatedSocials
                                         ?.linkedin?.linkedinUsername
                                     }
-                                    test
                                   </div>
                                 </Button>
                               </Link>

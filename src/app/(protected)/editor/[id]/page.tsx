@@ -62,7 +62,6 @@ const EditorPage = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
-  const [nonEmptyCardData, setnonEmptyCardData] = useState<string[]>([]);
   const [formValues, setFormValues] = useState<FormValues>({
     userId: "",
     cardTitle: "",
@@ -165,7 +164,6 @@ const EditorPage = () => {
             const filteredData = Object.entries(digiMeCard.cardData.socialMedia)
               .filter(([key, value]) => keysToRetain.includes(key) && value)
               .map(([key]) => key);
-            setnonEmptyCardData(filteredData);
             setSelectedInputs(filteredData);
           } else {
             setError(`Failed to fetch card data: ${response.statusText}`);
@@ -272,7 +270,7 @@ const EditorPage = () => {
           >
             <div className="flex flex-col gap-2">
               <FormSuccess message={success || ""} />
-              <FormError message={""} />
+              <FormError message={error || ""} />
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   onClick={(e) => handleUpdateData(formValues, cardId, e)}

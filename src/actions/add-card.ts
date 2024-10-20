@@ -18,8 +18,6 @@ export const addCard = async (values: z.infer<typeof DigimedCardSchema>) => {
 
   const session = await auth();
 
-  // Debugging: Log the validated data
-  console.log("Validated Fields:", validatedFields.data);
 
   try {
     const newCard = await db.digiMeCard.create({

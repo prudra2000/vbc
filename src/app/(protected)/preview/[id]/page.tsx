@@ -3,15 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Card as PCard } from "@prisma/client";
 import BasicCard from "@/components/card-components/default-light";
-import FloatButton from "@/components/ui/floatButton";
-import { Eye, Fullscreen, PencilRuler, Share2 } from "lucide-react";
-import ShareModal from "@/components/card/card-qr-modal";
+import { Eye } from "lucide-react";
 import { GridLoader } from "react-spinners";
 import BasicDarkCard from "@/components/card-components/default-dark";
 import GlassLightCard from "@/components/card-components/glass-light";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import EditorHeader from "@/components/editor/editorHeader";
 import PreviewHeader from "@/components/preview/editorHeader";
 
 type FormValues = {
@@ -47,7 +42,6 @@ const PreviewPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
-  const [nonEmptyCardData, setnonEmptyCardData] = useState<string[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({
     linkedin: "",
     github: "",
@@ -167,7 +161,6 @@ const PreviewPage = () => {
               )
                 .filter(([key, value]) => keysToRetain.includes(key) && value)
                 .map(([key]) => key);
-              setnonEmptyCardData(filteredData);
               setSelectedInputs(filteredData);
             } else {
               setError("Card data is null or undefined");

@@ -27,10 +27,6 @@ export default function GlassLightCard({
   cardValues = {},
   showUsername = true,
   selectedInputs = [],
-  type,
-  className,
-  removeAvatar = false,
-  removeSocials = false,
 }: CardProps) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-700 via-blue-800 to-blue-950 px-6 sm:px-0">

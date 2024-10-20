@@ -66,7 +66,6 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
     };
     startTransition(async () => {
       const newCard = await addCard(starterValues);
-      console.log(newCard);
       setNewCard(newCard);
       setError(newCard?.error || "");
       setSuccess(newCard?.success || "");

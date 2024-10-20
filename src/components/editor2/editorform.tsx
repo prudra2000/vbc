@@ -51,7 +51,6 @@ const EditorForm: React.FC<EditorForm> = ({
   if (!isOpen) return null;
 
   const { data: session } = useSession();
-  console.log("session", session);
 
   const form = useForm<z.infer<typeof EditorSchema>>({
     resolver: zodResolver(EditorSchema),
@@ -68,7 +67,6 @@ const EditorForm: React.FC<EditorForm> = ({
 
   const handleFormChange = (values: any) => {
     onFormChange({ ...values, urls });
-    console.log("values", values);
   };
 
   const [selectedInputs, setSelectedInputs] = useState<string[]>(selected);
@@ -152,10 +150,8 @@ const EditorForm: React.FC<EditorForm> = ({
   };
 
   const handleAddElements = async (newElements: string[]): Promise<void> => {
-    console.log("newElements", newElements);
     setSelectedElements((prev) => {
       const updatedElements = Array.from(new Set([...prev, ...newElements]));
-      console.log("selectedElements", updatedElements); // Log the updated state
       return updatedElements;
     });
   };

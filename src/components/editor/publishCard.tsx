@@ -21,6 +21,7 @@ interface PublishCardModalProps {
   onClose: () => void;
   cardID: string;
   isPublished: boolean;
+  cardTitle?: string;
 }
 
 const PublishCardModal: React.FC<PublishCardModalProps> = ({
@@ -28,6 +29,7 @@ const PublishCardModal: React.FC<PublishCardModalProps> = ({
   onClose,
   cardID,
   isPublished,
+  cardTitle,
 }) => {
   const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
@@ -90,16 +92,13 @@ const PublishCardModal: React.FC<PublishCardModalProps> = ({
               </div>
             </DialogTitle>
             <DialogDescription>
-              {isPublished ? "Your card is currently published. Click to unpublish." : "Your card is currently unpublished. Click to publish."}
+              {isPublished ? "Your card is currently published and can be viewed by others. Click to unpublish." : "Your card is currently unpublished and cannot be viewed by others. Click to publish."}
             </DialogDescription>
           </DialogHeader>
-          <div className="w-full h-full flex flex-col gap-2">
-            {isPublished ? (
-              <Button onClick={handleUnpublishCard} className="w-full">Unpublish Card</Button>
-            ) : (
-              <Button onClick={handlePublishCard} className="w-full">Publish Card</Button>
-            )}
-            {isPublished && (
+          <div className="w-full h-full flex flex-col gap-4">
+
+          {cardTitle && <div className="flex "><p className=" text-black">Card Title: <span className="font-medium">{cardTitle}</span></p></div>}
+          {isPublished && (
             <div className="flex gap-2 justify-center items-center">
               <Input
                 value={`http://localhost:3000/card/${cardId}`} // Use cardId or cardID as needed
@@ -112,6 +111,12 @@ const PublishCardModal: React.FC<PublishCardModalProps> = ({
               </Button>
             </div>
             )}
+            {isPublished ? (
+              <Button onClick={handleUnpublishCard} className="w-full">Unpublish Card</Button>
+            ) : (
+              <Button onClick={handlePublishCard} className="w-full">Publish Card</Button>
+            )}
+            
           </div>
         </DialogContent>
       </Dialog>

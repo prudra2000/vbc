@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { db } from "@/lib/db";
-import { DigimedCardSchema, UpdateCardSchema } from "@/schemas/index";
+import { DigimedCardSchema } from "@/schemas/index";
 import { getPersonalCardByUserID } from "@/data/card";
 import { auth } from "@/auth";
 

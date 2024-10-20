@@ -1,7 +1,6 @@
 "use client";
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { addCard } from "@/actions/add-card";
 import { useSession } from "next-auth/react";
 import {
   Form,
@@ -15,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
-import { IdCard, X } from "lucide-react";
+import { IdCard } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -38,7 +37,6 @@ const EditCardNameModal: React.FC<EditCardNameModalProps> = ({
   onSubmit,
   cardID,
 }) => {
-  const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const form = useForm();

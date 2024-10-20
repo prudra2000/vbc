@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const code = searchParams.get("code");
   const state = searchParams.get("state");
-  console.log("code", code);
+
 
   if (!code) {
     return NextResponse.json(
@@ -66,11 +66,9 @@ export async function GET(req: NextRequest) {
         { status: 500 }
       );
     }
-    console.log("tokenResponse", tokenResponse);
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
 
-    console.log("accessToken", accessToken);
     if (!accessToken) {
       return NextResponse.json(
         { error: "Failed to retrieve access token" },
@@ -86,7 +84,6 @@ export async function GET(req: NextRequest) {
         },
       }
     );
-    console.log("profileResponse", profileResponse);
 
     if (!profileResponse.ok) {
       console.error("Profile response error:", await profileResponse.text());
@@ -98,7 +95,6 @@ export async function GET(req: NextRequest) {
 
     const profileData = await profileResponse.json();
 
-    console.log("profileData", profileData);
 
     if (!profileData) {
       return NextResponse.json(

@@ -43,10 +43,8 @@ const CardPage = () => {
   const { id } = useParams(); // Get the id from the URL
   const [card, setCard] = useState<PCard | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
-  const [nonEmptyCardData, setnonEmptyCardData] = useState<string[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({
     linkedin: "",
     github: "",
@@ -153,19 +151,15 @@ const CardPage = () => {
                 "reddit",
                 "pinterest",
               ];
-              const filteredData = Object.entries(digiMeCard.cardData.socialMedia)
+              const filteredData = Object.entries(
+                digiMeCard.cardData.socialMedia
+              )
                 .filter(([key, value]) => keysToRetain.includes(key) && value)
                 .map(([key]) => key);
-              setnonEmptyCardData(filteredData);
               setSelectedInputs(filteredData);
-            } else {
-              setError("Card data is null or undefined");
             }
-          } else {
-            setError(`Failed to fetch card data: ${response.statusText}`);
           }
         } catch (error) {
-          setError("Error fetching card data");
           console.error("Error fetching card data:", error);
         }
       }

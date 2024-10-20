@@ -34,6 +34,7 @@ import { useSession } from "next-auth/react";
 import { GridLoader } from "react-spinners";
 import EmbedModal from "../editor/embedModal";
 import PublishCardModal from "../editor/publishCard";
+
 const ClientDashboard = () => {
   const { data: session, status } = useSession();
   const [cards, setCards] = useState<DigiMeCard[]>([]);
@@ -45,6 +46,9 @@ const ClientDashboard = () => {
   const [currentCardId, setCurrentCardId] = useState<string | null>(null);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [isPublished, setIsPublished] = useState(false);
+  const [publishModalCardId, setPublishModalCardId] = useState<string | null>(null);
+
+
   useEffect(() => {
     const fetchCards = async () => {
       setLoading(true);
@@ -98,6 +102,7 @@ const ClientDashboard = () => {
         }}
         onSubmit={handleAddCard}
       />
+
       {cards.length > 0 ? (
         <div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -106,15 +111,16 @@ const ClientDashboard = () => {
               .map((card) => {
                 return (
                   <>
-                    {isPublishModalOpen && (
-                      <PublishCardModal
-                        cardID={card.id}
-                        isOpen={isPublishModalOpen}
-                        onClose={() => setIsPublishModalOpen(false)}
-                        isPublished={card.isPublished}
-                      />
-                    )}
                     <div key={card.id} className="flex flex-col h-full">
+                      {isPublishModalOpen && (
+                        <PublishCardModal
+                          cardID={currentCardId || ""}
+                          cardTitle={card.cardTitle}
+                          isOpen={isPublishModalOpen}
+                          onClose={() => setIsPublishModalOpen(false)}
+                          isPublished={card.isPublished}
+                        />
+                      )}
                       <DisplayCard
                         cardID={card.id}
                         cardTitle={card.cardTitle}
@@ -179,17 +185,49 @@ const ClientDashboard = () => {
                                       </DropdownMenuShortcut>
                                     </DropdownMenuItem>
                                   </Link>
-                                  <DropdownMenuItem
-                                    onClick={() => {
-                                      setCurrentCardId(card.id);
-                                      setIsQRModalOpen(true);
-                                    }}
-                                  >
-                                    <span>Share</span>
-                                    <DropdownMenuShortcut>
-                                      <Share2 className="w-4 h-4" />
-                                    </DropdownMenuShortcut>
-                                  </DropdownMenuItem>
+                                  {card.isPublished && (
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        setCurrentCardId(card.id);
+                                        setIsQRModalOpen(true);
+                                      }}
+                                    >
+                                      <span>Share</span>
+                                      <DropdownMenuShortcut>
+                                        <Share2 className="w-4 h-4" />
+                                      </DropdownMenuShortcut>
+                                    </DropdownMenuItem>
+                                  )}
+                                  {!card.isPublished && (
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        setCurrentCardId(card.id);
+                                        setIsPublishModalOpen(true);
+                                      }}
+                                    >
+                                      <span className="text-green-600">
+                                        Publish
+                                      </span>
+                                      <DropdownMenuShortcut>
+                                        <Share2 className="w-4 h-4 text-green-600" />
+                                      </DropdownMenuShortcut>
+                                    </DropdownMenuItem>
+                                  )}
+                                  {card.isPublished && (
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        setCurrentCardId(card.id);
+                                        setIsPublishModalOpen(true);
+                                      }}
+                                    >
+                                      <span className="text-destructive">
+                                        Unpublish
+                                      </span>
+                                      <DropdownMenuShortcut>
+                                        <Send className="w-4 h-4 text-destructive" />
+                                      </DropdownMenuShortcut>
+                                    </DropdownMenuItem>
+                                  )}
                                   <DropdownMenuItem
                                     onClick={() => {
                                       setIsEmbedModalOpen(true);

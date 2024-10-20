@@ -56,7 +56,6 @@ const EmbedCardCode: React.FC<EmbedCardCodeProps> = ({
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`); 
         }
-        const data = await response.text();
         setCode(embedCode);
       } catch (error) {
         console.error("Error fetching code: ", error);

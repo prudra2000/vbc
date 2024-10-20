@@ -116,8 +116,8 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
               onClick={() => setIsPublishModalOpen(true)}
               size="sm"
             >
-              <Send className="w-4 h-4 text-green-500" />
-              <p className="text-xs hidden md:block">Publish</p>
+              <Send className="w-4 h-4 text-green-600" />
+              <p className="text-xs hidden md:block text-green-600">Publish</p>
             </Button>
           )}
         </div>

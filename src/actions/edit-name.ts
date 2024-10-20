@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { db } from "@/lib/db";
-import { DigimedCardSchema, UpdateCardSchema } from "@/schemas/index";
+import { DigimedCardSchema } from "@/schemas/index";
 import { getPersonalCardByUserID } from "@/data/card";
 import { auth } from "@/auth";
 
@@ -31,10 +31,6 @@ export const editCardName = async (cardID:string, values: z.infer<typeof Digimed
       error: "Card not found",
     };
   }
-
-  type CardData = {
-    cardTitle: string;
-  };
 
 
   try {
