@@ -62,7 +62,7 @@ const EmbedCardCode: React.FC<EmbedCardCodeProps> = ({
       }
     };
     fetchCode();
-  }, [githubFileUrl]);
+  }, [githubFileUrl, embedCode]);
 
   const [isCopied, setIsCopied] = useState(false);
   return (

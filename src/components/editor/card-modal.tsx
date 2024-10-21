@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
-import { IdCard, X } from "lucide-react";
+import { IdCard } from "lucide-react";
 import {
   Select,
   SelectTrigger,
@@ -34,16 +34,13 @@ import {
 interface CardModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => Promise<void>;
 }
 
-const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
+const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose}) => {
   const { data: session } = useSession();
-  const [CardCreated, setCardCreated] = useState(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const form = useForm();
-  const [newCard, setNewCard] = useState<any>(null); // Add state for newCard
   const handleAddCard = async (data: any) => {
     setError("");
     setSuccess("");
@@ -66,11 +63,9 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose, onSubmit }) => {
     };
     startTransition(async () => {
       const newCard = await addCard(starterValues);
-      setNewCard(newCard);
       setError(newCard?.error || "");
-      setSuccess(newCard?.success || "");
       if (newCard) {
-        setCardCreated(true);
+        setSuccess(newCard?.success || "");
         onClose();
         window.location.reload();
       }

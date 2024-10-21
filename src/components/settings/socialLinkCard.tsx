@@ -16,7 +16,6 @@ import {
   faPinterest,
   faSpotify,
 } from "@fortawesome/free-brands-svg-icons";
-import { Chip } from "../ui/chip";
 import { Button } from "../ui/button";
 import {
   EllipsisVertical,
@@ -129,11 +128,12 @@ const SocialLinkCard = ({
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Button variant="icon" size="sm">
-                  <EllipsisVertical className="w-5" />
+                  <EllipsisVertical className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>{type}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
                 <Link href={profileUrl} target="_blank">
                   <DropdownMenuItem>
                     <span className="">View Profile</span>

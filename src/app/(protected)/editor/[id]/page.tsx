@@ -14,11 +14,13 @@ import { FormSuccess } from "@/components/form-success";
 import EditorHeader from "@/components/editor/editorHeader";
 import { EditorPreview } from "@/components/editor/editor-preview";
 import { GridLoader } from "react-spinners";
+import { CardConfig } from "@/types/cardTypes";
 
 type FormValues = {
   userId: string;
   cardTitle: string;
   cardStyle: string;
+  cardConfig: CardConfig;
   cardData: {
     name: string;
     image: string;
@@ -66,6 +68,9 @@ const EditorPage = () => {
     userId: "",
     cardTitle: "",
     cardStyle: "",
+    cardConfig: {
+      showSocialUsername: true,
+    },
     cardData: {
       name: "",
       image: "",
@@ -100,9 +105,12 @@ const EditorPage = () => {
     },
   });
 
-  const handleFormChange = (newValues: FormValues) => {
-    setFormValues(newValues);
-  };
+  const handleFormChange = (newValues: { cardData: FormValues['cardData']; cardConfig: FormValues['cardConfig'] }) => {
+    setFormValues((prevValues) => ({
+        ...prevValues,
+        ...newValues,
+    }));
+};
 
   useEffect(() => {
     const fetchCard = async () => {
@@ -117,6 +125,9 @@ const EditorPage = () => {
               userId: digiMeCard.userId || "",
               cardTitle: digiMeCard.cardTitle || "",
               cardStyle: digiMeCard.cardStyle || "",
+              cardConfig: digiMeCard.cardConfig || {
+                showSocialUsername: true,
+              },
               cardData: {
                 name: digiMeCard.cardData.name || "",
                 image: digiMeCard.cardData.image || "",
@@ -199,6 +210,9 @@ const EditorPage = () => {
       userId: session?.user?.id || "",
       cardTitle: formValues.cardTitle || "",
       cardStyle: formValues.cardStyle || "",
+      cardConfig: {
+        showSocialUsername: formValues.cardConfig?.showSocialUsername ?? true,
+      },
       cardData: {
         name: formValues.cardData.name || "",
         image: formValues.cardData.image || "",

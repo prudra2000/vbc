@@ -10,9 +10,9 @@ import {
 } from "lucide-react";
 import SocialLinks from "../ui/SocialLinks";
 import { Separator } from "@/components/ui/separator";
-
+import { CardData, defaultCardData } from "@/types/cardTypes";
 interface CardProps {
-  cardValues?: Record<string, any>;
+  cardValues?: {cardData: CardData};
   urls?: Record<string, string>;
   showUsername: boolean;
   selectedInputs?: string[];
@@ -24,9 +24,10 @@ interface CardProps {
 
 export default function GlassLightCard({
   urls = {},
-  cardValues = {},
+  cardValues = {cardData: defaultCardData},
   showUsername = true,
   selectedInputs = [],
+  type,
 }: CardProps) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-700 via-blue-800 to-blue-950 px-6 sm:px-0">
@@ -124,7 +125,7 @@ export default function GlassLightCard({
             <a
             href={`data:text/vcard;charset=utf-8,BEGIN:VCARD%0AVERSION:3.0%0AN:;${encodeURIComponent(cardValues.cardData.name)};;;%0AFN:${encodeURIComponent(cardValues.cardData.name)}%0AORG:${encodeURIComponent(cardValues.cardData.company)}%0ATEL;TYPE=WORK,VOICE:${encodeURIComponent(cardValues.cardData.phone)}%0AEMAIL:${encodeURIComponent(cardValues.cardData.email)}%0AURL:${encodeURIComponent(cardValues.cardData.website)}%0AIMAGE;VALUE=URI:${encodeURIComponent(cardValues.cardData.image)}%0A%0AEND:VCARD`}
             // Ensure cardValues.image contains a valid URL
-            download={`${cardValues.name}.vcf`}
+            download={`${cardValues.cardData.name}.vcf`}
             className="break-words w-full justify-start"
             >
               <Button className="w-full justify-start bg-white text-black hover:bg-neutral-200 hover:text-black">
@@ -137,14 +138,14 @@ export default function GlassLightCard({
             )}
           </div>
           <div>
-            {cardValues.socialMedia.length > 0 && (
+            {Object.values(cardValues.cardData.socialMedia).some(value => value) && (
               <div>
                 <Separator className="my-4 bg-white/15" />
                 <SocialLinks
                   urls={urls}
                   showUsername={showUsername}
                   selectedInputs={selectedInputs}
-                  type="glassLight"
+                  type={type}
                 />{" "}
               </div>
             )}

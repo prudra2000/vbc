@@ -10,9 +10,10 @@ import {
 } from "lucide-react";
 import SocialLinks from "../ui/SocialLinks";
 import { Separator } from "@/components/ui/separator";
+import { CardData, defaultCardData } from "@/types/cardTypes";
 
 interface CardProps {
-  cardValues?: Record<string, any>;
+  cardValues?: {cardData: CardData};
   urls?: Record<string, string>;
   showUsername: boolean;
   selectedInputs?: string[];
@@ -24,7 +25,7 @@ interface CardProps {
 
 export default function BasicDarkCard({
   urls = {},
-  cardValues = {},
+  cardValues = {cardData: defaultCardData},
   showUsername = true,
   selectedInputs = [],
   type,
@@ -45,12 +46,12 @@ export default function BasicDarkCard({
               {cardValues.cardData.name}
             </h2>
             <div className="flex flex-col items-center ">
-              {cardValues.tagline && (
+              {cardValues.cardData.tagline && (
                 <p className="text-sm text-neutral-400">
                   {cardValues.cardData.tagline}
                 </p>
               )}
-              {cardValues.company && (
+              {cardValues.cardData.company && (
                 <p className="text-sm text-neutral-400">
                   {cardValues.cardData.company}
                 </p>
@@ -61,7 +62,7 @@ export default function BasicDarkCard({
         <CardContent className="p-6">
           <Separator className="mb-4 bg-neutral-700" />
           <div className="flex flex-col space-y-4">
-            {cardValues.phone && (
+            {cardValues.cardData.phone && (
               <a
                 href={`tel:${cardValues.cardData.phone}`}
                 target="_blank"
@@ -71,12 +72,12 @@ export default function BasicDarkCard({
                 <Button variant="outline" className="w-full justify-start border-neutral-700 text-white hover:bg-neutral-700 hover:text-white">
                   <Phone className="mr-2 h-4 w-4" />
                   <div className="flex flex-col items-start">
-                    <span className="text-xs ">{cardValues.phone}</span>
+                    <span className="text-xs ">{cardValues.cardData.phone}</span>
                   </div>
                 </Button>
               </a>
             )}
-            {cardValues.email && (
+            {cardValues.cardData.email && (
               <a
                 href={`mailto:${cardValues.cardData.email}`}
                 target="_blank"
@@ -91,7 +92,7 @@ export default function BasicDarkCard({
                 </Button>
               </a>
             )}
-            {cardValues.website && (
+            {cardValues.cardData.website && (
               <a
                 href={cardValues.cardData.website}
                 target="_blank"
@@ -106,7 +107,7 @@ export default function BasicDarkCard({
                 </Button>
               </a>
             )}
-            {cardValues.location && (
+            {cardValues.cardData.location && (
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${cardValues.cardData.location}`}
                 target="_blank"
@@ -138,7 +139,7 @@ export default function BasicDarkCard({
             )}
           </div>
           <div>
-            {cardValues.socialMedia.length > 0 && (
+            {Object.values(cardValues.cardData.socialMedia).some(value => value) && (
               <div>
                 <Separator className="my-4 bg-neutral-700" />
                 <SocialLinks

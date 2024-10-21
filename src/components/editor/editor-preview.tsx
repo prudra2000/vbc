@@ -1,13 +1,13 @@
 import React from "react";
-import PreviewCard from "../card/preview-card";
 import BasicCard from "../card-components/default-light";
 import BasicDarkCard from "../card-components/default-dark";
 import GlassLightCard from "../card-components/glass-light";
-
+import { CardConfig } from "@/types/cardTypes";
 interface EditorPreviewProps {
   formValues: {
     cardTitle: string;
     cardStyle: string;
+    cardConfig: CardConfig;
     cardData: {
       name: string;
       image: string;
@@ -37,7 +37,6 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   formValues,
   selectedInputs,
 }) => {
-  const showUsername = true;
   const links = {
     linkedin: `https://www.linkedin.com/in/${formValues.cardData.socialMedia.linkedin}`,
     github: `https://www.github.com/${formValues.cardData.socialMedia.github}`,
@@ -55,11 +54,9 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
         <BasicCard
           cardValues={{
             ...formValues,
-            socialMedia: JSON.stringify(formValues.cardData.socialMedia),
-            urls: JSON.stringify(links),
           }}
           urls={links}
-          showUsername={true}
+          showUsername={formValues.cardConfig.showSocialUsername || true}
           selectedInputs={selectedInputs}
           type={formValues.cardStyle}
         />
@@ -69,11 +66,9 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
           <BasicDarkCard
             cardValues={{
               ...formValues,
-              socialMedia: JSON.stringify(formValues.cardData.socialMedia),
-              urls: JSON.stringify(links),
             }}
             urls={links}
-            showUsername={true}
+            showUsername={formValues.cardConfig.showSocialUsername || true}
             selectedInputs={selectedInputs}
             type={formValues.cardStyle}
           />
@@ -83,11 +78,9 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
         <GlassLightCard
           cardValues={{
             ...formValues,
-            socialMedia: JSON.stringify(formValues.cardData.socialMedia),
-            urls: JSON.stringify(links),
           }}
           urls={links}
-          showUsername={true}
+          showUsername={formValues.cardConfig.showSocialUsername || true}
           selectedInputs={selectedInputs}
           type={formValues.cardStyle}
         />

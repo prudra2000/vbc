@@ -13,9 +13,10 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import DigiMeLogo from "@/components/DigiMeLogo";
+import PricingTable from "@/components/pricing-table-pub";
 const HomePage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-200">
+    <div className="min-h-screen bg-white">
       <header className="container mx-auto px-4 h-10 w-full">
         <nav className="flex justify-between items-center pt-4">
           <DigiMeLogo />
@@ -78,45 +79,7 @@ const HomePage: React.FC = () => {
         </section>
 
         <section className="flex flex-col  items-center">
-          <div className="flex flex-col items-center">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Features</h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Join thousands of professionals using DigiMe
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Smartphone,
-                title: "Mobile-First",
-                description: "Optimized for smartphones and tablets",
-              },
-              {
-                icon: Globe,
-                title: "Share Anywhere",
-                description: "Easy to share via QR code or link",
-              },
-              {
-                icon: Zap,
-                title: "Instant Updates",
-                description: "Change your info in real-time",
-              },
-            ].map((feature, index) => (
-              <div key={index}>
-                <Card className="shadow-md rounded-lg border border-blue-600">
-                  <CardContent className="flex flex-col items-center p-6">
-                    <feature.icon className="w-12 h-12 text-blue-600 mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 text-center">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
+          <PricingTable />
         </section>
       </main>
 

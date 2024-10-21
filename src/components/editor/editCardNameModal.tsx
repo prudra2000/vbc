@@ -1,7 +1,6 @@
 "use client";
 import { startTransition, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useSession } from "next-auth/react";
 import {
   Form,
   FormField,
@@ -23,20 +22,19 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { editCardName } from "@/actions/edit-name";
-
+import { useSession } from "next-auth/react";
 interface EditCardNameModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => Promise<void>;
   cardID: string;
 }
 
 const EditCardNameModal: React.FC<EditCardNameModalProps> = ({
   isOpen,
   onClose,
-  onSubmit,
   cardID,
 }) => {
+  const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const form = useForm();
@@ -45,7 +43,9 @@ const EditCardNameModal: React.FC<EditCardNameModalProps> = ({
     setError("");
     setSuccess("");
     const starterValues = {
+      userId: session?.user?.id || "", // Include userId
       cardTitle: data.cardTitle,
+      cardData: {}, // Include cardData (can be empty or existing data)
     };
     startTransition(async () => {
       const result = await editCardName(cardID, starterValues);

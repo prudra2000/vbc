@@ -30,12 +30,16 @@ import { Switch } from "../ui/switch";
 import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { CirclePlus } from "lucide-react";
+import { CardData, CardConfig } from "@/types/cardTypes";
 
 interface EditorForm {
   isOpen?: boolean;
   onClose?: () => void;
-  formValues: any;
-  onFormChange: (newValues: any) => void;
+  formValues: { cardData: CardData; cardConfig: CardConfig };
+  onFormChange: (newValues: {
+    cardData: CardData;
+    cardConfig: CardConfig;
+  }) => void;
   selected: string[];
   onSelectChange: (selectedInputs: string[]) => void;
   children: React.ReactElement;
@@ -61,7 +65,7 @@ const EditorForm: React.FC<EditorForm> = ({
   }, [formValues]);
 
   const [urls, setUrls] = useState<Record<string, string>>(
-    formValues.socialMedia || {} // Ensure socialMedia is an object
+    formValues.cardData.socialMedia || {} // Ensure socialMedia is an object
   );
 
   const handleFormChange = (values: any) => {
@@ -112,10 +116,8 @@ const EditorForm: React.FC<EditorForm> = ({
 
   useEffect(() => {
     setSelectedInputs(selected);
-    setUrls(formValues.urls);
-  }, [selected, formValues.urls]);
-
-
+    setUrls(formValues.cardData.socialMedia || {});
+  }, [selected, formValues.cardData.socialMedia]);
 
   const isEmpty =
     session?.user?.authenticatedSocials?.linkedin?.linkedinId === undefined &&
@@ -593,6 +595,22 @@ const EditorForm: React.FC<EditorForm> = ({
                             </div>
                           </div>
                         )}
+                        <FormField
+                          control={form.control}
+                          name="cardConfig.showSocialUsername"
+                          render={({ field }) => (
+                            <FormItem className="">
+                              <FormControl>
+                                <Switch
+                                  checked={!!field.value}
+                                  onCheckedChange={(checked) => {
+                                    field.onChange(checked ? true : false);
+                                  }}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        ></FormField>
                       </div>
                     </FormControl>
                   </FormItem>

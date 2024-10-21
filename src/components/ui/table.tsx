@@ -1,76 +1,120 @@
-import React from "react";
+import * as React from "react"
 
-interface TableProps {
-  className?: string;
-  columns: Array<{ col1: string; col2: string; col3: string }>;
-  data: Array<{ prop: string; type: string; default: JSX.Element }>;
+import { cn } from "@/lib/utils"
+
+const Table = React.forwardRef<
+  HTMLTableElement,
+  React.HTMLAttributes<HTMLTableElement>
+>(({ className, ...props }, ref) => (
+  <div className="relative w-full overflow-auto">
+    <table
+      ref={ref}
+      className={cn("w-full caption-bottom text-sm", className)}
+      {...props}
+    />
+  </div>
+))
+Table.displayName = "Table"
+
+const TableHeader = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <thead ref={ref} className={cn("[&_tr]:border-b", className)} {...props} />
+))
+TableHeader.displayName = "TableHeader"
+
+const TableBody = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <tbody
+    ref={ref}
+    className={cn("[&_tr:last-child]:border-0", className)}
+    {...props}
+  />
+))
+TableBody.displayName = "TableBody"
+
+const TableFooter = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(({ className, ...props }, ref) => (
+  <tfoot
+    ref={ref}
+    className={cn(
+      "border-t bg-neutral-100/50 font-medium [&>tr]:last:border-b-0 dark:bg-neutral-800/50",
+      className
+    )}
+    {...props}
+  />
+))
+TableFooter.displayName = "TableFooter"
+
+const TableRow = React.forwardRef<
+  HTMLTableRowElement,
+  React.HTMLAttributes<HTMLTableRowElement>
+>(({ className, ...props }, ref) => (
+  <tr
+    ref={ref}
+    className={cn(
+      "border-b transition-colors hover:bg-neutral-100/50 data-[state=selected]:bg-neutral-100 dark:hover:bg-neutral-800/50 dark:data-[state=selected]:bg-neutral-800",
+      className
+    )}
+    {...props}
+  />
+))
+TableRow.displayName = "TableRow"
+
+const TableHead = React.forwardRef<
+  HTMLTableCellElement,
+  React.ThHTMLAttributes<HTMLTableCellElement>
+>(({ className, ...props }, ref) => (
+  <th
+    ref={ref}
+    className={cn(
+      "h-10 px-2 text-left align-middle font-medium text-neutral-500 [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] dark:text-neutral-400",
+      className
+    )}
+    {...props}
+  />
+))
+TableHead.displayName = "TableHead"
+
+const TableCell = React.forwardRef<
+  HTMLTableCellElement,
+  React.TdHTMLAttributes<HTMLTableCellElement>
+>(({ className, ...props }, ref) => (
+  <td
+    ref={ref}
+    className={cn(
+      "p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+      className
+    )}
+    {...props}
+  />
+))
+TableCell.displayName = "TableCell"
+
+const TableCaption = React.forwardRef<
+  HTMLTableCaptionElement,
+  React.HTMLAttributes<HTMLTableCaptionElement>
+>(({ className, ...props }, ref) => (
+  <caption
+    ref={ref}
+    className={cn("mt-4 text-sm text-neutral-500 dark:text-neutral-400", className)}
+    {...props}
+  />
+))
+TableCaption.displayName = "TableCaption"
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
 }
-
-const Table: React.FC<TableProps> = ({ className, data, columns }) => {
-  return (
-    <div className="border border-1 border-white/20 rounded-lg overflow-hidden text-white">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-white/20">
-          <thead className="">
-            <tr className="text-start text-xs font-medium text-white">
-              <th scope="col" className="text-start px-6 py-2 bg-[#1e293b]">
-                <h2 className="text-md font-semibold text-white">
-                  {columns[0].col1}
-                </h2>
-              </th>
-              <th scope="col" className=" text-start px-6 py-2 bg-[#1e293b]">
-                <h2 className="text-md font-semibold text-white ">
-                  {columns[0].col2}
-                </h2>
-              </th>
-              <th scope="col" className=" text-start px-6 py-2 bg-[#1e293b]">
-                <h2 className="text-md font-semibold text-white ">
-                  {columns[0].col3}
-                </h2>
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/20">
-            {data.map((item, index) => (
-              <tr key={index}>
-                <td className="px-3 py-2">
-                  <div className="flex flex-row w-max px-3 py-1 justify-start items-end rounded-lg text-sm bg-white/10 text-[#F8CC38]">
-                    <p className="text-xs">
-                      {item.prop.split("*").map((part, i) => (
-                        <>
-                          {part}
-                          {i < item.prop.split("*").length - 1 && (
-                            <span className="text-error-primary text-sm">
-                              *
-                            </span>
-                          )}
-                        </>
-                      ))}
-                    </p>
-                  </div>
-                </td>
-                <td className="px-6 py-2">
-                  <div className="flex flex-row w-max px-3 py-1 justify-start items-end rounded-lg text-sm bg-white/10 text-paragraph-secondary">
-                    <p className="text-xs">
-                      {item.type.split("*").map((part, i) => (
-                        <>
-                          {part}
-                          {i < item.type.split("*").length - 1 && (
-                            <span className="text-error-primary">*</span>
-                          )}
-                        </>
-                      ))}
-                    </p>
-                  </div>
-                </td>
-                <td className="px-6 py-2">{item.default}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-};
-
-export default Table;

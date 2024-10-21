@@ -155,6 +155,9 @@ export const DigimedCardSchema = z.object({
   userId: z.string().min(1),
   cardTitle: z.string(),
   cardStyle: z.string().optional(),
+  cardConfig: z.object({
+    showSocialUsername: z.boolean().optional(),
+  }).optional(),
   isPublished: z.boolean().optional(),
   cardData: z.object({
     name: z.string().optional(),

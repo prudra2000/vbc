@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 1rem;
+  border-radius: var(--radius);
   min-height: 17rem;
   color: white;
   background-color: #131723;

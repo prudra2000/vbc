@@ -29,6 +29,13 @@ model User {
   cards                 Card[]
   personalCards         PersonalCard[]
   digiMeCards           DigiMeCard[]
+  priceId               String?
+  hasAccess             Boolean                @default(false)
+  stripeCustomerId      String?
+  stripeSubscriptionId  String?
+  stripeCurrentPeriodEnd DateTime?
+  stripeCurrentPeriodStart DateTime?
+  stripeSubscriptionStatus String?
 }
 
 model Account {
@@ -95,6 +102,7 @@ model DigiMeCard{
   cardTitle String
   userId      String
   cardStyle   String
+  cardConfig Json?
   cardData    Json
   isPublished Boolean @default(false)
   createdAt   DateTime @default(now())
