@@ -164,7 +164,6 @@ const ClientDashboard = () => {
                                   {card.isPublished === false && (
                                     <Link
                                       href={`/preview/${card.id}`}
-                                      target="_blank"
                                     >
                                       <DropdownMenuItem>
                                         <span>Preview Card</span>

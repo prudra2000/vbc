@@ -17,6 +17,13 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import "@/app/CardStyles.css";
 import { Button } from "./button";
+import { BadgeCheck } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "./tooltip";
 
 const socialIcons = {
   linkedin: faLinkedin,
@@ -74,9 +81,7 @@ const SocialLinks = ({
   selectedInputs,
   type = "primary",
 }: SocialLinksProps) => {
-  const links = {
-    
-  }
+  const links = {};
   const renderSocialLink = (
     platform: keyof typeof socialIcons,
     url: string | undefined
@@ -85,7 +90,9 @@ const SocialLinks = ({
       const username = platformRegex(url, platform);
       const icon = socialIcons[platform];
       return username ? (
-        <div key={platform}> {/* Add a unique key here */}
+        <div key={platform}>
+          {" "}
+          {/* Add a unique key here */}
           {showUsername ? (
             <a
               href={url}
@@ -93,11 +100,32 @@ const SocialLinks = ({
               rel="noopener noreferrer"
               key={platform}
             >
-              <Button variant="outline" className={`w-full justify-start ${type === "defaultDark" ? "border-neutral-700 text-white hover:bg-neutral-700 hover:text-white" : ""} ${type === "glassLight" ? "border-white/15 text-white hover:bg-white/10 hover:text-white" : ""}`}>
-                <FontAwesomeIcon icon={icon} className=" mr-2 w-4 h-4" />
-                <p className=" underline hover:text-blue-500 text-xs">
-                  {username}
-                </p>
+              <Button
+                variant="outline"
+                className={`w-full justify-between ${
+                  type === "defaultDark"
+                    ? "border-neutral-700 text-white hover:bg-neutral-700 hover:text-white"
+                    : ""
+                } ${
+                  type === "glassLight"
+                    ? "border-white/15 text-white hover:bg-white/10 hover:text-white"
+                    : ""
+                }`}
+              >
+                <div className="flex items-center">
+                  <FontAwesomeIcon icon={icon} className=" mr-2 w-4 h-4" />
+                  <p className=" underline hover:text-blue-500 text-xs">
+                    {username}
+                  </p>
+                </div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger><BadgeCheck className={`w-4 h-4`} /></TooltipTrigger>
+                    <TooltipContent>
+                      Verified
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </Button>
             </a>
           ) : (
@@ -108,7 +136,10 @@ const SocialLinks = ({
                 rel="noopener noreferrer"
                 key={platform}
               >
-                <Button variant="outline" className="w-full justify-start p-0 px-2">
+                <Button
+                  variant="outline"
+                  className="w-full justify-start p-0 px-2"
+                >
                   {" "}
                   <FontAwesomeIcon icon={icon} className="w-4 h-4" />
                 </Button>

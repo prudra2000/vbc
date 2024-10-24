@@ -9,6 +9,7 @@ import {
   X,
   LayoutDashboard,
   Settings,
+  CreditCard,
 } from "lucide-react";
 import UserInfo from "./user-info";
 
@@ -118,6 +119,14 @@ const Navbar = ({
               <LayoutDashboard className="w-4 h-4 stroke-blue-800" />
               <span className="ml-1 text-accent-primary rounded-md px-1 text-sm">
                 Darshboard
+              </span>
+            </Button>
+          </Link>
+          <Link href="/subscribe">
+            <Button variant="link" size="sm" className="hover:bg-slate-100">
+              <CreditCard className="w-4 h-4 stroke-blue-800" />
+              <span className="ml-1 text-accent-primary rounded-md px-1 text-sm">
+                Subscribe
               </span>
             </Button>
           </Link>

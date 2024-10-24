@@ -214,6 +214,17 @@ const ClientSettings = () => {
               </Button>
             </div>
             <hr />
+            <div className="flex flex-row justify-between items-center text-sm">
+              <p>
+                <strong className="font-[600]">Plan:</strong>{" "}
+                {session?.user?.hasAccess
+                  ? session.user.hasAccess.toString()
+                  : "Free"}
+              </p>
+              <Button variant="outline" size="sm">
+                Edit
+              </Button>
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-4 bg-white p-4 rounded-lg text-black shadow-md">

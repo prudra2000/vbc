@@ -25,6 +25,7 @@ declare module "next-auth" {
         spotifyUsername: string;
       };
     };
+    hasAccess: boolean;
   }
 
   interface Session {

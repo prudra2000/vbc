@@ -93,7 +93,11 @@ export default function GlassLightCard({
             )}
             {cardValues.cardData.website && (
               <a
-                href={cardValues.cardData.website}
+              href={
+                cardValues.cardData.website.startsWith('http://') || cardValues.cardData.website.startsWith('https://')
+                  ? cardValues.cardData.website
+                  : `http://${cardValues.cardData.website}`
+              }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="break-words w-full justify-start"

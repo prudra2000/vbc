@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { Pencil, Fullscreen, Send, PencilRuler, Share, Share2 } from "lucide-react";
+import { Pencil, Fullscreen, Send, PencilRuler, Share, Share2, Eye } from "lucide-react";
 
 import Link from "next/link";
 import EditCardNameModal from "../editor/editCardNameModal";
@@ -34,7 +34,6 @@ const PreviewHeader: React.FC<PreviewHeaderProps> = ({
           cardID={cardID}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSubmit={() => Promise.resolve()}
         />
       )}
       {isPreviewModalOpen && (
@@ -60,66 +59,66 @@ const PreviewHeader: React.FC<PreviewHeaderProps> = ({
           cardId={cardID}
         />
       )}
-      <div className="flex flex-row justify-between items-center bg-gradient-to-r from-blue-500 to-purple-500 py-10 px-5 rounded-md shadow-md">
-        <div className="flex items-center gap-2 text-white justify-center ">
+      <div className="flex flex-row justify-between items-center bg-white py-2 px-5 border-b-2 border-neutral-200">
+        <div className="flex items-center gap-2 justify-center text-black">
           <div>{icon}</div>
           <div className="flex flex-row justify-center items-center">
-            <h1 className="text-lg sm:text-2xl font-semibold">{headerTitle}</h1>
+            <h1 className="text-sm font-[600]">{headerTitle}</h1>
 
             <div
-              className="relative group bg-white/10 hover:bg-white/20 rounded-md px-2 ml-1 py-1"
+              className="relative group bg-neutral-100 hover:bg-neutral-200 transition-colors rounded-md px-2 ml-1 py-1"
               onClick={() => setIsModalOpen(true)}
             >
-              <h1 className="text-xs sm:text-2xl font-semibold text-white underline decoration-2 underline-offset-[3px] ">
+              <h1 className="text-sm font-[600] text-black underline decoration underline-offset-[2px] ">
                 {cardTitle}
               </h1>
               <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-md p-1">
                 {/* Replace with your edit icon component */}
-                <Pencil className=" w-4 h-4 text-blue-500" />
+                <Pencil className=" w-3 h-3 text-blue-500" />
               </div>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Link href={`/editor/${cardID}`}>
-            <Button
-              className="flex items-center gap-2 text-black"
-              variant="header"
-          >
-            <PencilRuler className="w-4 h-4" />
-              <p className="text-sm hidden md:block">Edit</p>
+            <Button className="flex items-center gap-2 text-black" variant="header" size="sm">
+              <PencilRuler className="w-4 h-4" />
+              <p className="text-xs hidden md:block">Edit</p>
             </Button>
           </Link>
           {isPublished && (
-          <Button
-            className="flex items-center gap-2 text-black"
-            onClick={() => setIsPublishModalOpen(true)}
-            variant="header"
-          >
-            <Send className="w-4 h-4 text-destructive" />
-            <p className="text-sm hidden md:block">Unpublish</p>
-          </Button>
-          
+            <Button
+              className="flex items-center gap-2 text-black"
+              variant="header"
+              onClick={() => setIsPublishModalOpen(true)}
+              size="sm"
+            >
+              <Send className="w-4 h-4 text-destructive" />
+              <p className="text-xs hidden md:block">
+                Unpublish
+              </p>
+            </Button>
           )}
           {isPublished && (
-          <Button
-            className="flex items-center gap-2 text-black"
-            onClick={() => setIsShareModalOpen(true)}
-            variant="header"
-          >
-            <Share2 className="w-4 h-4" />
-            <p className="text-sm hidden md:block">Share</p>
-          </Button>
-          
+            <Button
+              className="flex items-center gap-2  text-black"
+              variant="header"
+              onClick={() => setIsShareModalOpen(true)}
+              size="sm"
+            >
+              <Share2 className="w-4 h-4" />
+              <p className="text-xs hidden md:block">Share</p>
+            </Button>
           )}
           {!isPublished && (
             <Button
               className="flex items-center gap-2 text-black"
-              onClick={() => setIsPublishModalOpen(true)}
               variant="header"
+              onClick={() => setIsPublishModalOpen(true)}
+              size="sm"
             >
-              <Send className="w-4 h-4 text-green-500" />
-              <p className="text-sm hidden md:block">Publish</p>
+              <Send className="w-4 h-4 text-green-600" />
+              <p className="text-xs hidden md:block text-green-600">Publish</p>
             </Button>
           )}
         </div>

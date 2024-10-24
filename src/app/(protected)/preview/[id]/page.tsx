@@ -189,17 +189,17 @@ const PreviewPage = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="relative h-full pt-8 px-10 bg-gray-100 gap-4">
+    <div className="relative h-full  bg-gray-100 gap-4">
       <div className="mb-5">
         <PreviewHeader
           headerTitle={"Preview:"}
           cardTitle={card?.cardTitle || ""}
           cardID={card?.id || ""}
-          icon={<Eye className="text-white" />}
+          icon={<Eye className="text-black w-5 h-5"/>}
           isPublished={card?.isPublished || false}
         />
       </div>
-      <div className="overflow-hidden rounded-md">
+      <div className="overflow-hidden px-5 rounded-md ">
         {digiMeCard.cardStyle === "defaultLight" && (
           <BasicCard
             cardValues={{

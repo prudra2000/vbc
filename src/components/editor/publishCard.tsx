@@ -34,7 +34,6 @@ const PublishCardModal: React.FC<PublishCardModalProps> = ({
   const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  
 
   const handlePublishCard = async () => {
     setError("");
@@ -69,7 +68,7 @@ const PublishCardModal: React.FC<PublishCardModalProps> = ({
         onClose();
         window.location.reload();
       }
-    }); 
+    });
   };
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -92,31 +91,56 @@ const PublishCardModal: React.FC<PublishCardModalProps> = ({
               </div>
             </DialogTitle>
             <DialogDescription>
-              {isPublished ? "Your card is currently published and can be viewed by others. Click to unpublish." : "Your card is currently unpublished and cannot be viewed by others. Click to publish."}
+              {isPublished
+                ? "Your card is currently published and can be viewed by others. Click to unpublish."
+                : "Your card is currently unpublished and cannot be viewed by others. Click to publish."}
+              {isPublished ? (
+                <></>
+              ) : (
+                <>
+                  <hr className="my-2" />
+                <p>The follownig will be publicly visable once published.</p>
+                  <ul className="list-disc list-inside">
+                    <li>Email</li>
+                    <li>Phone Number</li>
+                    <li>Location</li>
+                    <li>Website</li>
+                    <li>Social Media Links</li>
+                  </ul>
+                </>
+              )}
             </DialogDescription>
           </DialogHeader>
           <div className="w-full h-full flex flex-col gap-4">
-
-          {cardTitle && <div className="flex "><p className=" text-black">Card Title: <span className="font-medium">{cardTitle}</span></p></div>}
-          {isPublished && (
-            <div className="flex gap-2 justify-center items-center">
-              <Input
-                value={`http://localhost:3000/card/${cardId}`} // Use cardId or cardID as needed
-                readOnly
-                ref={inputRef}
-                className="text-black border-gray-800 border"
-              />
-              <Button onClick={handleCopy}>
-                <Copy className="w-4 h-4" />
-              </Button>
-            </div>
+            {cardTitle && (
+              <div className="flex ">
+                <p className=" text-black">
+                  Card Title: <span className="font-medium">{cardTitle}</span>
+                </p>
+              </div>
+            )}
+            {isPublished && (
+              <div className="flex gap-2 justify-center items-center">
+                <Input
+                  value={`http://localhost:3000/card/${cardId}`} // Use cardId or cardID as needed
+                  readOnly
+                  ref={inputRef}
+                  className="text-black border-gray-800 border"
+                />
+                <Button onClick={handleCopy}>
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
             )}
             {isPublished ? (
-              <Button onClick={handleUnpublishCard} className="w-full">Unpublish Card</Button>
+              <Button onClick={handleUnpublishCard} className="w-full">
+                Unpublish Card
+              </Button>
             ) : (
-              <Button onClick={handlePublishCard} className="w-full">Publish Card</Button>
+              <Button onClick={handlePublishCard} className="w-full">
+                Publish Card
+              </Button>
             )}
-            
           </div>
         </DialogContent>
       </Dialog>

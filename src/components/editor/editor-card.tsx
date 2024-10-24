@@ -31,7 +31,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { CirclePlus } from "lucide-react";
 import { CardData, CardConfig } from "@/types/cardTypes";
-
+import LocationInput from "./LocationInput";
 interface EditorForm {
   isOpen?: boolean;
   onClose?: () => void;

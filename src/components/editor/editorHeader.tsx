@@ -32,7 +32,6 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
           cardID={cardID}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSubmit={() => Promise.resolve()}
         />
       )}
       {isPreviewModalOpen && (
