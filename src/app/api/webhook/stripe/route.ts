@@ -42,24 +42,16 @@ export async function POST(req: NextRequest) {
         );
 
         const customerId = checkoutSession.customer as string;
-        const customer = (await stripe.customers.retrieve(
-          customerId
-        )) as Stripe.Customer;
+        const customerEmail = checkoutSession.customer_details?.email || (dataObject as Stripe.Checkout.Session).customer_email;
+        const subscriptionId = (dataObject as Stripe.Checkout.Session).subscription as string;
 
-        if (customer && customer.email) {
-          const user = await getUserByEmail(customer.email as string);
-          console.log("User:", user);
+        if (customerEmail) {
+          const user = await getUserByEmail(customerEmail);
 
           if (user) {
             await db.user.update({
-              where: { email: customer.email as string },
+              where: { email: customerEmail },
               data: {
-                stripeCustomerId: customer.id,
-                stripeSubscriptionId: checkoutSession.id,
-                stripeSubscriptionStatus: checkoutSession.status,
-                priceId:
-                  checkoutSession.line_items?.data[0]?.price?.id ||
-                  "default_price_id",
                 hasAccess: true,
               },
             });

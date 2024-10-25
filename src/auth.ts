@@ -57,6 +57,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           github?: { githubId: string; githubUsername: string };
           twitter?: { twitterId: string; twitterUsername: string };
         } | undefined;
+        session.user.hasAccess = user?.hasAccess
       }
       return session;
     },

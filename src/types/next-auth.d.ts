@@ -24,8 +24,12 @@ declare module "next-auth" {
         spotifyId: string;
         spotifyUsername: string;
       };
+      twitch?: {
+        twitchId: string;
+        twitchUsername: string;
+      };
     };
-    hasAccess: boolean;
+    hasAccess?: boolean;
   }
 
   interface Session {

@@ -10,6 +10,7 @@ import SocialLinkCard from "../settings/socialLinkCard";
 
 const ClientSettings = () => {
   const { data: session, status } = useSession();
+  console.log(session);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   if (status === "loading") {
     return (
@@ -138,6 +139,29 @@ const ClientSettings = () => {
     }
   };
 
+  const twitchClientId = process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID;
+  const twitchRedirectUri =
+    "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/twitch/callback";
+  const twitchScope = "user:read:email";
+
+  const handleTwitchLink = async () => {
+    try {
+      const codeVerifier = generateCodeVerifier();
+      const state = generateState(codeVerifier);
+
+      const twitchAuthorizationUrl = `https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=${twitchClientId}&redirect_uri=${encodeURIComponent(
+        twitchRedirectUri
+      )}&scope=${encodeURIComponent(
+        twitchScope
+      )}&state=${state}`;
+
+        window.location.href = twitchAuthorizationUrl;
+    } catch (error) {
+      console.error("Error during Twitch link process:", error);
+      // Optionally, display an error message to the user
+    }
+  };
+
   const handleUnlink = async (provider: string) => {
     try {
       const response = await fetch(`/api/socialUnlink/${provider}`, {
@@ -199,9 +223,6 @@ const ClientSettings = () => {
                 <strong className="font-[600]">Name:</strong>{" "}
                 {session?.user?.name}
               </p>
-              <Button variant="outline" size="sm">
-                Edit
-              </Button>
             </div>
             <hr />
             <div className="flex flex-row justify-between items-center text-sm">
@@ -209,21 +230,22 @@ const ClientSettings = () => {
                 <strong className="font-[600]">Email:</strong>{" "}
                 {session?.user?.email}
               </p>
-              <Button variant="outline" size="sm">
-                Edit
-              </Button>
             </div>
             <hr />
             <div className="flex flex-row justify-between items-center text-sm">
               <p>
                 <strong className="font-[600]">Plan:</strong>{" "}
-                {session?.user?.hasAccess
-                  ? session.user.hasAccess.toString()
-                  : "Free"}
+                {session?.user?.hasAccess ? "Pro" : "Free"}
               </p>
-              <Button variant="outline" size="sm">
-                Edit
-              </Button>
+              {session?.user?.hasAccess ? (
+                <Button variant="outline" size="sm">
+                  Manage
+                </Button>
+              ) : (
+                <Button variant="outline" size="sm">
+                  Upgrade
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -298,9 +320,7 @@ const ClientSettings = () => {
                 }
                 unlink={() => handleUnlink("spotify")}
                 link={() => handleSpotifyLink()}
-                id={
-                  session?.user?.authenticatedSocials?.spotify?.spotifyId
-                }
+                id={session?.user?.authenticatedSocials?.spotify?.spotifyId}
               />
             ) : (
               <SocialLinkCard
@@ -308,6 +328,26 @@ const ClientSettings = () => {
                 icon="spotify"
                 unlink={() => handleUnlink("spotify")}
                 link={() => handleSpotifyLink()}
+              />
+            )}
+            {session?.user?.authenticatedSocials?.twitch?.twitchId ? (
+              <SocialLinkCard
+                type="Twitch"
+                isLinked={true}
+                icon="twitch"
+                username={
+                  session?.user?.authenticatedSocials?.twitch?.twitchUsername
+                }
+                unlink={() => handleUnlink("twitch")}
+                link={() => handleTwitchLink()}
+                id={session?.user?.authenticatedSocials?.twitch?.twitchId}
+              />
+            ) : (
+              <SocialLinkCard
+                isLinked={false}
+                icon="twitch"
+                unlink={() => handleUnlink("twitch")}
+                link={() => handleTwitchLink()}
               />
             )}
           </div>
