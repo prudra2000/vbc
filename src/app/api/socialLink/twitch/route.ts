@@ -7,6 +7,9 @@ export async function GET(req: NextRequest) {
   const session = await auth();
   const searchParams = req.nextUrl.searchParams;
   const code = searchParams.get("code");
+  const state = searchParams.get("state");
+  console.log("code", code);
+  console.log("state", state);
 
   if (!code) {
     return NextResponse.json(
@@ -14,29 +17,53 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
+  let codeVerifier: string | null = null;
+  try {
+    const decodedState = Buffer.from(state!, "base64").toString("utf-8");
+    const stateObj = JSON.parse(decodedState);
+    codeVerifier = stateObj.codeVerifier;
+  } catch (error) {
+    console.error("Error decoding state parameter:", error);
+    return NextResponse.json(
+      { error: "Invalid state parameter" },
+      { status: 400 }
+    );
+  }
+
+  if (!codeVerifier) {
+    return NextResponse.json(
+      { error: "Code verifier missing in state" },
+      { status: 400 }
+    );
+  }
 
   try {
-    const clientId = process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID;
-    const clientSecret = process.env.NEXT_PUBLIC_TWITCH_CLIENT_SECRET;
+    const clientId = process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID!;
+    const clientSecret = process.env.NEXT_PUBLIC_TWITCH_CLIENT_SECRET!;
+    const redirectUri =
+      "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/twitch/callback";
 
-    // Exchange authorization code for access token
-    const tokenResponse = await fetch(
-      "https://id.twitch.tv/oauth2/token",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          client_id: clientId,
-          client_secret: clientSecret,
-          code,
-          grant_type: "authorization_code",
-          redirect_uri: "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/twitch/callback",
-        }),
-      }
-    );
+    const tokenResponse = await fetch("https://id.twitch.tv/oauth2/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        code: code,
+        grant_type: "authorization_code",
+        redirect_uri: redirectUri,
+      }),
+    });
 
+    if (!tokenResponse.ok) {
+      console.error("Token response error:", await tokenResponse.text());
+      return NextResponse.json(
+        { error: "Failed to retrieve access token" },
+        { status: 500 }
+      );
+    }
     const tokenData = await tokenResponse.json();
     const accessToken = tokenData.access_token;
 
@@ -47,33 +74,40 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Fetch GitHub user profile data
     const profileResponse = await fetch("https://api.twitch.tv/helix/users", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Client-Id": process.env.TWITCH_CLIENT_ID!,
-        },
-      });
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-ID": clientId,
+      },
+    });
+
+    if (!profileResponse.ok) {
+      console.error("Profile response error:", await profileResponse.text());
+      return NextResponse.json(
+        { error: "Failed to retrieve profile data" },
+        { status: 500 }
+      );
+    }
 
     const profileData = await profileResponse.json();
 
     if (!profileData) {
       return NextResponse.json(
-        { error: "Failed to retrieve user profile" },
+        { error: "Failed to retrieve profile data" },
         { status: 500 }
       );
     } else {
       const twitchUserId = profileData.data[0].id;
-      const twitchUserName = profileData.data[0].login;
+      const twitchUsername = profileData.data[0].display_name;
       const existingUser = await db.user.findUnique({
         where: { id: session?.user?.id },
       });
 
       const updatedAuthenticatedSocials = {
-        ...((existingUser?.authenticatedSocials as object) || {}), // Ensure it's an object
+        ...((existingUser?.authenticatedSocials as object) || {}),
         twitch: {
           twitchId: twitchUserId,
-          twitchUsername: twitchUserName,
+          twitchUsername: twitchUsername,
         },
       };
 
@@ -81,7 +115,6 @@ export async function GET(req: NextRequest) {
         where: { id: session?.user?.id },
         data: { authenticatedSocials: updatedAuthenticatedSocials },
       });
-      // Optionally, redirect the user after successful linking
       return NextResponse.redirect(new URL("/settings", req.url));
     }
   } catch (error) {

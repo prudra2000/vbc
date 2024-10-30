@@ -25,6 +25,32 @@ const ClientSettings = () => {
     return <div>You need to be authenticated to view this page.</div>;
   }
 
+  // Generate code challenge from the code verifier
+  const generateCodeChallenge = async (codeVerifier: string) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(codeVerifier);
+    const hash = await crypto.subtle.digest("SHA-256", data);
+
+    // Convert the hash to Base64 URL encoding
+    const hashArray = Array.from(new Uint8Array(hash));
+    const hashString = String.fromCharCode(...hashArray);
+    const base64Url = btoa(hashString)
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+    return base64Url;
+  };
+
+  const generateState = (codeVerifier: string) => {
+    const stateObject = {
+      codeVerifier,
+      randomString: Math.random().toString(36).substring(2, 15),
+    };
+
+    const json = JSON.stringify(stateObject);
+    return btoa(unescape(encodeURIComponent(json)));
+  };
+
   const linkedinClientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID;
   const linkedinRedirectUri =
     "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/linkedin/callback";
@@ -68,31 +94,7 @@ const ClientSettings = () => {
     );
   };
 
-  // Generate code challenge from the code verifier
-  const generateCodeChallenge = async (codeVerifier: string) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(codeVerifier);
-    const hash = await crypto.subtle.digest("SHA-256", data);
 
-    // Convert the hash to Base64 URL encoding
-    const hashArray = Array.from(new Uint8Array(hash));
-    const hashString = String.fromCharCode(...hashArray);
-    const base64Url = btoa(hashString)
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/, "");
-    return base64Url;
-  };
-
-  const generateState = (codeVerifier: string) => {
-    const stateObject = {
-      codeVerifier,
-      randomString: Math.random().toString(36).substring(2, 15),
-    };
-
-    const json = JSON.stringify(stateObject);
-    return btoa(unescape(encodeURIComponent(json)));
-  };
 
   const handleTwitterLink = async () => {
     try {
@@ -149,13 +151,15 @@ const ClientSettings = () => {
       const codeVerifier = generateCodeVerifier();
       const state = generateState(codeVerifier);
 
+      sessionStorage.setItem(`pkce_code_verifier_${state}`, codeVerifier);
+
       const twitchAuthorizationUrl = `https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=${twitchClientId}&redirect_uri=${encodeURIComponent(
         twitchRedirectUri
       )}&scope=${encodeURIComponent(
         twitchScope
       )}&state=${state}`;
 
-        window.location.href = twitchAuthorizationUrl;
+      window.location.href = twitchAuthorizationUrl;
     } catch (error) {
       console.error("Error during Twitch link process:", error);
       // Optionally, display an error message to the user
