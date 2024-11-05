@@ -1,7 +1,6 @@
 "use client";
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { addCard } from "@/actions/add-card";
 import { useSession } from "next-auth/react";
 import {
   Form,
@@ -12,10 +11,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { Input } from "../ui/input";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
-import { IdCard, Trash, X } from "lucide-react";
+import { IdCard, Trash, ImageUp } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -39,36 +37,15 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
   onSubmit,
   cardID,
 }) => {
-  const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const form = useForm();
 
-  const handleUploadImage = async (data: any) => {
-    setError("");
-    setSuccess("");
-    const starterValues = {
-      userId: session?.user?.id || "",
-      cardTitle: data.cardTitle,
-      cardData: {
-        image: data.image,
-      },
-    };
-    startTransition(async () => {
-      const result = await updateCard(starterValues, cardID);
-      if (result.error) {
-        setError(result.error);
-      } else {
-        setSuccess(result.success);
-        onClose();
-        window.location.reload();
-      }
-    });
-  };
 
   const [preview, setPreview] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
-
+  const [fileSize, setFileSize] = useState<string | null>(null);
   const onDrop = (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
     if (rejectedFiles.length > 0) {
       setError("Invalid file type. Please upload a jpg, jpeg, or png image.");
@@ -78,7 +55,9 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
       setError("");
       const file = acceptedFiles[0];
       form.setValue("image", file); // Set the file to the form
+      setFile(file); // Set the file to the state
       setFileName(file.name); // Set the file name
+      setFileSize(`${(file.size / 1000000).toFixed(2)} mb`);
       // Create a preview of the image
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -90,6 +69,7 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
 
   const handleDeleteImage = () => {
     setPreview(null);
+    setFile(null); // Reset the file
     form.setValue("image", null); // Reset the form value
   };
 
@@ -98,6 +78,36 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
     accept: { "image/jpeg": [], "image/png": [], "image/jpg": [] },
     maxFiles: 1,
   });
+
+  const handleUploadImage = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!file) {
+      setError('Please select a file to upload.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/s3-upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setSuccess(`File uploaded successfully: ${result.fileName}`);
+        window.location.reload();
+      } else {
+        setError(`Error: ${result.error || 'Failed to upload file'}`);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setError('Error uploading file');
+    }
+  };
+
 
   return (
     <div className="w-1/2">
@@ -118,11 +128,7 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const data = {
-                  image: formData.get("image") as File,
-                };
-                await handleUploadImage(data);
+                await handleUploadImage(e);
               }}
               className="space-y-4"
             >
@@ -150,7 +156,11 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
                     className="max-w-full h-auto rounded-lg shadow-md border border-neutral-200"
                   />
                   <div className="flex flex-row justify-between items-center">
-                    <p className=" text-neutral-500 text-sm">File Name: {fileName}</p>
+                    <div className="flex flex-col">
+                      <p className=" text-neutral-500 text-sm">File Name: {fileName}</p>
+                      <p className=" text-neutral-500 text-sm">File Size: {fileSize}</p>
+                    </div>
+                    
                     <Button
                       variant="outline"
                       type="button"
@@ -167,7 +177,10 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
               <FormSuccess message={success || ""} />
 
               <div className="flex justify-end items-end">
-                <Button type="submit">Submit</Button>
+                <Button type="submit">
+                  <ImageUp className="mr-2 w-5 h-5" />
+                  Upload
+                </Button>
               </div>
             </form>
           </Form>

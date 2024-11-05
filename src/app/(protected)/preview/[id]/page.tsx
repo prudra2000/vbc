@@ -37,7 +37,7 @@ type FormValues = {
 };
 
 const PreviewPage = () => {
-  const { id } = useParams(); // Get the id from the URL
+  const { id } = useParams(); 
   const [card, setCard] = useState<PCard | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
