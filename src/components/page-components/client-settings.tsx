@@ -9,8 +9,8 @@ import UploadProfilePicModal from "../settings/uploadProfilePicModal";
 import SocialLinkCard from "../settings/socialLinkCard";
 
 const ClientSettings = () => {
-  const { data: session, status } = useSession();
-  console.log(session);
+  const { data: session, status, update } = useSession();
+
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   if (status === "loading") {
     return (
@@ -94,8 +94,6 @@ const ClientSettings = () => {
     );
   };
 
-
-
   const handleTwitterLink = async () => {
     try {
       const codeVerifier = generateCodeVerifier();
@@ -155,9 +153,7 @@ const ClientSettings = () => {
 
       const twitchAuthorizationUrl = `https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=${twitchClientId}&redirect_uri=${encodeURIComponent(
         twitchRedirectUri
-      )}&scope=${encodeURIComponent(
-        twitchScope
-      )}&state=${state}`;
+      )}&scope=${encodeURIComponent(twitchScope)}&state=${state}`;
 
       window.location.href = twitchAuthorizationUrl;
     } catch (error) {
@@ -179,7 +175,6 @@ const ClientSettings = () => {
 
       if (response.ok) {
         alert(result.success);
-        // Optionally, update the UI to reflect the change
         window.location.reload();
       } else {
         alert(result.error);
@@ -215,7 +210,6 @@ const ClientSettings = () => {
                 isOpen={isUploadModalOpen}
                 onClose={() => setIsUploadModalOpen(false)}
                 onSubmit={async () => {
-                  // Your submit logic here
                   return; // Ensure it returns a Promise
                 }}
                 cardID={""}

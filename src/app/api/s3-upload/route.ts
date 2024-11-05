@@ -13,6 +13,7 @@ const s3Client = new S3Client({
   },
 });
 
+
 async function uploadImageToS3(
   file: Buffer,
   fileName: string
@@ -72,6 +73,11 @@ export async function POST(request: NextRequest) {
       where: { id: userId },
       data: { image: profileImageURL },
     });
+
+    if (session?.user) {
+      session.user.image = profileImageURL;
+    }
+
 
     return NextResponse.json({ success: true, fileName });
   } catch (error) {

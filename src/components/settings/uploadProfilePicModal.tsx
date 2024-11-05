@@ -4,11 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import {
   Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { FormError } from "../form-error";
@@ -41,6 +36,26 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
   const [success, setSuccess] = useState<string | undefined>("");
   const form = useForm();
 
+  const { data: session, update } = useSession();
+
+
+  const handleSessionRefresh = async () => {
+    try {
+      const updatedSession = await update();
+  
+      if (updatedSession) {
+        console.log("Session refreshed:", updatedSession);
+        alert("Session updated successfully.");
+      } else {
+        console.warn("No session data available after refresh.");
+        alert("Session refreshed, but no data was returned.");
+      }
+    } catch (error) {
+      console.error("Error refreshing session:", error);
+      alert("Failed to update session.");
+    }
+  };
+
 
   const [preview, setPreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -54,11 +69,10 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
     if (acceptedFiles.length > 0) {
       setError("");
       const file = acceptedFiles[0];
-      form.setValue("image", file); // Set the file to the form
-      setFile(file); // Set the file to the state
-      setFileName(file.name); // Set the file name
+      form.setValue("image", file);
+      setFile(file);
+      setFileName(file.name);
       setFileSize(`${(file.size / 1000000).toFixed(2)} mb`);
-      // Create a preview of the image
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result as string);
@@ -69,8 +83,8 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
 
   const handleDeleteImage = () => {
     setPreview(null);
-    setFile(null); // Reset the file
-    form.setValue("image", null); // Reset the form value
+    setFile(null);
+    form.setValue("image", null);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -98,7 +112,7 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
       const result = await response.json();
       if (response.ok) {
         setSuccess(`File uploaded successfully: ${result.fileName}`);
-        window.location.reload();
+        await handleSessionRefresh();
       } else {
         setError(`Error: ${result.error || 'Failed to upload file'}`);
       }
