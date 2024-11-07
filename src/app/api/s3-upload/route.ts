@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     }
 
 
-    return NextResponse.json({ success: true, fileName });
+    return NextResponse.json({ success: true, fileName, profileImageURL });
   } catch (error) {
     console.error("Error uploading image:", error);
     return NextResponse.json(

@@ -1,5 +1,5 @@
 "use client";
-import { startTransition, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import {
@@ -16,21 +16,16 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { updateCard } from "@/actions/update-card";
 import { FileRejection, useDropzone } from "react-dropzone";
 
 interface UploadProfilePicModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => Promise<void>;
-  cardID: string;
 }
 
 const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
   isOpen,
   onClose,
-  onSubmit,
-  cardID,
 }) => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -39,16 +34,20 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
   const { data: session, update } = useSession();
 
 
-  const handleSessionRefresh = async () => {
+  const handleSessionRefresh = async (profileImageURL: string) => {
     try {
-      const updatedSession = await update();
+      const updatedSession = await update({
+        ...session,
+        user: {
+          ...session?.user,
+          image: profileImageURL,
+        },
+      });
   
       if (updatedSession) {
-        console.log("Session refreshed:", updatedSession);
-        alert("Session updated successfully.");
+        console.log("Session refreshed");
       } else {
         console.warn("No session data available after refresh.");
-        alert("Session refreshed, but no data was returned.");
       }
     } catch (error) {
       console.error("Error refreshing session:", error);
@@ -112,7 +111,8 @@ const UploadProfilePicModal: React.FC<UploadProfilePicModalProps> = ({
       const result = await response.json();
       if (response.ok) {
         setSuccess(`File uploaded successfully: ${result.fileName}`);
-        await handleSessionRefresh();
+        await handleSessionRefresh(result.profileImageURL);
+        onClose();
       } else {
         setError(`Error: ${result.error || 'Failed to upload file'}`);
       }

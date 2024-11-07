@@ -7,9 +7,6 @@ export async function GET(req: NextRequest) {
   const session = await auth();
   const searchParams = req.nextUrl.searchParams;
   const code = searchParams.get("code");
-  const state = searchParams.get("state");
-  console.log("code", code);
-  console.log("state", state);
 
   if (!code) {
     return NextResponse.json(
@@ -17,29 +14,11 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
-  let codeVerifier: string | null = null;
-  try {
-    const decodedState = Buffer.from(state!, "base64").toString("utf-8");
-    const stateObj = JSON.parse(decodedState);
-    codeVerifier = stateObj.codeVerifier;
-  } catch (error) {
-    console.error("Error decoding state parameter:", error);
-    return NextResponse.json(
-      { error: "Invalid state parameter" },
-      { status: 400 }
-    );
-  }
 
-  if (!codeVerifier) {
-    return NextResponse.json(
-      { error: "Code verifier missing in state" },
-      { status: 400 }
-    );
-  }
 
   try {
     const clientId = process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID!;
-    const clientSecret = process.env.NEXT_PUBLIC_TWITCH_CLIENT_SECRET!;
+    const clientSecret = process.env.TWITCH_CLIENT_SECRET!;
     const redirectUri =
       "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/twitch/callback";
 

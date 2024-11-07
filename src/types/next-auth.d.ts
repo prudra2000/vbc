@@ -28,6 +28,10 @@ declare module "next-auth" {
         twitchId: string;
         twitchUsername: string;
       };
+      gitlab?: {
+        gitlabId: string;
+        gitlabUsername: string;
+      };
     };
     hasAccess?: boolean;
   }

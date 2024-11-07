@@ -15,6 +15,7 @@ import {
   faReddit,
   faPinterest,
   faSpotify,
+  faGitlab,
 } from "@fortawesome/free-brands-svg-icons";
 import { Button } from "../ui/button";
 import {
@@ -71,6 +72,7 @@ const SocialLinkCard = ({
     reddit: faReddit,
     pinterest: faPinterest,
     spotify: faSpotify,
+    gitlab: faGitlab,
   };
   const iconBackground = {
     linkedin: "bg-[#0A66C2]",
@@ -83,6 +85,7 @@ const SocialLinkCard = ({
     twitch: "bg-[#6441A5]",
     discord: "bg-[#7289DA]",
     spotify: "bg-[#1DB954]",
+    gitlab: "bg-[#FCA326]",
   };
   const url = {
     LinkedIn: `https://www.linkedin.com/in/${username}`,
@@ -95,6 +98,7 @@ const SocialLinkCard = ({
     Twitch: `https://www.twitch.com/${username}`,
     Discord: `https://www.discord.com/${username}`,
     Spotify: `https://open.spotify.com/user/${id}`,
+    Gitlab: `https://gitlab.com/${username}`,
   };
 
   const profileUrl = url[type as keyof typeof url] || "#";

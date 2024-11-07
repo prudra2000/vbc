@@ -32,6 +32,7 @@ import { Button } from "../ui/button";
 import { CirclePlus } from "lucide-react";
 import { CardData, CardConfig } from "@/types/cardTypes";
 import LocationInput from "./LocationInput";
+import Avatar from "../avatar";
 interface EditorForm {
   isOpen?: boolean;
   onClose?: () => void;
@@ -359,12 +360,22 @@ const EditorForm: React.FC<EditorForm> = ({
                     <FormControl>
                       <div className="flex justify-center items-center gap-2">
                         <div className="flex w-full justify-center items-center gap-2 border border-neutral-200 rounded-md p-2">
-                          <img
-                            src={field.value}
-                            alt="Image"
+                          <Avatar
+                            src={session?.user?.image || ""}
+                            alt={formValues.cardData.name}
+                            variant="secondary"
+                            size="xxxxl"
                             className="rounded-full border-2 border-neutral-300 shadow-md "
                           />
                         </div>
+                        <Switch
+                          checked={!!field.value}
+                          onCheckedChange={(checked) => {
+                            field.onChange(
+                              checked ? session?.user?.image || "" : ""
+                            );
+                          }}
+                        />
                       </div>
                     </FormControl>
                   </FormItem>

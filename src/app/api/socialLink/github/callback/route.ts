@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
-    const clientSecret = process.env.NEXT_PUBLIC_GITHUB_CLIENT_SECRET;
+    const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID!;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET!;
 
     // Exchange authorization code for access token
     const tokenResponse = await fetch(

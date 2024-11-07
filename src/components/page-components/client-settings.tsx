@@ -115,7 +115,7 @@ const ClientSettings = () => {
     }
   };
 
-  const spotifyClientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
+  const spotifyClientId = process.env.SPOTIFY_CLIENT_ID;
   const spotifyRedirectUri =
     "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/spotify/callback";
   const spotifyScope = "user-read-private user-read-email";
@@ -158,6 +158,31 @@ const ClientSettings = () => {
       window.location.href = twitchAuthorizationUrl;
     } catch (error) {
       console.error("Error during Twitch link process:", error);
+      // Optionally, display an error message to the user
+    }
+  };
+
+
+  const gitlabClientId = process.env.NEXT_PUBLIC_GITLAB_CLIENT_ID;
+  const gitlabRedirectUri =
+    "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/gitlab/callback";
+  const gitlabScope = "read_user";
+
+  const handleGitlabLink = async () => {
+    try {
+      const codeVerifier = generateCodeVerifier();
+      const codeChallenge = await generateCodeChallenge(codeVerifier);
+      const state = generateState(codeVerifier);
+
+      const gitlabAuthorizationUrl = `https://gitlab.com/oauth/authorize?response_type=code&client_id=${gitlabClientId}&redirect_uri=${encodeURIComponent(
+        gitlabRedirectUri
+      )}&scope=${encodeURIComponent(
+        gitlabScope
+      )}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+
+      window.location.href = gitlabAuthorizationUrl;
+    } catch (error) {
+      console.error("Error during Gitlab link process:", error);
       // Optionally, display an error message to the user
     }
   };
@@ -209,10 +234,6 @@ const ClientSettings = () => {
               <UploadProfilePicModal
                 isOpen={isUploadModalOpen}
                 onClose={() => setIsUploadModalOpen(false)}
-                onSubmit={async () => {
-                  return; // Ensure it returns a Promise
-                }}
-                cardID={""}
               />
             </div>
             <hr />
@@ -287,6 +308,25 @@ const ClientSettings = () => {
                 icon="github"
                 unlink={() => handleUnlink("github")}
                 link={() => handleGitHubLink()}
+              />
+            )}
+            {session?.user?.authenticatedSocials?.gitlab?.gitlabId ? (
+              <SocialLinkCard
+                type="Gitlab"
+                isLinked={true}
+                icon="gitlab"
+                username={
+                  session?.user?.authenticatedSocials?.gitlab?.gitlabUsername
+                }
+                unlink={() => handleUnlink("gitlab")}
+                link={() => handleGitlabLink()}
+              />
+            ) : (
+              <SocialLinkCard
+                isLinked={false}
+                icon="gitlab"
+                unlink={() => handleUnlink("gitlab")}
+                link={() => handleGitlabLink()}
               />
             )}
             {session?.user?.authenticatedSocials?.twitter?.twitterId ? (

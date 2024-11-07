@@ -9,7 +9,6 @@ export async function GET(req: NextRequest) {
   const code = searchParams.get("code");
   const state = searchParams.get("state");
 
-
   if (!code) {
     return NextResponse.json(
       { error: "Authorization code missing" },
@@ -37,24 +36,23 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const clientId = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID!;
-    const clientSecret = process.env.LINKEDIN_CLIENT_SECRET!;
+    const clientId = process.env.NEXT_PUBLIC_GITLAB_CLIENT_ID!;
     const redirectUri =
-      "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/linkedin/callback";
+      "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/gitlab/callback";
 
     const tokenResponse = await fetch(
-      "https://www.linkedin.com/oauth/v2/accessToken",
+      "https://gitlab.com/oauth/token",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-          grant_type: "authorization_code",
-          code: code,
-          redirect_uri: redirectUri,
           client_id: clientId,
-          client_secret: clientSecret,
+          code: code,
+          grant_type: "authorization_code",
+          redirect_uri: redirectUri,
+          code_verifier: codeVerifier,
         }),
       }
     );
@@ -77,7 +75,7 @@ export async function GET(req: NextRequest) {
     }
 
     const profileResponse = await fetch(
-      "https://api.linkedin.com/v2/me",
+      "https://gitlab.com/api/v4/user",
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -102,16 +100,17 @@ export async function GET(req: NextRequest) {
         { status: 500 }
       );
     } else {
-      const linkedinUserId = profileData.id;
+      const gitlabUserId = profileData.id;
       const existingUser = await db.user.findUnique({
         where: { id: session?.user?.id },
       });
 
+
       const updatedAuthenticatedSocials = {
         ...((existingUser?.authenticatedSocials as object) || {}),
-        linkedin: {
-          linkedinId: linkedinUserId,
-          linkedinUsername: profileData.vanityName,
+            gitlab: {
+          gitlabId: gitlabUserId,
+          gitlabUsername: profileData.username,
         },
       };
 
