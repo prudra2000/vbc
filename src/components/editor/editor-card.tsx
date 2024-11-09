@@ -33,7 +33,6 @@ import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { CirclePlus } from "lucide-react";
 import { CardData, CardConfig } from "@/types/cardTypes";
-import LocationInput from "./LocationInput";
 import Avatar from "../avatar";
 interface EditorForm {
   isOpen?: boolean;
@@ -48,6 +47,8 @@ interface EditorForm {
   children: React.ReactElement;
 }
 
+type DigimedCardValues = z.infer<typeof DigimedCardSchema>;
+
 const EditorForm: React.FC<EditorForm> = ({
   isOpen = true,
   formValues,
@@ -56,7 +57,6 @@ const EditorForm: React.FC<EditorForm> = ({
   children,
 }) => {
   const { data: session } = useSession();
-  if (!isOpen) return null;
 
   const form = useForm<z.infer<typeof DigimedCardSchema>>({
     resolver: zodResolver(DigimedCardSchema),
@@ -71,11 +71,11 @@ const EditorForm: React.FC<EditorForm> = ({
     formValues.cardData.socialMedia || {} // Ensure socialMedia is an object
   );
 
-  const handleFormChange = (values: any) => {
+  const handleFormChange = (values: DigimedCardValues) => {
     onFormChange({ ...values, urls });
   };
 
-  const [selectedInputs, setSelectedInputs] = useState<string[]>(selected);
+  //const [selectedInputs, setSelectedInputs] = useState<string[]>(selected);
   const [countryCodes, setCountryCodes] = useState<
     { code: string; dialCode: string; flag: string; name: string }[]
   >([]);
@@ -118,7 +118,7 @@ const EditorForm: React.FC<EditorForm> = ({
   }, []);
 
   useEffect(() => {
-    setSelectedInputs(selected);
+    //setSelectedInputs(selected);
     setUrls(formValues.cardData.socialMedia || {});
   }, [selected, formValues.cardData.socialMedia]);
 
@@ -126,7 +126,7 @@ const EditorForm: React.FC<EditorForm> = ({
     session?.user?.authenticatedSocials?.linkedin?.linkedinId === undefined &&
     session?.user?.authenticatedSocials?.github?.githubId === undefined &&
     session?.user?.authenticatedSocials?.twitter?.twitterId === undefined;
-
+  if (!isOpen) return null;
   return (
     <div className="flex flex-col h-max   text-neutral-950 dark:border-neutral-800  dark:text-neutral-50">
       <div className="flex flex-col gap-2 p-4">
@@ -693,8 +693,8 @@ const EditorForm: React.FC<EditorForm> = ({
                                           field.onChange(
                                             checked
                                               ? session?.user
-                                                  ?.authenticatedSocials
-                                                  ?.twitch?.twitchUsername
+                                                  ?.authenticatedSocials?.twitch
+                                                  ?.twitchUsername
                                               : ""
                                           );
                                         }}

@@ -9,7 +9,7 @@ import UploadProfilePicModal from "../settings/uploadProfilePicModal";
 import SocialLinkCard from "../settings/socialLinkCard";
 
 const ClientSettings = () => {
-  const { data: session, status, update } = useSession();
+  const { data: session, status } = useSession();
 
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   if (status === "loading") {

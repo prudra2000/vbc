@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { editCardName } from "@/actions/edit-name";
 import { useSession } from "next-auth/react";
+import { AddCardFormValues } from "@/types/forms";
 interface EditCardNameModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -37,9 +38,13 @@ const EditCardNameModal: React.FC<EditCardNameModalProps> = ({
   const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const form = useForm();
+  const form = useForm<AddCardFormValues>({
+    defaultValues: {
+      cardTitle: "",
+    },
+  });
 
-  const handleUpdateCard = async (data: any) => {
+  const handleUpdateCard = async (data: AddCardFormValues) => {
     setError("");
     setSuccess("");
     const starterValues = {
@@ -79,6 +84,8 @@ const EditCardNameModal: React.FC<EditCardNameModalProps> = ({
                 const formData = new FormData(e.currentTarget); // Get form data
                 const data = {
                   cardTitle: formData.get("cardTitle") as string,
+                  cardStyle: "", // Add this line with an appropriate value
+
                 };
                 await handleUpdateCard(data); // Call handleAddCard with the form data
               }}

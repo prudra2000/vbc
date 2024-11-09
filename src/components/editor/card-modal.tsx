@@ -30,18 +30,34 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-
+import { AddCardFormValues } from "@/types/forms";
 interface CardModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+
 const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose}) => {
+
   const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const form = useForm();
-  const handleAddCard = async (data: any) => {
+  const form = useForm<AddCardFormValues>({
+    defaultValues: {
+      cardTitle: "",
+      cardStyle: "",
+      name: "",
+      image: "",
+      tagline: "",
+      company: "",
+      email: "",
+      phone: "",
+      location: "",
+      website: "",
+      socialMedia: {},
+    },
+  });
+  const handleAddCard = async (data: AddCardFormValues) => {
     setError("");
     setSuccess("");
     const starterValues = {

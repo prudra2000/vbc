@@ -50,7 +50,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const mimeType = file.type;
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const fileName = await uploadImageToS3(

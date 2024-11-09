@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import EditCardNameModal from "./editCardNameModal";
-import { Pencil, Fullscreen, Send, PencilRuler, Share2, Eye } from "lucide-react";
-import PreviewCardModal from "./previewCard";
+import { Pencil, Send, Share2, Eye } from "lucide-react";
 import PublishCardModal from "./publishCard";
 import Link from "next/link";
 import ShareModal from "../card/card-qr-modal";
@@ -22,7 +21,6 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
   isPublished,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   return (
@@ -32,14 +30,6 @@ const EditorHeader: React.FC<EditorHeaderProps> = ({
           cardID={cardID}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-        />
-      )}
-      {isPreviewModalOpen && (
-        <PreviewCardModal
-          cardID={cardID}
-          isOpen={isPreviewModalOpen}
-          onClose={() => setIsPreviewModalOpen(false)}
-          onSubmit={() => Promise.resolve()}
         />
       )}
       {isPublishModalOpen && (

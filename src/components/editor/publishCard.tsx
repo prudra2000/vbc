@@ -1,11 +1,9 @@
 "use client";
-import { startTransition, useEffect, useRef, useState } from "react";
+import { startTransition, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { Input } from "../ui/input";
-import { FormError } from "../form-error";
-import { FormSuccess } from "../form-success";
-import { Copy, IdCard, X } from "lucide-react";
+import { Copy, IdCard } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -32,21 +30,15 @@ const PublishCardModal: React.FC<PublishCardModalProps> = ({
   cardTitle,
 }) => {
   const { data: session } = useSession();
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
 
   const handlePublishCard = async () => {
-    setError("");
-    setSuccess("");
     const publishValues = {
       userId: session?.user?.id || "",
     };
     startTransition(async () => {
       const result = await publishCard(publishValues.userId, cardID);
       if (result.error) {
-        setError(result.error);
       } else {
-        setSuccess(result.success);
         onClose();
         window.location.reload();
       }
@@ -54,17 +46,13 @@ const PublishCardModal: React.FC<PublishCardModalProps> = ({
   };
 
   const handleUnpublishCard = async () => {
-    setError("");
-    setSuccess("");
     const unpublishValues = {
       userId: session?.user?.id || "",
     };
     startTransition(async () => {
       const result = await unpublishCard(unpublishValues.userId, cardID);
       if (result.error) {
-        setError(result.error);
       } else {
-        setSuccess(result.success);
         onClose();
         window.location.reload();
       }
@@ -99,7 +87,7 @@ const PublishCardModal: React.FC<PublishCardModalProps> = ({
               ) : (
                 <>
                   <hr className="my-2" />
-                <p>The follownig will be publicly visable once published.</p>
+                  <p>The follownig will be publicly visable once published.</p>
                   <ul className="list-disc list-inside">
                     <li>Email</li>
                     <li>Phone Number</li>
