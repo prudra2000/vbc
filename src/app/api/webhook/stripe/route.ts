@@ -41,9 +41,9 @@ export async function POST(req: NextRequest) {
           { expand: ["line_items"] }
         );
 
-        const customerId = checkoutSession.customer as string;
+        // const customerId = checkoutSession.customer as string;
         const customerEmail = checkoutSession.customer_details?.email || (dataObject as Stripe.Checkout.Session).customer_email;
-        const subscriptionId = (dataObject as Stripe.Checkout.Session).subscription as string;
+       //  const subscriptionId = (dataObject as Stripe.Checkout.Session).subscription as string;
 
         if (customerEmail) {
           const user = await getUserByEmail(customerEmail);

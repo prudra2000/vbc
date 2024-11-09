@@ -16,7 +16,7 @@ import Link from "next/link";
 import { LogOut, Settings, LayoutDashboard } from "lucide-react";
 
 const UserInfo = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   return (
     <div>
       <Menubar>

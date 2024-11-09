@@ -55,13 +55,9 @@ const ClientSettings = () => {
   const linkedinRedirectUri =
     "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/linkedin/callback";
   const linkedinScope = "r_basicprofile";
-  const generateLinkedInState = () => {
-    return Math.random().toString(36).substring(2, 15);
-  };
 
   const handleLinkedInLink = async () => {
     const codeVerifier = generateCodeVerifier();
-    const codeChallenge = await generateCodeChallenge(codeVerifier);
     const state = generateState(codeVerifier);
     const authorizationUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${linkedinClientId}&redirect_uri=${encodeURIComponent(
       linkedinRedirectUri

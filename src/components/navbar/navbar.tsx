@@ -8,7 +8,6 @@ import {
   Search,
   X,
   LayoutDashboard,
-  Settings,
   CreditCard,
 } from "lucide-react";
 import UserInfo from "./user-info";
@@ -41,7 +40,6 @@ const Navbar = ({
   logo?: React.ReactElement<typeof NavBarLogo>;
   links?: React.ReactNode;
 }) => {
-  const [docsData, setDocsData] = useState([]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -54,11 +52,9 @@ const Navbar = ({
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
-    setSearchQuery("");
   };
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
 
   const toggleNavbar = () => {
     setIsOpen((prev) => !prev);
@@ -97,12 +93,7 @@ const Navbar = ({
     };
   }, [menuRef]);
 
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredDocs = docsData.filter(
-    (doc: { title: string; href: string; id: string }) =>
-      doc.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <div className="relative z-20">

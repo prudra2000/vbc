@@ -14,6 +14,7 @@ import {
   faTelegram,
   faReddit,
   faPinterest,
+  faSpotify,
 } from "@fortawesome/free-brands-svg-icons";
 import "@/app/CardStyles.css";
 import { Button } from "./button";
@@ -40,6 +41,7 @@ const socialIcons = {
   telegram: faTelegram,
   reddit: faReddit,
   pinterest: faPinterest,
+  spotify: faSpotify,
 };
 
 const platformRegex = (url: string, platform: string) => {
@@ -58,6 +60,7 @@ const platformRegex = (url: string, platform: string) => {
     telegram: /^(https?:\/\/)?t\.me\/([^\/]+)\/?/,
     reddit: /^(https?:\/\/)?(www\.)?reddit\.com\/user\/([^\/]+)\/?/,
     pinterest: /^(https?:\/\/)?(www\.)?pinterest\.com\/([^\/]+)\/?/,
+    spotify: /^(https?:\/\/)?(www\.)?spotify\.com\/([^\/]+)\/?/,
   };
 
   const regex = regexMap[platform];
@@ -81,7 +84,6 @@ const SocialLinks = ({
   selectedInputs,
   type = "primary",
 }: SocialLinksProps) => {
-  const links = {};
   const renderSocialLink = (
     platform: keyof typeof socialIcons,
     url: string | undefined

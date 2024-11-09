@@ -40,6 +40,7 @@ type FormValues = {
       youtube: string;
       twitch: string;
       discord: string;
+      spotify: string;
     };
   };
   urls: {
@@ -52,6 +53,7 @@ type FormValues = {
     youtube: string;
     twitch: string;
     discord: string;
+    spotify: string;
   };
 };
 
@@ -90,6 +92,7 @@ const EditorPage = () => {
         youtube: "",
         twitch: "",
         discord: "",
+        spotify: "",
       },
     },
     urls: {
@@ -102,6 +105,7 @@ const EditorPage = () => {
       youtube: "",
       twitch: "",
       discord: "",
+      spotify: "",
     },
   });
 
@@ -147,6 +151,7 @@ const EditorPage = () => {
                   youtube: digiMeCard.cardData.socialMedia.youtube || "",
                   twitch: digiMeCard.cardData.socialMedia.twitch || "",
                   discord: digiMeCard.cardData.socialMedia.discord || "",
+                  spotify: digiMeCard.cardData.socialMedia.spotify || "",
                 },
               },
               urls: {
@@ -159,6 +164,7 @@ const EditorPage = () => {
                 youtube: digiMeCard.cardData.socialMedia.youtube || "",
                 twitch: digiMeCard.cardData.socialMedia.twitch || "",
                 discord: digiMeCard.cardData.socialMedia.discord || "",
+                spotify: digiMeCard.cardData.socialMedia.spotify || "",
               },
             });
             const keysToRetain = [
@@ -171,6 +177,7 @@ const EditorPage = () => {
               "youtube",
               "twitch",
               "discord",
+              "spotify",
             ];
             const filteredData = Object.entries(digiMeCard.cardData.socialMedia)
               .filter(([key, value]) => keysToRetain.includes(key) && value)
@@ -232,6 +239,7 @@ const EditorPage = () => {
           youtube: formValues.cardData.socialMedia.youtube || "",
           twitch: formValues.cardData.socialMedia.twitch || "",
           discord: formValues.cardData.socialMedia.discord || "",
+          spotify: formValues.cardData.socialMedia.spotify || "",
         },
       },
     };

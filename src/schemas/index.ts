@@ -51,6 +51,7 @@ export const CardSchema = z.object({
   telegram: z.string().optional(),
   reddit: z.string().optional(),
   pinterest: z.string().optional(),
+  spotify: z.string().optional(),
 });
 
 export const UpdateCardSchema = z.object({
@@ -81,6 +82,7 @@ export const UpdateCardSchema = z.object({
       telegram: z.string().optional(),
       reddit: z.string().optional(),
       pinterest: z.string().optional(),
+      spotify: z.string().optional(),
     })
     .optional(),
 });
@@ -113,6 +115,7 @@ export const EditorSchema = z.object({
       telegram: z.string().optional(),
       reddit: z.string().optional(),
       pinterest: z.string().optional(),
+      spotify: z.string().optional(),
     })
     .optional(),
 });
@@ -146,6 +149,7 @@ export const PersonalCardSchema = z.object({
       telegram: z.string().optional(),
       reddit: z.string().optional(),
       pinterest: z.string().optional(),
+      spotify: z.string().optional(),
     })
     .optional(),
 });
@@ -178,6 +182,7 @@ export const DigimedCardSchema = z.object({
       youtube: z.string().optional(),
       twitch: z.string().optional(),
       discord: z.string().optional(),
+      spotify: z.string().optional(),
     })
     .optional(),
   }),

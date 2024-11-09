@@ -17,6 +17,8 @@ import {
   faLinkedin,
   faGithub,
   faTwitter,
+  faSpotify,
+  faTwitch,
 } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
 import {
@@ -595,6 +597,104 @@ const EditorForm: React.FC<EditorForm> = ({
                                               ? session?.user
                                                   ?.authenticatedSocials
                                                   ?.twitter?.twitterUsername
+                                              : ""
+                                          );
+                                        }}
+                                      />
+                                    </FormControl>
+                                  </FormItem>
+                                )}
+                              ></FormField>
+                            </div>
+                          </div>
+                        )}
+                        {session?.user?.authenticatedSocials?.spotify
+                          ?.spotifyId !== undefined && (
+                          <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
+                            <div className="flex items-center justify-center gap-2">
+                              <Link
+                                href={`https://twitter.com/${
+                                  session?.user?.authenticatedSocials?.spotify
+                                    ?.spotifyUsername || ""
+                                }`}
+                                target="_blank"
+                              >
+                                <Button variant="link" className="p-0 gap-2">
+                                  <FontAwesomeIcon
+                                    icon={faSpotify}
+                                    className="w-6 h-6"
+                                  />
+                                  {
+                                    session?.user?.authenticatedSocials?.spotify
+                                      ?.spotifyUsername
+                                  }
+                                </Button>
+                              </Link>
+                            </div>
+                            <div className="flex items-center">
+                              <FormField
+                                control={form.control}
+                                name="cardData.socialMedia.spotify"
+                                render={({ field }) => (
+                                  <FormItem className="">
+                                    <FormControl>
+                                      <Switch
+                                        checked={!!field.value}
+                                        onCheckedChange={(checked) => {
+                                          field.onChange(
+                                            checked
+                                              ? session?.user
+                                                  ?.authenticatedSocials
+                                                  ?.spotify?.spotifyUsername
+                                              : ""
+                                          );
+                                        }}
+                                      />
+                                    </FormControl>
+                                  </FormItem>
+                                )}
+                              ></FormField>
+                            </div>
+                          </div>
+                        )}
+                        {session?.user?.authenticatedSocials?.twitch
+                          ?.twitchId !== undefined && (
+                          <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
+                            <div className="flex items-center justify-center gap-2">
+                              <Link
+                                href={`https://twitter.com/${
+                                  session?.user?.authenticatedSocials?.twitch
+                                    ?.twitchUsername || ""
+                                }`}
+                                target="_blank"
+                              >
+                                <Button variant="link" className="p-0 gap-2">
+                                  <FontAwesomeIcon
+                                    icon={faTwitch}
+                                    className="w-6 h-6"
+                                  />
+                                  {
+                                    session?.user?.authenticatedSocials?.twitch
+                                      ?.twitchUsername
+                                  }
+                                </Button>
+                              </Link>
+                            </div>
+                            <div className="flex items-center">
+                              <FormField
+                                control={form.control}
+                                name="cardData.socialMedia.twitch"
+                                render={({ field }) => (
+                                  <FormItem className="">
+                                    <FormControl>
+                                      <Switch
+                                        checked={!!field.value}
+                                        onCheckedChange={(checked) => {
+                                          field.onChange(
+                                            checked
+                                              ? session?.user
+                                                  ?.authenticatedSocials
+                                                  ?.twitch?.twitchUsername
                                               : ""
                                           );
                                         }}

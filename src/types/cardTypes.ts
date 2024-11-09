@@ -22,6 +22,7 @@ export interface CardData {
       youtube: string;
       twitch: string;
       discord: string;
+      spotify: string;
     };
   }
 
@@ -44,5 +45,6 @@ export interface CardData {
       youtube: '',
       twitch: '',
       discord: '',
+      spotify: '',
     },
   };

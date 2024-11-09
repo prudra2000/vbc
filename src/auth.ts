@@ -66,7 +66,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
       return session;
     },
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, trigger, session }) {
       // Handle image updates triggered from the client
       if (trigger === "update" && session?.user?.image) {
         token.image = session.user.image;

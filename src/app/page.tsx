@@ -1,12 +1,8 @@
 "use client";
 import LoginButton from "@/components/auth/login-button";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   LogIn,
-  Smartphone,
-  Globe,
-  Zap,
   IdCard,
   CircleUserRound,
 } from "lucide-react";

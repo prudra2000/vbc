@@ -1,19 +1,16 @@
 "use client";
-import { useEffect, useState, RefObject } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { addCard } from "@/actions/add-card";
-import { DigiMeCard, PersonalCard } from "@prisma/client";
+import { DigiMeCard } from "@prisma/client";
 import { getCards } from "@/actions/get-user-cards";
 import CardModal from "../editor/card-modal";
 import {
   Trash2,
-  Plus,
   Share2,
   PencilRuler,
   EllipsisVertical,
   Eye,
-  CodeXml,
   Send,
 } from "lucide-react";
 import { deleteCard } from "@/actions/delete-card";
@@ -32,17 +29,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useSession } from "next-auth/react";
 import { GridLoader } from "react-spinners";
-import EmbedModal from "../editor/embedModal";
 import PublishCardModal from "../editor/publishCard";
 import { CardData } from "@/types/cardTypes";
 const ClientDashboard = () => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [cards, setCards] = useState<DigiMeCard[]>([]);
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
-  const [isEmbedModalOpen, setIsEmbedModalOpen] = useState(false);
   const [currentCardId, setCurrentCardId] = useState<string | null>(null);
   const [publishModalCardId, setPublishModalCardId] = useState<string | null>(null);
 
@@ -62,27 +57,8 @@ const ClientDashboard = () => {
 
     fetchCards();
   }, []);
-  const handleAddCard = async (data: any) => {
-    const starterValues = {
-      userId: session?.user?.id || "",
-      cardTitle: data.cardTitle || "",
-      cardStyle: data.cardStyle || "",
-      isPublished: false,
-      cardData: {
-        name: data.name || "",
-        image: data.image || "",
-        tagline: data.tagline || "",
-        company: data.company || "",
-        email: data.email || "",
-        phone: data.phone || "",
-        location: data.location || "",
-        website: data.website || "",
-        socialMedia: data.socialMedia || {},
-      },
-    };
-    await addCard(starterValues);
-  };
 
+  if (error) return <div>{error}</div>; 
   if (!session) return <div>Loading...</div>;
   if (loading)
     return (
@@ -134,8 +110,8 @@ const ClientDashboard = () => {
                             hour12: true,
                           }
                         )}
-                        children={
-                          <div className="">
+                      >
+                        <div className="">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="secondary" size="sm">
@@ -243,8 +219,7 @@ const ClientDashboard = () => {
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </div>
-                        }
-                      />
+                        </DisplayCard>
                     </div>
                   </>
                 );

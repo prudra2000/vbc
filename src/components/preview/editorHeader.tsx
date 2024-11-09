@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { Pencil, Fullscreen, Send, PencilRuler, Share, Share2, Eye } from "lucide-react";
+import { Pencil, Send, PencilRuler, Share2 } from "lucide-react";
 
 import Link from "next/link";
 import EditCardNameModal from "../editor/editCardNameModal";
