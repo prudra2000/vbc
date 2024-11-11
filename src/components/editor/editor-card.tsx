@@ -67,12 +67,32 @@ const EditorForm: React.FC<EditorForm> = ({
     form.reset(formValues);
   }, [formValues]);
 
+  const defaultSocialMedia: CardData['socialMedia'] = {
+    linkedin: '',
+    github: '',
+    twitter: '',
+    instagram: '',
+    facebook: '',
+    tiktok: '',
+    youtube: '',
+    twitch: '',
+    discord: '',
+    spotify: '',
+  };
+
   const [urls, setUrls] = useState<Record<string, string>>(
-    formValues.cardData.socialMedia || {} // Ensure socialMedia is an object
+    { ...defaultSocialMedia, ...formValues.cardData.socialMedia }
   );
 
   const handleFormChange = (values: DigimedCardValues) => {
-    onFormChange({ ...values, urls });
+    onFormChange({
+      
+      cardData: {
+        ...values.cardData,
+        socialMedia: { ...defaultSocialMedia, ...urls },
+      },
+      
+    });
   };
 
   //const [selectedInputs, setSelectedInputs] = useState<string[]>(selected);
@@ -419,6 +439,7 @@ const EditorForm: React.FC<EditorForm> = ({
               <FormField
                 control={form.control}
                 name="cardData.socialMedia"
+                /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>

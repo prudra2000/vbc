@@ -3,6 +3,7 @@ export interface CardConfig {
   showSocialUsername: boolean;
 }
 
+
 export interface CardData {
     name: string;
     image: string;

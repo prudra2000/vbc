@@ -32,6 +32,7 @@ type FormValues = {
       youtube: string;
       twitch: string;
       discord: string;
+      spotify: string;
     };
   };
 };
@@ -76,6 +77,7 @@ const PreviewPage = () => {
         youtube: "",
         twitch: "",
         discord: "",
+        spotify: "",
       },
     },
   });
@@ -113,6 +115,7 @@ const PreviewPage = () => {
                     youtube: digiMeCard.cardData.socialMedia.youtube || "",
                     twitch: digiMeCard.cardData.socialMedia.twitch || "",
                     discord: digiMeCard.cardData.socialMedia.discord || "",
+                    spotify: digiMeCard.cardData.socialMedia.spotify || "",
                   },
                 },
               });
@@ -144,6 +147,9 @@ const PreviewPage = () => {
                 discord:
                   `https://discord.gg/${digiMeCard.cardData.socialMedia.discord}` ||
                   "",
+                spotify:
+                  `https://open.spotify.com/user/${digiMeCard.cardData.socialMedia.spotify}` ||
+                  "",
               });
               const keysToRetain = [
                 "linkedin",
@@ -155,6 +161,7 @@ const PreviewPage = () => {
                 "youtube",
                 "twitch",
                 "discord",
+                "spotify",
               ];
               const filteredData = Object.entries(
                 digiMeCard.cardData.socialMedia
@@ -203,9 +210,7 @@ const PreviewPage = () => {
         {digiMeCard.cardStyle === "defaultLight" && (
           <BasicCard
             cardValues={{
-              ...digiMeCard,
-              socialMedia: JSON.stringify(digiMeCard.cardData.socialMedia),
-              urls: JSON.stringify(digiMeCard.cardData.socialMedia),
+              cardData: digiMeCard.cardData,
             }}
             urls={urls}
             showUsername={true}
@@ -217,9 +222,7 @@ const PreviewPage = () => {
           <>
             <BasicDarkCard
               cardValues={{
-                ...digiMeCard,
-                socialMedia: JSON.stringify(digiMeCard.cardData.socialMedia),
-                urls: JSON.stringify(digiMeCard.cardData.socialMedia),
+                cardData: digiMeCard.cardData,
               }}
               urls={urls}
               showUsername={true}
@@ -231,9 +234,7 @@ const PreviewPage = () => {
         {digiMeCard.cardStyle === "glassLight" && (
           <GlassLightCard
             cardValues={{
-              ...digiMeCard,
-              socialMedia: JSON.stringify(digiMeCard.cardData.socialMedia),
-              urls: JSON.stringify(digiMeCard.cardData.socialMedia),
+              cardData: digiMeCard.cardData,
             }}
             urls={urls}
             showUsername={true}

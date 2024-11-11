@@ -35,6 +35,7 @@ type FormValues = {
       youtube: string;
       twitch: string;
       discord: string;
+      spotify: string;
     };
   };
 };
@@ -84,6 +85,7 @@ const CardPage = () => {
         youtube: "",
         twitch: "",
         discord: "",
+        spotify: "",
       },
     },
   });
@@ -121,6 +123,7 @@ const CardPage = () => {
                     youtube: digiMeCard.cardData.socialMedia.youtube || "",
                     twitch: digiMeCard.cardData.socialMedia.twitch || "",
                     discord: digiMeCard.cardData.socialMedia.discord || "",
+                    spotify: digiMeCard.cardData.socialMedia.spotify || "",
                   },
                 },
               });
@@ -134,6 +137,7 @@ const CardPage = () => {
                 youtube: `https://www.youtube.com/@${digiMeCard.cardData.socialMedia.youtube}`,
                 twitch: `https://www.twitch.tv/${digiMeCard.cardData.socialMedia.twitch}`,
                 discord: `https://discord.gg/${digiMeCard.cardData.socialMedia.discord}`,
+                spotify: `https://open.spotify.com/user/${digiMeCard.cardData.socialMedia.spotify}`,
               });
               const keysToRetain = [
                 "linkedin",
@@ -145,6 +149,7 @@ const CardPage = () => {
                 "youtube",
                 "twitch",
                 "discord",
+                "spotify",
                 "snapchat",
                 "whatsapp",
                 "telegram",
@@ -204,9 +209,7 @@ const CardPage = () => {
       {cardValues.cardStyle === "defaultLight" && (
         <BasicCard
           cardValues={{
-            ...cardValues,
-            socialMedia: JSON.stringify(cardValues.cardData.socialMedia),
-            urls: JSON.stringify(cardValues.cardData.socialMedia),
+            cardData: cardValues.cardData,
           }}
           urls={urls}
           showUsername={true}
@@ -218,9 +221,7 @@ const CardPage = () => {
         <>
           <BasicDarkCard
             cardValues={{
-              ...cardValues,
-              socialMedia: JSON.stringify(cardValues.cardData.socialMedia),
-              urls: JSON.stringify(cardValues.cardData.socialMedia),
+              cardData: cardValues.cardData,
             }}
             urls={urls}
             showUsername={true}
@@ -232,9 +233,7 @@ const CardPage = () => {
       {cardValues.cardStyle === "glassLight" && (
         <GlassLightCard
           cardValues={{
-            ...cardValues,
-            socialMedia: JSON.stringify(cardValues.cardData.socialMedia),
-            urls: JSON.stringify(cardValues.cardData.socialMedia),
+            cardData: cardValues.cardData,
           }}
           urls={urls}
           showUsername={true}

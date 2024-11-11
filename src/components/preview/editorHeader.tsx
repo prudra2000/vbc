@@ -4,7 +4,6 @@ import { Pencil, Send, PencilRuler, Share2 } from "lucide-react";
 
 import Link from "next/link";
 import EditCardNameModal from "../editor/editCardNameModal";
-import PreviewCardModal from "../editor/previewCard";
 import PublishCardModal from "../editor/publishCard";
 import ShareModal from "../card/card-qr-modal";
 
@@ -24,7 +23,6 @@ const PreviewHeader: React.FC<PreviewHeaderProps> = ({
   isPublished,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   return (
@@ -34,14 +32,6 @@ const PreviewHeader: React.FC<PreviewHeaderProps> = ({
           cardID={cardID}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-        />
-      )}
-      {isPreviewModalOpen && (
-        <PreviewCardModal
-          cardID={cardID}
-          isOpen={isPreviewModalOpen}
-          onClose={() => setIsPreviewModalOpen(false)}
-          onSubmit={() => Promise.resolve()}
         />
       )}
       {isPublishModalOpen && (
@@ -81,7 +71,11 @@ const PreviewHeader: React.FC<PreviewHeaderProps> = ({
         </div>
         <div className="flex items-center gap-2">
           <Link href={`/editor/${cardID}`}>
-            <Button className="flex items-center gap-2 text-black" variant="header" size="sm">
+            <Button
+              className="flex items-center gap-2 text-black"
+              variant="header"
+              size="sm"
+            >
               <PencilRuler className="w-4 h-4" />
               <p className="text-xs hidden md:block">Edit</p>
             </Button>
@@ -94,9 +88,7 @@ const PreviewHeader: React.FC<PreviewHeaderProps> = ({
               size="sm"
             >
               <Send className="w-4 h-4 text-destructive" />
-              <p className="text-xs hidden md:block">
-                Unpublish
-              </p>
+              <p className="text-xs hidden md:block">Unpublish</p>
             </Button>
           )}
           {isPublished && (
