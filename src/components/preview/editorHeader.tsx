@@ -53,7 +53,7 @@ const PreviewHeader: React.FC<PreviewHeaderProps> = ({
         <div className="flex items-center gap-2 justify-center text-black">
           <div>{icon}</div>
           <div className="flex flex-row justify-center items-center">
-            <h1 className="text-sm font-[600]">{headerTitle}</h1>
+            <h1 className="text-sm font-[600] hidden sm:block">{headerTitle}</h1>
 
             <div
               className="relative group bg-neutral-100 hover:bg-neutral-200 transition-colors rounded-md px-2 ml-1 py-1"

@@ -68,7 +68,7 @@ const ClientDashboard = () => {
       </div>
     );
   return (
-    <div className=" py-8 px-4 sm:px-10  ">
+    <div className="">
       <CardModal
         isOpen={isModalOpen}
         onClose={() => {

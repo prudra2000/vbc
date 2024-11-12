@@ -11,7 +11,7 @@ import {
 import SocialLinks from "../ui/SocialLinks";
 import { Separator } from "@/components/ui/separator";
 import { CardData, defaultCardData } from "@/types/cardTypes";
-
+import Watermark from "../card/watermark";
 interface CardProps {
   cardValues?: {cardData: CardData};
   urls?: Record<string, string>;
@@ -31,7 +31,7 @@ export default function BasicDarkCard({
   type,
 }: CardProps) {
   return (
-    <div className="flex items-center justify-center min-h-screen  px-6 sm:px-0">
+    <div className="flex items-center justify-center min-h-screen  px-6 sm:px-0 py-4 ">
       <Card className="w-full max-w-md mx-auto rounded-3xl overflow-hidden bg-[#222222] border-neutral-700">
         <CardHeader className="p-6 pb-0">
           <div className="flex flex-col items-center text-center">
@@ -153,6 +153,7 @@ export default function BasicDarkCard({
           </div>
         </CardContent>
       </Card>
+      <Watermark />
     </div>
   );
 }

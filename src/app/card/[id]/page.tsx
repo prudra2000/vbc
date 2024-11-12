@@ -241,6 +241,8 @@ const CardPage = () => {
           type={cardValues.cardStyle}
         />
       )}
+
+      
     </div>
   );
 };
