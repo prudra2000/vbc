@@ -207,7 +207,7 @@ const ClientSettings = () => {
   };
 
   return (
-    <div className=" pt-8 bg-gray-100">
+    <div className=" bg-gray-100">
       <div className="flex flex-col gap-4 rounded-lg">
         <div className="flex flex-col gap-4 bg-white p-4 rounded-lg shadow-md">
           <h1 className="font-semibold text-black">Your Account:</h1>

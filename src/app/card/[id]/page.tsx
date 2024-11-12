@@ -11,6 +11,7 @@ import BasicDarkCard from "@/components/card-components/default-dark";
 import GlassLightCard from "@/components/card-components/glass-light";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import DigiMeLogo from "@/components/DigiMeLogo";
 
 type FormValues = {
   userId: string;
@@ -241,6 +242,8 @@ const CardPage = () => {
           type={cardValues.cardStyle}
         />
       )}
+
+      
     </div>
   );
 };

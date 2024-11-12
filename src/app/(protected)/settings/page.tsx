@@ -4,7 +4,7 @@ import { Settings } from "lucide-react";
 const SettingsPage = async () => {
   return (
     <div>
-      <div className="pt-8 px-10 bg-gray-100 min-h-screen">
+      <div className="flex flex-col py-8 px-3 gap-4 min-h-screen bg-gray-100">
         <Header
           headerTitle={"Settings"}
           icon={<Settings className="stroke-white" />}
