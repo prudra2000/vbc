@@ -5,12 +5,12 @@ export interface CardConfig {
 
 
 export interface CardData {
-    name: string;
-    image: string;
-    tagline: string;
-    company: string;
-    email: string;
-    phone: string;
+  name: string;
+  image: string;
+  tagline: string;
+  company: string;
+  email: string;
+  phone: string;
     location: string;
     website: string;
     socialMedia: {
@@ -28,24 +28,24 @@ export interface CardData {
   }
 
   export const defaultCardData: CardData = {
-    image: '',
-    name: '',
-    tagline: '',
-    company: '',
-    phone: '',
-    email: '',
-    website: '',
-    location: '',
-    socialMedia: {
-      linkedin: '',
-      github: '',
-      twitter: '',
-      instagram: '',
-      facebook: '',
-      tiktok: '',
-      youtube: '',
-      twitch: '',
-      discord: '',
-      spotify: '',
+  image: "",
+  name: "",
+  tagline: "",
+  company: "",
+  phone: "",
+  email: "",
+  website: "",
+  location: "",
+  socialMedia: {
+    linkedin: "",
+    github: "",
+    twitter: "",
+    instagram: "",
+    facebook: "",
+    tiktok: "",
+    youtube: "",
+    twitch: "",
+    discord: "",
+    spotify: "",
     },
   };

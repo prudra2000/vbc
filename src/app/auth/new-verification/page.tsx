@@ -1,3 +1,4 @@
+"use client";
 import React, { Suspense } from "react";
 import { NewVerificationForm } from "@/components/auth/new-verification-form";
 import { GridLoader } from "react-spinners";

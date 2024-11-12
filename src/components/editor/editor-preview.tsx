@@ -27,6 +27,7 @@ interface EditorPreviewProps {
         youtube: string;
         twitch: string;
         discord: string;
+        spotify: string;
       };
     };
   };
@@ -47,13 +48,14 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
     youtube: `https://www.youtube.com/@${formValues.cardData.socialMedia.youtube}`,
     twitch: `https://www.twitch.tv/${formValues.cardData.socialMedia.twitch}`,
     discord: `https://discord.gg/${formValues.cardData.socialMedia.discord}`,
+    spotify: `https://open.spotify.com/artist/${formValues.cardData.socialMedia.spotify}`,
   };
   return (
     <div className="">
       {formValues.cardStyle === "defaultLight" && (
         <BasicCard
           cardValues={{
-            ...formValues,
+            cardData: formValues.cardData,
           }}
           urls={links}
           showUsername={formValues.cardConfig.showSocialUsername || true}
@@ -65,7 +67,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
         <>
           <BasicDarkCard
             cardValues={{
-              ...formValues,
+              cardData: formValues.cardData,
             }}
             urls={links}
             showUsername={formValues.cardConfig.showSocialUsername || true}
@@ -77,7 +79,7 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
       {formValues.cardStyle === "glassLight" && (
         <GlassLightCard
           cardValues={{
-            ...formValues,
+            cardData: formValues.cardData,
           }}
           urls={links}
           showUsername={formValues.cardConfig.showSocialUsername || true}
