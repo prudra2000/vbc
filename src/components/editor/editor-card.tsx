@@ -37,8 +37,13 @@ import Avatar from "../avatar";
 interface EditorForm {
   isOpen?: boolean;
   onClose?: () => void;
-  formValues: { cardData: CardData; cardConfig: CardConfig };
+  formValues: {
+    cardStyle: string;
+    cardData: CardData;
+    cardConfig: CardConfig;
+  };
   onFormChange: (newValues: {
+    cardStyle: string;
     cardData: CardData;
     cardConfig: CardConfig;
   }) => void;
@@ -67,31 +72,50 @@ const EditorForm: React.FC<EditorForm> = ({
     form.reset(formValues);
   }, [formValues]);
 
-  const defaultSocialMedia: CardData['socialMedia'] = {
-    linkedin: '',
-    github: '',
-    twitter: '',
-    instagram: '',
-    facebook: '',
-    tiktok: '',
-    youtube: '',
-    twitch: '',
-    discord: '',
-    spotify: '',
+  const defaultSocialMedia: CardData["socialMedia"] = {
+    linkedin: "",
+    github: "",
+    twitter: "",
+    instagram: "",
+    facebook: "",
+    tiktok: "",
+    youtube: "",
+    twitch: "",
+    discord: "",
+    spotify: "",
   };
 
-  const [urls, setUrls] = useState<Record<string, string>>(
-    { ...defaultSocialMedia, ...formValues.cardData.socialMedia }
-  );
+  const [urls, setUrls] = useState<Record<string, string>>({
+    ...defaultSocialMedia,
+    ...formValues.cardData.socialMedia,
+  });
 
   const handleFormChange = (values: DigimedCardValues) => {
     onFormChange({
-      
+      cardStyle: values.cardStyle || "",
       cardData: {
-        ...values.cardData,
-        socialMedia: { ...defaultSocialMedia, ...urls },
+        name: values.cardData.name || "",
+        image: values.cardData.image || "",
+        tagline: values.cardData.tagline || "",
+        company: values.cardData.company || "",
+        email: values.cardData.email || "",
+        phone: values.cardData.phone || "",
+        location: values.cardData.location || "",
+        website: values.cardData.website || "",
+        socialMedia: {
+          github: values.cardData.socialMedia?.github || "",
+          linkedin: values.cardData.socialMedia?.linkedin || "",
+          twitter: values.cardData.socialMedia?.twitter || "",
+          instagram: values.cardData.socialMedia?.instagram || "",
+          facebook: values.cardData.socialMedia?.facebook || "",
+          tiktok: values.cardData.socialMedia?.tiktok || "",
+          youtube: values.cardData.socialMedia?.youtube || "",
+          twitch: values.cardData.socialMedia?.twitch || "",
+          discord: values.cardData.socialMedia?.discord || "",
+          spotify: values.cardData.socialMedia?.spotify || "",
+        },
       },
-      
+      cardConfig: formValues.cardConfig,
     });
   };
 
@@ -727,23 +751,23 @@ const EditorForm: React.FC<EditorForm> = ({
                             </div>
                           </div>
                         )}
-                        <FormField
-                          control={form.control}
-                          name="cardConfig.showSocialUsername"
-                          render={({ field }) => (
-                            <FormItem className="">
-                              <FormControl>
-                                <Switch
-                                  checked={!!field.value}
-                                  onCheckedChange={(checked) => {
-                                    field.onChange(checked ? true : false);
-                                  }}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        ></FormField>
                       </div>
+                    </FormControl>
+                  </FormItem>
+                )}
+              ></FormField>
+              <FormField
+                control={form.control}
+                name="cardConfig.showSocialUsername"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormControl>
+                      <Switch
+                        checked={!!field.value}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked);
+                        }}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
