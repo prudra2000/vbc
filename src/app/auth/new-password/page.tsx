@@ -1,3 +1,4 @@
+"use client";
 import { NewPasswordForm } from "@/components/auth/new-password-form";
 import React, { Suspense } from "react";
 import { GridLoader } from "react-spinners";

@@ -1,36 +1,34 @@
 import React from "react";
-import PreviewCard from "../card/preview-card";
 import BasicCard from "../card-components/default-light";
 import BasicDarkCard from "../card-components/default-dark";
 import GlassLightCard from "../card-components/glass-light";
-
+import { CardConfig } from "@/types/cardTypes";
 interface EditorPreviewProps {
   formValues: {
     cardTitle: string;
     cardStyle: string;
-    name: string;
-    image: string;
-    tagline: string;
-    company: string;
-    email: string;
-    phone: string;
-    location: string;
-    website: string;
-    socialMedia: {
-      linkedin: string;
-      github: string;
-      twitter: string;
-      instagram: string;
-      facebook: string;
-      tiktok: string;
-      youtube: string;
-      twitch: string;
-      discord: string;
-      snapchat: string;
-      whatsapp: string;
-      telegram: string;
-      reddit: string;
-      pinterest: string;
+    cardConfig: CardConfig;
+    cardData: {
+      name: string;
+      image: string;
+      tagline: string;
+      company: string;
+      email: string;
+      phone: string;
+      location: string;
+      website: string;
+      socialMedia: {
+        linkedin: string;
+        github: string;
+        twitter: string;
+        instagram: string;
+        facebook: string;
+        tiktok: string;
+        youtube: string;
+        twitch: string;
+        discord: string;
+        spotify: string;
+      };
     };
   };
   selectedInputs: string[];
@@ -40,34 +38,27 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
   formValues,
   selectedInputs,
 }) => {
-  const showUsername = true;
-  const urls = {
-    linkedin: formValues.socialMedia.linkedin,
-    github: formValues.socialMedia.github,
-    twitter: formValues.socialMedia.twitter,
-    instagram: formValues.socialMedia.instagram,
-    facebook: formValues.socialMedia.facebook,
-    tiktok: formValues.socialMedia.tiktok,
-    youtube: formValues.socialMedia.youtube,
-    twitch: formValues.socialMedia.twitch,
-    discord: formValues.socialMedia.discord,
-    snapchat: formValues.socialMedia.snapchat,
-    whatsapp: formValues.socialMedia.whatsapp,
-    telegram: formValues.socialMedia.telegram,
-    reddit: formValues.socialMedia.reddit,
-    pinterest: formValues.socialMedia.pinterest,
+  const links = {
+    linkedin: `https://www.linkedin.com/in/${formValues.cardData.socialMedia.linkedin}`,
+    github: `https://www.github.com/${formValues.cardData.socialMedia.github}`,
+    twitter: `https://x.com/${formValues.cardData.socialMedia.twitter}`,
+    instagram: `https://www.instagram.com/${formValues.cardData.socialMedia.instagram}`,
+    facebook: `https://www.facebook.com/${formValues.cardData.socialMedia.facebook}`,
+    tiktok: `https://www.tiktok.com/@${formValues.cardData.socialMedia.tiktok}`,
+    youtube: `https://www.youtube.com/@${formValues.cardData.socialMedia.youtube}`,
+    twitch: `https://www.twitch.tv/${formValues.cardData.socialMedia.twitch}`,
+    discord: `https://discord.gg/${formValues.cardData.socialMedia.discord}`,
+    spotify: `https://open.spotify.com/artist/${formValues.cardData.socialMedia.spotify}`,
   };
   return (
     <div className="">
-     {formValues.cardStyle === "defaultLight" && (
+      {formValues.cardStyle === "defaultLight" && (
         <BasicCard
           cardValues={{
-            ...formValues,
-            socialMedia: JSON.stringify(formValues.socialMedia),
-            urls: JSON.stringify(formValues.socialMedia),
+            cardData: formValues.cardData,
           }}
-          urls={urls}
-          showUsername={true}
+          urls={links}
+          showUsername={formValues.cardConfig.showSocialUsername || true}
           selectedInputs={selectedInputs}
           type={formValues.cardStyle}
         />
@@ -76,12 +67,10 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
         <>
           <BasicDarkCard
             cardValues={{
-              ...formValues,
-              socialMedia: JSON.stringify(formValues.socialMedia),
-              urls: JSON.stringify(formValues.socialMedia),
+              cardData: formValues.cardData,
             }}
-            urls={urls}
-            showUsername={true}
+            urls={links}
+            showUsername={formValues.cardConfig.showSocialUsername || true}
             selectedInputs={selectedInputs}
             type={formValues.cardStyle}
           />
@@ -90,12 +79,10 @@ export const EditorPreview: React.FC<EditorPreviewProps> = ({
       {formValues.cardStyle === "glassLight" && (
         <GlassLightCard
           cardValues={{
-            ...formValues,
-            socialMedia: JSON.stringify(formValues.socialMedia),
-            urls: JSON.stringify(formValues.socialMedia),
+            cardData: formValues.cardData,
           }}
-          urls={urls}
-          showUsername={true}
+          urls={links}
+          showUsername={formValues.cardConfig.showSocialUsername || true}
           selectedInputs={selectedInputs}
           type={formValues.cardStyle}
         />

@@ -8,7 +8,7 @@ import {
   Search,
   X,
   LayoutDashboard,
-  Settings,
+  CreditCard,
 } from "lucide-react";
 import UserInfo from "./user-info";
 
@@ -40,7 +40,6 @@ const Navbar = ({
   logo?: React.ReactElement<typeof NavBarLogo>;
   links?: React.ReactNode;
 }) => {
-  const [docsData, setDocsData] = useState([]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -53,11 +52,9 @@ const Navbar = ({
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
-    setSearchQuery("");
   };
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
 
   const toggleNavbar = () => {
     setIsOpen((prev) => !prev);
@@ -96,42 +93,31 @@ const Navbar = ({
     };
   }, [menuRef]);
 
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredDocs = docsData.filter(
-    (doc: { title: string; href: string; id: string }) =>
-      doc.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <div className="relative z-20">
-      <div className="flex flex-row px-5 md:px-10 py-2 justify-between items-center bg-white backdrop-blur-md border-b border-1 border-blue-400 text-white shadow-lg">
+      <div className="flex flex-row px-3 py-2 justify-between items-center bg-white backdrop-blur-md border-b border-1 border-blue-400 text-white">
         {logo}
         <div
           className={`${
             isOpen ? "hidden" : "block"
           } hidden sm:hidden md:flex flex-row gap-x-2 justify-center items-center`}
         >
-          <Button
-            variant="link"
-            size="sm"
-            onClick={() => handleOpenDialog()}
-            className="hover:bg-slate-100"
-          >
-            <Search className="w-4 h-4 stroke-blue-800" />
-            <span className=" hidden md:block ml-1 text-accent-primary rounded-md px-1 text-xs">
-              {typeof navigator !== "undefined" &&
-              navigator.userAgent.includes("Mac")
-                ? "⌘ K"
-                : "Ctrl+K"}
-            </span>
-          </Button>
 
           <Link href="/dashboard">
             <Button variant="link" size="sm" className="hover:bg-slate-100">
               <LayoutDashboard className="w-4 h-4 stroke-blue-800" />
-              <span className="ml-1 text-accent-primary rounded-md px-1">
+              <span className="ml-1 text-accent-primary rounded-md px-1 text-sm">
                 Darshboard
+              </span>
+            </Button>
+          </Link>
+          <Link href="/subscribe">
+            <Button variant="link" size="sm" className="hover:bg-slate-100">
+              <CreditCard className="w-4 h-4 stroke-blue-800" />
+              <span className="ml-1 text-accent-primary rounded-md px-1 text-sm">
+                Subscribe
               </span>
             </Button>
           </Link>

@@ -1,5 +1,3 @@
-import authConfig from "./auth.config";
-import NextAuth from "next-auth";
 import {
   publicRoutes,
   authRoutes,
@@ -7,7 +5,7 @@ import {
   DEFAUL_LOGIN_REDIRECT,
 } from "./routes";
 import { auth } from "@/auth";
-import { getCardByUserID, isCardOwner } from "./data/card";
+import { isCardOwner } from "./data/card";
 
 function isRoutePublic(pathname: string, publicRoutes: string[]): boolean {
   return publicRoutes.some((route) => {

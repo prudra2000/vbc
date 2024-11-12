@@ -1,8 +1,6 @@
 "use client";
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { addCard } from "@/actions/add-card";
-import { useSession } from "next-auth/react";
 import {
   Form,
   FormField,
@@ -15,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
-import { IdCard, X } from "lucide-react";
+import { IdCard } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -23,37 +21,39 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { updateCard } from "@/actions/update-card";
-
+import { editCardName } from "@/actions/edit-name";
+import { useSession } from "next-auth/react";
+import { AddCardFormValues } from "@/types/forms";
 interface EditCardNameModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => Promise<void>;
   cardID: string;
 }
 
 const EditCardNameModal: React.FC<EditCardNameModalProps> = ({
   isOpen,
   onClose,
-  onSubmit,
   cardID,
 }) => {
   const { data: session } = useSession();
-  const [CardCreated, setCardCreated] = useState(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const form = useForm();
-  const [newCard, setNewCard] = useState<any>(null); // Add state for newCard
+  const form = useForm<AddCardFormValues>({
+    defaultValues: {
+      cardTitle: "",
+    },
+  });
 
-  const handleAddCard = async (data: any) => {
+  const handleUpdateCard = async (data: AddCardFormValues) => {
     setError("");
     setSuccess("");
     const starterValues = {
-      userId: session?.user?.id || "",
+      userId: session?.user?.id || "", // Include userId
       cardTitle: data.cardTitle,
+      cardData: {}, // Include cardData (can be empty or existing data)
     };
     startTransition(async () => {
-      const result = await updateCard(starterValues, cardID);
+      const result = await editCardName(cardID, starterValues);
       if (result.error) {
         setError(result.error);
       } else {
@@ -84,8 +84,10 @@ const EditCardNameModal: React.FC<EditCardNameModalProps> = ({
                 const formData = new FormData(e.currentTarget); // Get form data
                 const data = {
                   cardTitle: formData.get("cardTitle") as string,
+                  cardStyle: "", // Add this line with an appropriate value
+
                 };
-                await handleAddCard(data); // Call handleAddCard with the form data
+                await handleUpdateCard(data); // Call handleAddCard with the form data
               }}
               className="space-y-4"
             >

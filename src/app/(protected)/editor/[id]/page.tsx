@@ -4,29 +4,45 @@ import EditorForm from "../../../../components/editor/editor-card";
 import { Card as PCard } from "@prisma/client";
 import { useParams } from "next/navigation";
 import * as z from "zod";
-import { UpdateCardSchema } from "@/schemas";
+import { DigimedCardSchema } from "@/schemas";
 import { useSession } from "next-auth/react";
 import { updateCard } from "@/actions/update-card";
 import { Button } from "../../../../components/ui/button";
-import {  Save, PencilRuler } from "lucide-react";
+import { Save, PencilRuler } from "lucide-react";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import EditorHeader from "@/components/editorHeader";
+import EditorHeader from "@/components/editor/editorHeader";
 import { EditorPreview } from "@/components/editor/editor-preview";
 import { GridLoader } from "react-spinners";
+import { CardConfig } from "@/types/cardTypes";
 
 type FormValues = {
   userId: string;
   cardTitle: string;
   cardStyle: string;
-  name: string;
-  image: string;
-  tagline: string;
-  company: string;
-  email: string;
-  phone: string;
-  location: string;
-  website: string;
+  cardConfig: CardConfig;
+  cardData: {
+    name: string;
+    image: string;
+    tagline: string;
+    company: string;
+    email: string;
+    phone: string;
+    location: string;
+    website: string;
+    socialMedia: {
+      linkedin: string;
+      github: string;
+      twitter: string;
+      instagram: string;
+      facebook: string;
+      tiktok: string;
+      youtube: string;
+      twitch: string;
+      discord: string;
+      spotify: string;
+    };
+  };
   urls: {
     linkedin: string;
     github: string;
@@ -37,27 +53,7 @@ type FormValues = {
     youtube: string;
     twitch: string;
     discord: string;
-    snapchat: string;
-    whatsapp: string;
-    telegram: string;
-    reddit: string;
-    pinterest: string;
-  };
-  socialMedia: {
-    linkedin: string;
-    github: string;
-    twitter: string;
-    instagram: string;
-    facebook: string;
-    tiktok: string;
-    youtube: string;
-    twitch: string;
-    discord: string;
-    snapchat: string;
-    whatsapp: string;
-    telegram: string;
-    reddit: string;
-    pinterest: string;
+    spotify: string;
   };
 };
 
@@ -70,19 +66,35 @@ const EditorPage = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedInputs, setSelectedInputs] = useState<string[]>([]);
-  const [nonEmptyCardData, setnonEmptyCardData] = useState<string[]>([]);
   const [formValues, setFormValues] = useState<FormValues>({
     userId: "",
     cardTitle: "",
     cardStyle: "",
-    name: "",
-    image: "",
-    tagline: "",
-    company: "",
-    email: "",
-    phone: "",
-    location: "",
-    website: "",
+    cardConfig: {
+      showSocialUsername: true,
+    },
+    cardData: {
+      name: "",
+      image: "",
+      tagline: "",
+      company: "",
+      email: "",
+      phone: "",
+      location: "",
+      website: "",
+      socialMedia: {
+        linkedin: "",
+        github: "",
+        twitter: "",
+        instagram: "",
+        facebook: "",
+        tiktok: "",
+        youtube: "",
+        twitch: "",
+        discord: "",
+        spotify: "",
+      },
+    },
     urls: {
       linkedin: "",
       github: "",
@@ -93,33 +105,16 @@ const EditorPage = () => {
       youtube: "",
       twitch: "",
       discord: "",
-      snapchat: "",
-      whatsapp: "",
-      telegram: "",
-      reddit: "",
-      pinterest: "",
-    },
-    socialMedia: {
-      linkedin: "",
-      github: "",
-      twitter: "",
-      instagram: "",
-      facebook: "",
-      tiktok: "",
-      youtube: "",
-      twitch: "",
-      discord: "",
-      snapchat: "",
-      whatsapp: "",
-      telegram: "",
-      reddit: "",
-      pinterest: "",
+      spotify: "",
     },
   });
 
-  const handleFormChange = (newValues: FormValues) => {
-    setFormValues(newValues);
-  };
+  const handleFormChange = (newValues: { cardData: FormValues['cardData']; cardConfig: FormValues['cardConfig'] }) => {
+    setFormValues((prevValues) => ({
+        ...prevValues,
+        ...newValues,
+    }));
+};
 
   useEffect(() => {
     const fetchCard = async () => {
@@ -128,51 +123,48 @@ const EditorPage = () => {
         try {
           const response = await fetch(`/api/editor/${id}`);
           if (response.ok) {
-            const { card: cardData } = await response.json();
-            setCard(cardData);
+            const { card: digiMeCard } = await response.json();
+            setCard(digiMeCard);
             setFormValues({
-              userId: cardData.userId || "",
-              cardTitle: cardData.cardTitle || "",
-              cardStyle: cardData.cardStyle || "",
-              name: cardData.name || "",
-              image: cardData.image || "",
-              tagline: cardData.tagline || "",
-              company: cardData.company || "",
-              email: cardData.email || "",
-              phone: cardData.phone || "",
-              location: cardData.location || "",
-              website: cardData.website || "",
-              urls: {
-                linkedin: cardData.socialMedia.linkedin || "",
-                github: cardData.socialMedia.github || "",
-                twitter: cardData.socialMedia.twitter || "",
-                instagram: cardData.socialMedia.instagram || "",
-                facebook: cardData.socialMedia.facebook || "",
-                tiktok: cardData.socialMedia.tiktok || "",
-                youtube: cardData.socialMedia.youtube || "",
-                twitch: cardData.socialMedia.twitch || "",
-                discord: cardData.socialMedia.discord || "",
-                snapchat: cardData.socialMedia.snapchat || "",
-                whatsapp: cardData.socialMedia.whatsapp || "",
-                telegram: cardData.socialMedia.telegram || "",
-                reddit: cardData.socialMedia.reddit || "",
-                pinterest: cardData.socialMedia.pinterest || "",
+              userId: digiMeCard.userId || "",
+              cardTitle: digiMeCard.cardTitle || "",
+              cardStyle: digiMeCard.cardStyle || "",
+              cardConfig: digiMeCard.cardConfig || {
+                showSocialUsername: true,
               },
-              socialMedia: {
-                linkedin: cardData.socialMedia.linkedin || "",
-                github: cardData.socialMedia.github || "",
-                twitter: cardData.socialMedia.twitter || "",
-                instagram: cardData.socialMedia.instagram || "",
-                facebook: cardData.socialMedia.facebook || "",
-                tiktok: cardData.socialMedia.tiktok || "",
-                youtube: cardData.socialMedia.youtube || "",
-                twitch: cardData.socialMedia.twitch || "",
-                discord: cardData.socialMedia.discord || "",
-                snapchat: cardData.socialMedia.snapchat || "",
-                whatsapp: cardData.socialMedia.whatsapp || "",
-                telegram: cardData.socialMedia.telegram || "",
-                reddit: cardData.socialMedia.reddit || "",
-                pinterest: cardData.socialMedia.pinterest || "",
+              cardData: {
+                name: digiMeCard.cardData.name || "",
+                image: digiMeCard.cardData.image || "",
+                tagline: digiMeCard.cardData.tagline || "",
+                company: digiMeCard.cardData.company || "",
+                email: digiMeCard.cardData.email || "",
+                phone: digiMeCard.cardData.phone || "",
+                location: digiMeCard.cardData.location || "",
+                website: digiMeCard.cardData.website || "",
+                socialMedia: {
+                  linkedin: digiMeCard.cardData.socialMedia.linkedin || "",
+                  github: digiMeCard.cardData.socialMedia.github || "",
+                  twitter: digiMeCard.cardData.socialMedia.twitter || "",
+                  instagram: digiMeCard.cardData.socialMedia.instagram || "",
+                  facebook: digiMeCard.cardData.socialMedia.facebook || "",
+                  tiktok: digiMeCard.cardData.socialMedia.tiktok || "",
+                  youtube: digiMeCard.cardData.socialMedia.youtube || "",
+                  twitch: digiMeCard.cardData.socialMedia.twitch || "",
+                  discord: digiMeCard.cardData.socialMedia.discord || "",
+                  spotify: digiMeCard.cardData.socialMedia.spotify || "",
+                },
+              },
+              urls: {
+                linkedin: digiMeCard.cardData.socialMedia.linkedin || "",
+                github: digiMeCard.cardData.socialMedia.github || "",
+                twitter: digiMeCard.cardData.socialMedia.twitter || "",
+                instagram: digiMeCard.cardData.socialMedia.instagram || "",
+                facebook: digiMeCard.cardData.socialMedia.facebook || "",
+                tiktok: digiMeCard.cardData.socialMedia.tiktok || "",
+                youtube: digiMeCard.cardData.socialMedia.youtube || "",
+                twitch: digiMeCard.cardData.socialMedia.twitch || "",
+                discord: digiMeCard.cardData.socialMedia.discord || "",
+                spotify: digiMeCard.cardData.socialMedia.spotify || "",
               },
             });
             const keysToRetain = [
@@ -185,16 +177,11 @@ const EditorPage = () => {
               "youtube",
               "twitch",
               "discord",
-              "snapchat",
-              "whatsapp",
-              "telegram",
-              "reddit",
-              "pinterest",
+              "spotify",
             ];
-            const filteredData = Object.entries(cardData.socialMedia)
+            const filteredData = Object.entries(digiMeCard.cardData.socialMedia)
               .filter(([key, value]) => keysToRetain.includes(key) && value)
               .map(([key]) => key);
-            setnonEmptyCardData(filteredData);
             setSelectedInputs(filteredData);
           } else {
             setError(`Failed to fetch card data: ${response.statusText}`);
@@ -221,7 +208,7 @@ const EditorPage = () => {
   }, [success]);
 
   const handleUpdateData = async (
-    formValues1: z.infer<typeof UpdateCardSchema>,
+    formValues1: z.infer<typeof DigimedCardSchema>,
     cardID: string,
     e: React.SyntheticEvent
   ) => {
@@ -230,43 +217,40 @@ const EditorPage = () => {
       userId: session?.user?.id || "",
       cardTitle: formValues.cardTitle || "",
       cardStyle: formValues.cardStyle || "",
-      name: formValues.name || "",
-      image: formValues.image || "",
-      tagline: formValues.tagline || "",
-      company: formValues.company || "",
-      email: formValues.email || "",
-      phone: formValues.phone || "",
-      location: formValues.location || "",
-      website: formValues.website || "",
-      style: formValues.image || "",
-      socialMedia: {
-        linkedin: formValues.urls.linkedin || "",
-        github: formValues.urls.github || "",
-        twitter: formValues.urls.twitter || "",
-        instagram: formValues.urls.instagram || "",
-        facebook: formValues.urls.facebook || "",
-        tiktok: formValues.urls.tiktok || "",
-        youtube: formValues.urls.youtube || "",
-        twitch: formValues.urls.twitch || "",
-        discord: formValues.urls.discord || "",
-        snapchat: formValues.urls.snapchat || "",
-        whatsapp: formValues.urls.whatsapp || "",
-        telegram: formValues.urls.telegram || "",
-        reddit: formValues.urls.reddit || "",
-        pinterest: formValues.urls.pinterest || "",
+      cardConfig: {
+        showSocialUsername: formValues.cardConfig?.showSocialUsername ?? true,
       },
-      
+      cardData: {
+        name: formValues.cardData.name || "",
+        image: formValues.cardData.image || "",
+        tagline: formValues.cardData.tagline || "",
+        company: formValues.cardData.company || "",
+        email: formValues.cardData.email || "",
+        phone: formValues.cardData.phone || "",
+        location: formValues.cardData.location || "",
+        website: formValues.cardData.website || "",
+        socialMedia: {
+          linkedin: formValues.cardData.socialMedia.linkedin || "",
+          github: formValues.cardData.socialMedia.github || "",
+          twitter: formValues.cardData.socialMedia.twitter || "",
+          instagram: formValues.cardData.socialMedia.instagram || "",
+          facebook: formValues.cardData.socialMedia.facebook || "",
+          tiktok: formValues.cardData.socialMedia.tiktok || "",
+          youtube: formValues.cardData.socialMedia.youtube || "",
+          twitch: formValues.cardData.socialMedia.twitch || "",
+          discord: formValues.cardData.socialMedia.discord || "",
+          spotify: formValues.cardData.socialMedia.spotify || "",
+        },
+      },
     };
-    console.log("values", formValues)
 
     startTransition(async () => {
       try {
         const data = await updateCard(values, card?.id || "");
         setSuccess("Card Updated");
         if (data.error) {
-          throw new Error(data.error); // Handle error response from updateCard
+          throw new Error(data.error);
         }
-        // Optionally, you can show a success message here
       } catch (error) {
         console.error("Error updating card:", error); // Log the error
       }
@@ -282,14 +266,24 @@ const EditorPage = () => {
     ); // Replace with your spinner component
 
   return (
-    <div className="h-full pt-8 px-10 bg-white">
-      <EditorHeader headerTitle={"Editor:"} cardTitle={card?.cardTitle || ""} cardID={card?.id || ""} icon={<PencilRuler className="text-white"/>} />
-      <div className="flex flex-col md:flex-row w-full justify-center items-center gap-x-5  bg-neutral-100">
-        <div className="w-full h-full shadow-md rounded-lg overflow-hidden">
-         <EditorPreview formValues={formValues} selectedInputs={selectedInputs} /> 
-          
+    <div className="h-full  bg-gray-100">
+      <EditorHeader
+        headerTitle={"Editor:"}
+        cardTitle={card?.cardTitle || ""}
+        cardID={card?.id || ""}
+        icon={<PencilRuler className="text-black w-5 h-5" />}
+        isPublished={card?.isPublished || false}
+      />
+      <div className="flex flex-col md:flex-row w-full justify-center items-center">
+        <div className="w-full px-5 py-5 sm:py-0">
+          <div className="h-1/2 rounded-[1rem] overflow-hidden">
+            <EditorPreview
+              formValues={formValues}
+              selectedInputs={selectedInputs}
+            />
+          </div>
         </div>
-        <div className="w-full sm:w-1/2 sm:border-l-2 sm:border-neutral-200 bg-white">
+        <div className="w-full sm:w-1/2 border-t-2 sm:border-t-0 sm:border-l-2 sm:border-neutral-200 bg-white">
           <EditorForm
             formValues={formValues}
             onFormChange={handleFormChange}
@@ -298,7 +292,7 @@ const EditorPage = () => {
           >
             <div className="flex flex-col gap-2">
               <FormSuccess message={success || ""} />
-              <FormError message={""} />
+              <FormError message={error || ""} />
               <div className="flex flex-col sm:flex-row gap-2">
                 <Button
                   onClick={(e) => handleUpdateData(formValues, cardId, e)}

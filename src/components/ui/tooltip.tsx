@@ -1,80 +1,32 @@
-"use client";
-import React, { useState } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { twMerge } from "tailwind-merge";
+"use client"
 
-const tooltipVariants = cva(
-  "absolute w-auto text-xs text-center transition-opacity duration-300 whitespace-normal",
-  {
-    variants: {
-      variant: {
-        default:
-          "bg-dark-primary text-white outline outline-1 outline-dark-secondary",
-        secondary: "bg-light-primary  text-black outline outline-1 outline-light-secondary",
-        custom: "",
-      },
-      rounded: {
-        small: "rounded-sm",
-        medium: "rounded-md",
-        large: "rounded-lg",
-        full: "rounded-full",
-      },
-      position: {
-        top: "bottom-full mb-2",
-        bottom: "top-full mt-2",
-        left: "right-full mr-2",
-        right: "left-full ml-2",
-      },
-      size: {
-        default: "px-4 py-1",
-        large: "px-5 py-1.5 text-base",
-        small: "px-2 py-0.5 ",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-      rounded: "small",
-      position: "top",
-    },
-  }
-);
+import * as React from "react"
+import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 
-interface TooltipProps extends VariantProps<typeof tooltipVariants> {
-  text: string | React.ReactNode;
-  children: React.ReactNode;
-  className?: string;
-}
+import { cn } from "@/lib/utils"
 
-const Tooltip: React.FC<TooltipProps> = ({
-  variant,
-  size,
-  rounded,
-  text,
-  children,
-  position,
-  className,
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
+const TooltipProvider = TooltipPrimitive.Provider
 
-  return (
-    <div
-      className="relative flex flex-col justify-center items-center"
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
-    >
-      {children}
-      {isVisible && (
-        <div
-          className={twMerge(
-            tooltipVariants({ variant, size, rounded, position, className }), "z-50"
-          )}
-        >
-          {text}
-        </div>
+const Tooltip = TooltipPrimitive.Root
+
+const TooltipTrigger = TooltipPrimitive.Trigger
+
+const TooltipContent = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>
+>(({ className, sideOffset = 4, ...props }, ref) => (
+  <TooltipPrimitive.Portal>
+    <TooltipPrimitive.Content
+      ref={ref}
+      sideOffset={sideOffset}
+      className={cn(
+        "z-50 overflow-hidden rounded-md bg-neutral-900 px-3 py-1.5 text-xs text-neutral-50 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:bg-neutral-50 dark:text-neutral-900",
+        className
       )}
-    </div>
-  );
-};
+      {...props}
+    />
+  </TooltipPrimitive.Portal>
+))
+TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
-export default Tooltip;
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }

@@ -1,3 +1,4 @@
+"use client";
 import { LoginForm } from "@/components/auth/login-form";
 import React, { Suspense } from "react";
 import { GridLoader } from "react-spinners";

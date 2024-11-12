@@ -39,7 +39,7 @@ export const isCardOwner = async (userId: string, cardId: string) => {
 export const getPersonalCardByUserID = async (cardId: string) => {
   const session = await auth();
   try {
-    const card = await db.personalCard.findFirst({
+    const card = await db.digiMeCard.findFirst({
       where: {
         id: cardId,
         userId: session?.user?.id,

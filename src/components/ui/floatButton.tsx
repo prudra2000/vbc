@@ -1,16 +1,14 @@
 "use client";
 
-import { twMerge } from "tailwind-merge";
 import { Button } from "./button"; // Changed to named import
 
 
 interface FloatButtonProps {
     children: React.ReactNode;
     onClick: () => void;
-    disabled?: boolean;
 }
 
-const FloatButton: React.FC<FloatButtonProps> = ({  children,  disabled, onClick, ...props }) => {
+const FloatButton: React.FC<FloatButtonProps> = ({  children, onClick, ...props }) => {
     return (
         <Button 
             variant="outline"

@@ -30,8 +30,12 @@ const CardForm = () => {
       const { url } = await response.json();
       // Redirect or show the public URL to the user
       window.location.href = url; // or display the URL
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     } finally {
       setLoading(false);
     }

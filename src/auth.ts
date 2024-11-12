@@ -50,11 +50,27 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     async session({ session, token }) {
       if (token.sub && session.user) {
-        session.user.id = token.sub
+        session.user.id = token.sub;
+        const user = await getUserById(token.sub);
+        session.user.authenticatedSocials = user?.authenticatedSocials as {
+          linkedin?: { linkedinId: string; linkedinUsername: string };
+          github?: { githubId: string; githubUsername: string };
+          twitter?: { twitterId: string; twitterUsername: string };
+        } | undefined;
+        session.user.hasAccess = user?.hasAccess;
+
+        // Incorporate the updated image from the token
+        if (token.image) {
+          session.user.image = token.image as string;
+        }
       }
       return session;
     },
-    async jwt({ token }) {
+    async jwt({ token, trigger, session }) {
+      // Handle image updates triggered from the client
+      if (trigger === "update" && session?.user?.image) {
+        token.image = session.user.image;
+      }
       return token;
     },
   },

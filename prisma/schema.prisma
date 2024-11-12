@@ -22,11 +22,20 @@ model User {
   emailVerified         DateTime?
   image                 String?
   password              String?
+  authenticatedSocials Json?
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
   cards                 Card[]
   personalCards         PersonalCard[]
+  digiMeCards           DigiMeCard[]
+  priceId               String?
+  hasAccess             Boolean                @default(false)
+  stripeCustomerId      String?
+  stripeSubscriptionId  String?
+  stripeCurrentPeriodEnd DateTime?
+  stripeCurrentPeriodStart DateTime?
+  stripeSubscriptionStatus String?
 }
 
 model Account {
@@ -62,6 +71,7 @@ model Card {
   location  String
   website   String
   socialMedia Json
+  isPublished Boolean @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])
@@ -81,6 +91,20 @@ model PersonalCard {
   location  String
   website   String
   socialMedia Json
+  isPublished Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model DigiMeCard{
+  id        String   @id @default(cuid())
+  cardTitle String
+  userId      String
+  cardStyle   String
+  cardConfig Json?
+  cardData    Json
+  isPublished Boolean @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])

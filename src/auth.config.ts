@@ -1,4 +1,4 @@
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "./schemas";
 import { getUserByEmail } from "./data/user";
@@ -22,7 +22,16 @@ export default {
           }
           const passwordMatch = await bcrypt.compare(password, user.password);
           if (passwordMatch) {
-            return user;
+            return {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              image: user.image,
+              authenticatedSocials: user.authenticatedSocials,
+              isTwoFactorEnabled: user.isTwoFactorEnabled,
+              stripeSubscriptionStatus: user.stripeSubscriptionStatus,
+              // Include other custom properties as needed
+            } as User;
           }
         }
         return null;
