@@ -71,8 +71,7 @@ const EditorForm: React.FC<EditorForm> = ({
   useEffect(() => {
     form.reset(formValues);
   }, [formValues]);
-
-  const [urls, setUrls] = useState<Record<string, string>>({});
+  const [urls, setUrls] = useState<Record<string, string>>({}); // eslint-disable-line @typescript-eslint/no-unused-vars
   const handleFormChange = (values: DigimedCardValues) => {
     onFormChange({
       cardStyle: values.cardStyle || "",

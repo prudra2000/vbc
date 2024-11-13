@@ -2,12 +2,11 @@ import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox"; // Import the Checkbox component from shadcn/ui
 
 interface StyleSelectorProps {
-  selectedStyle: string;
+  selectedStyle?: string;
   onSelectStyle: (style: string) => void;
 }
 
 const StyleSelector = ({
-  selectedStyle,
   onSelectStyle,
 }: StyleSelectorProps) => {
   // State to track a single selected item
@@ -39,9 +38,8 @@ const StyleSelector = ({
   return (
     <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 h-64 overflow-y-auto justify-items-center">
       {Object.values(style).map((item, index) => (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center" key={item.id}>
           <div
-            key={index}
             onClick={() => {
               selectItem(index);
               onSelectStyle(item.id);
