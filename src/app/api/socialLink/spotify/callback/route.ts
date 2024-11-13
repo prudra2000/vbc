@@ -101,6 +101,9 @@ export async function GET(req: NextRequest) {
       );
     } else {
       const spotifyUserId = profileData.id;
+      const spotifyUrl = profileData.external_urls.spotify;
+      const spotifyUsername = spotifyUrl.split('/').pop();
+
       const existingUser = await db.user.findUnique({
         where: { id: session?.user?.id },
       });
@@ -110,7 +113,8 @@ export async function GET(req: NextRequest) {
         ...((existingUser?.authenticatedSocials as object) || {}),
         spotify: {
           spotifyId: spotifyUserId,
-          spotifyUsername: profileData.display_name,
+          spotifyUsername: spotifyUsername,
+          spotifyDisplayName: profileData.display_name,
         },
       };
 
@@ -123,7 +127,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("An error occurred:", error);
     return NextResponse.json(
-      { error: "An error occurred during GitHub OAuth" },
+      { error: "An error occurred during Spotify OAuth" },
       { status: 500 }
     );
   }

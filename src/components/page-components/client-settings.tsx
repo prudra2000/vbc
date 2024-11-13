@@ -111,7 +111,7 @@ const ClientSettings = () => {
     }
   };
 
-  const spotifyClientId = process.env.SPOTIFY_CLIENT_ID;
+  const spotifyClientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
   const spotifyRedirectUri =
     "https://python-enjoyed-mallard.ngrok-free.app/api/socialLink/spotify/callback";
   const spotifyScope = "user-read-private user-read-email";
@@ -350,7 +350,7 @@ const ClientSettings = () => {
                 isLinked={true}
                 icon="spotify"
                 username={
-                  session?.user?.authenticatedSocials?.spotify?.spotifyUsername
+                  session?.user?.authenticatedSocials?.spotify?.spotifyDisplayName
                 }
                 unlink={() => handleUnlink("spotify")}
                 link={() => handleSpotifyLink()}
