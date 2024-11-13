@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox"; // Import the Checkbox component from shadcn/ui
 
-
 interface StyleSelectorProps {
   selectedStyle: string;
   onSelectStyle: (style: string) => void;
 }
 
-const StyleSelector = ({ selectedStyle, onSelectStyle }: StyleSelectorProps) => {
+const StyleSelector = ({
+  selectedStyle,
+  onSelectStyle,
+}: StyleSelectorProps) => {
   // State to track a single selected item
   const [selected, setSelected] = useState<number | null>(null);
 
@@ -44,7 +46,9 @@ const StyleSelector = ({ selectedStyle, onSelectStyle }: StyleSelectorProps) => 
               selectItem(index);
               onSelectStyle(item.id);
             }}
-            className="relative flex items-center justify-center w-32 h-32 border border-gray-300 bg-gray-100 cursor-pointer rounded-lg"
+            className={`relative flex items-center justify-center w-32 h-32 border  bg-gray-100 cursor-pointer rounded-lg ${
+              selected === index ? "border-blue-500" : "border-gray-300"
+            }`}
           >
             {selected === index && (
               <Checkbox
