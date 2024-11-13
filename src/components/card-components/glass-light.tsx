@@ -46,7 +46,7 @@ export default function GlassLightCard({
                 </p>
               )}
               {cardValues.cardData.company && (
-                <p className="text-sm text-neutral-200">
+                <p className="text-sm m text-neutral-200">
                   {cardValues.cardData.company}
                 </p>
               )}

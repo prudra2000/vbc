@@ -71,12 +71,7 @@ const EditorForm: React.FC<EditorForm> = ({
   useEffect(() => {
     form.reset(formValues);
   }, [formValues]);
-
-  // const [urls, setUrls] = useState<Record<string, string>>({
-  //   ...defaultSocialMedia,
-  //   ...formValues.cardData.socialMedia,
-  // });
-
+  const [urls, setUrls] = useState<Record<string, string>>({}); // eslint-disable-line @typescript-eslint/no-unused-vars
   const handleFormChange = (values: DigimedCardValues) => {
     onFormChange({
       cardStyle: values.cardStyle || "",
@@ -149,8 +144,15 @@ const EditorForm: React.FC<EditorForm> = ({
   }, []);
 
   useEffect(() => {
-    //setSelectedInputs(selected);
-    //setUrls(formValues.cardData.socialMedia || {});
+    const socialMedia = formValues.cardData.socialMedia || {};
+    const updatedUrls = Object.entries(socialMedia).reduce((acc, [key, value]) => {
+      if (value) {
+        acc[key] = `https://www.${key}.com/${value}`;
+      }
+      return acc;
+    }, {} as Record<string, string>);
+
+    setUrls(updatedUrls);
   }, [selected, formValues.cardData.socialMedia]);
 
   const isEmpty =
@@ -544,12 +546,13 @@ const EditorForm: React.FC<EditorForm> = ({
                           ?.linkedinId !== undefined && (
                           <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
                             <div className="flex items-center justify-center gap-2">
-                              <Link
+                              <a
                                 href={`https://linkedin.com/in/${
                                   session?.user?.authenticatedSocials?.linkedin
                                     ?.linkedinUsername || ""
                                 }`}
                                 target="_blank"
+                                rel="noopener noreferrer"
                               >
                                 <Button variant="link" className="p-0 gap-2">
                                   <FontAwesomeIcon
@@ -563,7 +566,7 @@ const EditorForm: React.FC<EditorForm> = ({
                                     }
                                   </div>
                                 </Button>
-                              </Link>
+                              </a>
                             </div>
                             <div className="flex items-center">
                               <FormField
@@ -645,7 +648,7 @@ const EditorForm: React.FC<EditorForm> = ({
                           <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
                             <div className="flex items-center justify-center gap-2">
                               <Link
-                                href={`https://twitter.com/${
+                                href={`https://open.spotify.com/user/${
                                   session?.user?.authenticatedSocials?.spotify
                                     ?.spotifyUsername || ""
                                 }`}
@@ -658,7 +661,7 @@ const EditorForm: React.FC<EditorForm> = ({
                                   />
                                   {
                                     session?.user?.authenticatedSocials?.spotify
-                                      ?.spotifyUsername
+                                      ?.spotifyDisplayName
                                   }
                                 </Button>
                               </Link>
@@ -694,7 +697,7 @@ const EditorForm: React.FC<EditorForm> = ({
                           <div className="flex flex-row items-center justify-between gap-2 border border-neutral-300 rounded-md p-2">
                             <div className="flex items-center justify-center gap-2">
                               <Link
-                                href={`https://twitter.com/${
+                                href={`https://www.twitch.tv/${
                                   session?.user?.authenticatedSocials?.twitch
                                     ?.twitchUsername || ""
                                 }`}

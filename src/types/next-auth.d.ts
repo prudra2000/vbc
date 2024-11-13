@@ -24,6 +24,7 @@ declare module "next-auth" {
       spotify?: {
         spotifyId: string;
         spotifyUsername: string;
+        spotifyDisplayName: string;
       };
       twitch?: {
         twitchId: string;

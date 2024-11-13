@@ -16,13 +16,7 @@ import { Input } from "../ui/input";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import { IdCard } from "lucide-react";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "../ui/select";
+
 import {
   Dialog,
   DialogContent,
@@ -31,17 +25,18 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { AddCardFormValues } from "@/types/forms";
+import StyleSelector from "../ui/styleSelector";
 interface CardModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-
-const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose}) => {
-
+const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose }) => {
   const { data: session } = useSession();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+  const [selectedStyle, setSelectedStyle] = useState<string>("");
+
   const form = useForm<AddCardFormValues>({
     defaultValues: {
       cardTitle: "",
@@ -110,7 +105,8 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose}) => {
                 const formData = new FormData(e.currentTarget); // Get form data
                 const data = {
                   cardTitle: formData.get("cardTitle") as string,
-                  cardStyle: formData.get("cardStyle") as string,
+                  cardStyle:
+                    selectedStyle || (formData.get("cardStyle") as string),
                 };
                 await handleAddCard(data); // Call handleAddCard with the form data
               }}
@@ -136,7 +132,7 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose}) => {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="cardStyle"
                   render={({ field }) => (
@@ -166,7 +162,13 @@ const CardModal: React.FC<CardModalProps> = ({ isOpen, onClose}) => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
+                <div className="flex w-full justify-center">
+                  <StyleSelector
+                    selectedStyle={selectedStyle}
+                    onSelectStyle={setSelectedStyle}
+                  />
+                </div>
               </div>
               <FormError message={error || ""} />
               <FormSuccess message={success || ""} />
