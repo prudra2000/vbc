@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuid } from "uuid";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import sharp from "sharp";
 import { db } from '@/lib/db';
 import { auth } from '@/auth';
@@ -39,6 +39,18 @@ async function uploadImageToS3(
   return fileName;
 }
 
+
+async function deleteImageFromS3(fileName: string): Promise<void> {
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME as string,
+    Key: `${fileName}`, // Ensure file extension is .jpeg
+  };
+
+  const command = new DeleteObjectCommand(params);
+  await s3Client.send(command);
+}
+
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -62,6 +74,14 @@ export async function POST(request: NextRequest) {
     const profileImageURL = `https://digime-s3-storage.s3.us-east-1.amazonaws.com/${fileNameWithoutExtension}.jpeg`;
     const session = await auth();
     const userId = session?.user?.id;
+
+    const existingImageURL = session?.user?.image;
+
+    const existingImage = existingImageURL?.split("/").pop();
+
+    if (existingImageURL?.startsWith("https://digime-s3-storage.s3.us-east-1.amazonaws.com/") && existingImage) {
+      await deleteImageFromS3(existingImage);
+    }
 
     if (!userId) {
       return NextResponse.json({ error: "User not authenticated" }, { status: 401 });
